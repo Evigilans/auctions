@@ -21,7 +21,7 @@ public final class ConnectionPool {
     //private AtomicInteger poolSize = new AtomicInteger();
 
     private BlockingQueue<ConnectionWrapper> freeConnections;
-    private BlockingQueue<ConnectionWrapper> workingConnections;//arraydeque
+    private BlockingQueue<ConnectionWrapper> workingConnections; //arraydeque
 
     public String getUrl() {
         return url;
@@ -61,7 +61,11 @@ public final class ConnectionPool {
             try {
                 if (instance == null) {
                     instance = new ConnectionPool();
-
+                    instance.setUrl("jdbc:mysql://localhost:3306/auctions");
+                    instance.setUsername("root");
+                    instance.setPassword("root");
+                    instance.setPoolSize(30);
+                    instance.init();
                 }
             } finally {
                 LOCK.unlock();

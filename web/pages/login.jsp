@@ -13,7 +13,7 @@
 <h3>Login Page</h3>
 <p style="color: red;">${errorString}</p>
 
-<form method="POST" action="${pageContext.request.contextPath}/login">
+<form method="POST" action="${pageContext.request.contextPath}/AuctionServlet?command=login">
     <table border="0">
         <tr>
             <td>User Name</td>
@@ -30,7 +30,7 @@
         <tr>
             <td colspan="2">
                 <input type="submit" value="Submit"/>
-                <a href="${pageContext.request.contextPath}/">Cancel</a>
+                <a href="${pageContext.request.contextPath}/AuctionServlet?command=home">Cancel</a>
             </td>
         </tr>
     </table>

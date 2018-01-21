@@ -3,9 +3,9 @@
 
 <div style="padding: 5px;">
 
-    <a href="${pageContext.request.contextPath}/">Home</a> |
-    <a href="${pageContext.request.contextPath}/list">Auctions List</a> |
-    <a href="${pageContext.request.contextPath}/profile">My Profile</a> |
-    <a href="${pageContext.request.contextPath}/login">Login</a>
+    <a href="home.jsp">Home</a> |
+    <a href="list.jsp">Auctions List</a> |
+    <a href="profile.jsp">My Profile</a> |
+    <a href="login.jsp">Login</a>
 
 </div>
