@@ -1,8 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
-<div style="background: #E0E0E0; text-align: center; padding: 5px; margin-top: 10px;">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Sample</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/temp.css" type="text/css" media="screen">
+</head>
+<body>
 
-    @SOLD.BY All right reserved
+<footer>
+    2018 @ SOLD.BY <strong>all rights reserved</strong>.
+</footer>
 
-</div>
+</body>
+</html>

@@ -16,6 +16,10 @@ public final class ConnectionWrapper {
         return connection.prepareStatement(statement);
     }
 
+    public PreparedStatement prepareStatement(String statement, int value) throws SQLException {
+        return connection.prepareStatement(statement, value);
+    }
+
     public PreparedStatement prepareStatement(String statement, String[] columnNames) throws SQLException {
         return connection.prepareStatement(statement, columnNames);
     }

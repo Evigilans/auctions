@@ -1,41 +1,45 @@
 package com.piankov.auctions.dao;
 
 
+import com.mysql.jdbc.Statement;
 import com.piankov.auctions.connection.ConnectionWrapper;
-import com.piankov.auctions.pool.ConnectionPool;
+import com.piankov.auctions.entity.Entity;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 
-public abstract class AbstractDAO {
-    private ConnectionPool pool;
+public abstract class AbstractDAO<T extends Entity> {
+    protected ConnectionWrapper connection;
 
-    public ConnectionPool getPool() {
-        return pool;
-    }
+    public abstract List<T> findAll() throws SQLException;
 
-    public void setPool(ConnectionPool pool) {
-        this.pool = pool;
-    }
+    public abstract T findById(String id) throws SQLException;
 
-    public ConnectionWrapper getConnection() {
-        return getPool().takeConnection();
-    }
+    public abstract boolean delete(String id);
 
-    public void returnConnection(ConnectionWrapper connection) {
-        getPool().releaseConnection(connection);
-    }
+    public abstract boolean delete(T entity);
 
-    public void closePreparedStatement(PreparedStatement statement) throws SQLException {
-        if (statement != null) {
-            statement.close();
+    public abstract long create(T entity) throws SQLException;
+
+    public abstract T update(T entity);
+
+    public void close(Statement st) {
+        try {
+            if (st != null) {
+                st.close();
+            }
+        } catch (SQLException e) {
+            // лог о невозможности закрытия Statement
         }
     }
 
-    public void closeStatement(Statement statement) throws SQLException {
-        if (statement != null) {
-            statement.close();
+    public void close() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            // генерация исключения, т.к. нарушается работа пула
         }
     }
 }

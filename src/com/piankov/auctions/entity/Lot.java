@@ -1,11 +1,11 @@
-package com.piankov.auctions.auction;
+package com.piankov.auctions.entity;
 
-public class Lot {
+public class Lot extends Entity {
     private long id;
     private long ownerId;
     private int startPrice;
     private String name;
-    private String Description;
+    private String description;
 
     public Lot() {
     }
@@ -15,7 +15,7 @@ public class Lot {
         this.ownerId = ownerId;
         this.startPrice = startPrice;
         this.name = name;
-        Description = description;
+        this.description = description;
     }
 
     public long getId() {
@@ -51,10 +51,10 @@ public class Lot {
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 }

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -6,9 +7,24 @@
 <body>
 
 <jsp:include page="service/header.jsp"></jsp:include>
-<jsp:include page="service/menu.jsp"></jsp:include>
 
-<h3>Your profile</h3>
+<main>
+    <c:choose>
+        <c:when test="${empty client}">
+            <p> Чтобы просматривать свой профиль, вам необходимо <a
+                    href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/login.jsp">войти</a>
+                или зарегистрироваться.
+            </p>
+        </c:when>
+        <c:otherwise>
+            <h3>Your profile</h3>
+
+            <p>
+                Your Name: ${client.name}
+            </p>
+        </c:otherwise>
+    </c:choose>
+</main>
 
 <jsp:include page="service/footer.jsp"></jsp:include>
 

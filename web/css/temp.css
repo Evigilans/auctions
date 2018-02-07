@@ -1,0 +1,265 @@
+@import url(https://fonts.googleapis.com/css?family=Lora:400,700);
+
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Lora", serif;
+    font-size: 16px;
+    line-height: 1.4;
+    padding: 1rem;
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    line-height: 1.1;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+p {
+    margin: 1.5rem auto;
+    max-width: 40rem;
+}
+
+a {
+    color: #4A4A4A;
+    text-decoration: none !important;
+    -webkit-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+
+a:hover {
+    color: #6e6e6e;
+}
+
+header {
+    max-width: 60rem;
+    margin: 0 auto;
+}
+
+header .topheader {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+}
+
+@media only screen and (max-width: 38rem) {
+    header .topheader .social, header .topheader .shopping {
+        display: none;
+    }
+}
+
+header .topheader ul li {
+    display: inline-block;
+}
+
+header .topheader .social li {
+    margin: 0 1rem 0 0;
+}
+
+header .topheader .social li a i {
+    font-size: 1.5rem;
+}
+
+header .topheader .shopping li {
+    margin: 0 0 0 1rem;
+}
+
+header .topheader .shopping li i {
+    margin: 0 0.5rem 0 0;
+}
+
+header #home {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+header #home #logo img {
+    max-width: 6rem;
+    height: auto;
+}
+
+header #home #burger {
+    display: none;
+    cursor: pointer;
+    -ms-flex-item-align: center;
+    align-self: center;
+    margin: 0;
+    padding: 0;
+}
+
+@media only screen and (max-width: 38rem) {
+    header #home {
+        margin: 0 0 1rem;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+    }
+
+    header #home #logo img {
+        max-width: 4rem;
+    }
+
+    header #home #burger {
+        display: block;
+    }
+
+    header #home #burger i {
+        font-size: 3rem;
+    }
+}
+
+header .menu {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+header .menu:before, header .menu:after {
+    content: "";
+    background: #636363;
+    padding: 0.5px;
+    -webkit-box-flex: 100%;
+    -ms-flex: 100%;
+    flex: 100%;
+}
+
+@media only screen and (max-width: 38rem) {
+    header .menu .menu-ul {
+        display: none;
+    }
+}
+
+header .menu .menu-ul li {
+    display: inline-block;
+    margin: 1.25rem 1rem;
+    text-align: center;
+}
+
+header .menu .menu-ul .mobile {
+    display: none;
+}
+
+@media only screen and (max-width: 38rem) {
+    header .menu .menu-ul .mobile {
+        display: inline-block;
+    }
+}
+
+@media only screen and (max-width: 38rem) {
+    header .menu ul {
+        width: 100%;
+    }
+
+    header .menu ul li, header .menu ul .mobile {
+        display: block;
+        margin: 0;
+    }
+
+    header .menu ul li a, header .menu ul .mobile a {
+        display: block;
+        padding: 1rem;
+        font-size: 1.25rem;
+    }
+
+    header .menu ul li a:hover, header .menu ul .mobile a:hover {
+        background: #212121;
+        color: white;
+    }
+
+    header .menu ul .social-mobile {
+        display: inline-block;
+        width: 32%;
+    }
+
+    header .menu ul .social-mobile a i {
+        font-size: 2rem;
+    }
+}
+
+.red {
+    background: red;
+}
+
+#lang-menu {
+    width: 65px;
+    height: auto;
+    position: absolute;
+    top: 2.5rem;
+    right: 75px;
+    text-align: center;
+    vertical-align: middle;
+    transition: all .3s ease;
+    vertical-align: middle;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -o-transition: all .3s ease;
+}
+
+#lang-menu div {
+    text-align: center;
+    top: 50%;
+    transition: all .2s ease;
+    -webkit-transition: all .2s ease;
+    -moz-transition: all .2s ease;
+    -o-transition: all .2s ease;
+}
+
+#lang-menu ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    display: none;
+    text-align: center;
+}
+
+#lang-menu ul li {
+    padding: 5px 0px;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -o-transition: all .3s ease;
+}
+
+#lang-menu ul li:hover {
+    cursor: pointer;
+    color: #fff;
+    background: rgb(0, 0, 0);
+}
+
+footer {
+    position: fixed;
+    height: 40px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background-color: #efefef;
+    text-align: center;
+    vertical-align: center;
+}
