@@ -1,4 +1,6 @@
-package com.piankov.auctions.command;
+package com.piankov.auctions.command.system;
+
+import com.piankov.auctions.command.Command;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

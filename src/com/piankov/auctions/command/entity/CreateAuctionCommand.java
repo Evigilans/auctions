@@ -1,11 +1,10 @@
-package com.piankov.auctions.command;
+package com.piankov.auctions.command.entity;
 
+import com.piankov.auctions.command.Command;
 import com.piankov.auctions.dao.AuctionDAO;
 import com.piankov.auctions.dao.LotDAO;
-import com.piankov.auctions.entity.Auction;
-import com.piankov.auctions.entity.Client;
-import com.piankov.auctions.entity.Lot;
-import com.piankov.auctions.validator.Validator;
+import com.piankov.auctions.entity.*;
+import com.piankov.auctions.validator.EntityValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,31 +19,27 @@ public class CreateAuctionCommand implements Command {
         String description = request.getParameter("description");
         int startPrice = Integer.parseInt(request.getParameter("startPrice"));
         int days = Integer.parseInt(request.getParameter("days"));
-        Client client = (Client) request.getSession().getAttribute("client");
+        User user = (User) request.getSession().getAttribute("user");
 
-        Validator validator = new Validator();
+        EntityValidator entityValidator = new EntityValidator();
 
-        if (validator.validateRegistrationData()) {
+        if (entityValidator.validateRegistrationData()) {
             try {
-                Auction auction = new Auction();
+                LotDAO lotDAO = new LotDAO();
                 Lot lot = new Lot();
-
                 lot.setName(name);
                 lot.setDescription(description);
-                lot.setOwnerId(client.getId());
+                lot.setOwner(user);
                 lot.setStartPrice(startPrice);
-
-                LotDAO lotDAO = new LotDAO();
-                long  generatedLotId = lotDAO.create(lot);
+                long generatedLotId = lotDAO.create(lot);
                 lot.setId(generatedLotId);
 
-
-                auction.setLot(lot);
-                auction.setStateId(2);
-                auction.setTypeId(1);
-
                 AuctionDAO auctionDAO = new AuctionDAO();
-                long  generatedAuctionId = auctionDAO.create(auction);
+                Auction auction = new Auction();
+                auction.setLot(lot);
+                auction.setState(AuctionState.IN_PROGRESS);
+                auction.setType(AuctionType.DIRECT);
+                long generatedAuctionId = auctionDAO.create(auction);
                 auction.setId(generatedAuctionId);
 
                 request.getRequestDispatcher("pages/home.jsp").forward(request, response);

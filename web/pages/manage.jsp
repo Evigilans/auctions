@@ -11,7 +11,7 @@
 <main>
 
     <c:choose>
-        <c:when test="${client.category != 1}">
+        <c:when test="${user.category != 1}">
             Данная страница доступна только для администратора! <br>
         </c:when>
         <c:otherwise>

@@ -1,6 +1,6 @@
 package com.piankov.auctions.validator;
 
-public class Validator {
+public class EntityValidator {
     public boolean validateLoginData() {
         return true;
     }

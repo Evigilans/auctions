@@ -1,9 +1,10 @@
-package com.piankov.auctions.command;
+package com.piankov.auctions.command.entity;
 
+import com.piankov.auctions.command.Command;
 import com.piankov.auctions.dao.BidDAO;
 import com.piankov.auctions.entity.Bid;
-import com.piankov.auctions.entity.Client;
-import com.piankov.auctions.validator.Validator;
+import com.piankov.auctions.entity.User;
+import com.piankov.auctions.validator.EntityValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +17,14 @@ public class MakeBidCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         int value = Integer.parseInt(request.getParameter("value"));
         String auctionId = request.getParameter("auctionId");
-        Client client = (Client) request.getSession().getAttribute("client");
+        User user = (User) request.getSession().getAttribute("user");
 
-        Validator validator = new Validator();
+        EntityValidator entityValidator = new EntityValidator();
 
-        if (validator.validateRegistrationData()) {
+        if (entityValidator.validateRegistrationData()) {
             try {
                 Bid bid = new Bid();
-                bid.setClientId(client.getId());
+                bid.setClientId(user.getId());
                 bid.setAuctionId(Long.parseLong(auctionId));
                 bid.setValue(value);
 

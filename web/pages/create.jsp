@@ -17,7 +17,7 @@
 <main>
     <div class="form">
         <c:choose>
-            <c:when test="${empty client}">
+            <c:when test="${empty user}">
                 <h1>Welcome, Guest</h1>
                 <p> Чтобы просматривать свой профиль, вам необходимо <a
                         href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/login.jsp">войти</a>

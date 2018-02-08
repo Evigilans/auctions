@@ -20,14 +20,14 @@
         </ul>
         <ul class="shopping">
             <c:choose>
-                <c:when test="${empty client}">
+                <c:when test="${empty user}">
                     <li>Welcome, Guest</li>
                     <li>
                         <a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/login.jsp">Login/Register</a>
                     </li>
                 </c:when>
                 <c:otherwise>
-                    <li>Welcome, ${client.name}</li>
+                    <li>Welcome, ${user.name}</li>
                     <li>
                         <a href="${pageContext.request.contextPath}/ApplicationServlet?command=logout">Logout</a>
                     </li>
@@ -50,10 +50,10 @@
             <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/create.jsp">Create
                 auction</a></li>
 
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=list">Auctions List</a></li>
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=profile&id=${client.id}">My
+            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=list&auctionsState=active">Auctions List</a></li>
+            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=profile&id=${user.id}">My
                 Profile</a></li>
-            <c:if test="${client.admin}">
+            <c:if test="${user.admin}">
             <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/manage.jsp">Auction
                 Manage</a>
                 </c:if>

@@ -1,6 +1,16 @@
 package com.piankov.auctions.servlet;
 
-import com.piankov.auctions.command.*;
+import com.piankov.auctions.command.Command;
+import com.piankov.auctions.command.entity.CreateAuctionCommand;
+import com.piankov.auctions.command.entity.MakeBidCommand;
+import com.piankov.auctions.command.system.ChangeLanguageCommand;
+import com.piankov.auctions.command.system.LinkCommand;
+import com.piankov.auctions.command.user.LoginCommand;
+import com.piankov.auctions.command.user.LogoutCommand;
+import com.piankov.auctions.command.user.RegistrationCommand;
+import com.piankov.auctions.command.view.AuctionsListCommand;
+import com.piankov.auctions.command.view.ProfileCommand;
+import com.piankov.auctions.command.view.ShowAuctionCommand;
 
 import java.util.HashMap;
 import java.util.Map;

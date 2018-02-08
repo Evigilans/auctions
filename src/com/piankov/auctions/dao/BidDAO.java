@@ -1,5 +1,6 @@
 package com.piankov.auctions.dao;
 
+import com.piankov.auctions.creator.BidCreator;
 import com.piankov.auctions.entity.Bid;
 import com.piankov.auctions.pool.ConnectionPool;
 
@@ -10,65 +11,86 @@ import java.sql.Statement;
 import java.util.List;
 
 public class BidDAO extends AbstractDAO<Bid> {
+    private static final String FIND_ALL_BIDS = "SELECT * FROM BID";
+    private static final String FIND_BID_BY_ID = "SELECT * FROM BID WHERE ID = ?";
+    private static final String DELETE_BID_BY_ID = "DELETE FROM BID WHERE ID = ?";
+    private static final String UPDATE_BID = "UPDATE BID SET CLIENT_ID = ?, AUCTION_ID = ?, VALUE = ? WHERE ID = ?";
+    private static final String CREATE_BID = "INSERT INTO BID (CLIENT_ID, AUCTION_ID, VALUE) VALUES (?, ?, ?)";
+    private static final String FIND_MAXIMAL_BID_FOR_AUCTION = "SELECT ID, CLIENT_ID, AUCTION_ID, MAX(VALUE) FROM BID WHERE AUCTION_ID = ? GROUP BY AUCTION_ID";
+    private static final String HAS_AUCTION_ANY_BID = "SELECT * FROM BID WHERE AUCTION_ID = ?";
+
     public BidDAO() {
         this.connection = ConnectionPool.getInstance().takeConnection();
     }
 
     @Override
     public List<Bid> findAll() throws SQLException {
-        return null;
+        PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_BIDS);
+        ResultSet rs = statement.executeQuery();
+        BidCreator bidCreator = new BidCreator();
+        return bidCreator.buildListFromResultSet(rs);
     }
 
     @Override
-    public Bid findById(String id) throws SQLException {
-        return null;
+    public Bid findById(String bidId) throws SQLException {
+        PreparedStatement statement = this.connection.prepareStatement(FIND_BID_BY_ID);
+        statement.setString(1, bidId);
+        ResultSet rs = statement.executeQuery();
+        BidCreator bidCreator = new BidCreator();
+        return bidCreator.buildEntityFromResultSet(rs);
+    }
+
+    //TODO: CHECK THIS METHOD
+    @Override
+    public boolean delete(String bidId) throws SQLException {
+        PreparedStatement statement = this.connection.prepareStatement(DELETE_BID_BY_ID, Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, bidId);
+        return statement.execute();
     }
 
     @Override
-    public boolean delete(String id) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Bid entity) {
-        return false;
+    public boolean delete(Bid bid) throws SQLException {
+        return delete(String.valueOf(bid.getId()));
     }
 
     @Override
     public long create(Bid bid) throws SQLException {
-        String query = "INSERT INTO BID (CLIENT_ID, AUCTION_ID, VALUE) VALUES (?, ?, ?)";
-        PreparedStatement statement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        statement.setString(1, String.valueOf(bid.getClientId()));
-        statement.setString(2, String.valueOf(bid.getAuctionId()));
-        statement.setString(3, String.valueOf(bid.getValue()));
-
-        System.out.println(statement.toString());
-
+        PreparedStatement statement = this.connection.prepareStatement(CREATE_BID, Statement.RETURN_GENERATED_KEYS);
+        statement.setLong(1, bid.getClientId());
+        statement.setLong(2, bid.getAuctionId());
+        statement.setLong(3, bid.getValue());
         statement.executeUpdate();
+
         ResultSet resultSet = statement.getGeneratedKeys();
         resultSet.next();
         return resultSet.getLong(1);
     }
 
     @Override
-    public Bid update(Bid entity) {
-        return null;
+    public Bid update(Bid bid) throws SQLException {
+        PreparedStatement statement = this.connection.prepareStatement(UPDATE_BID, Statement.RETURN_GENERATED_KEYS);
+        statement.setLong(1, bid.getClientId());
+        statement.setLong(2, bid.getAuctionId());
+        statement.setLong(3, bid.getValue());
+        statement.setLong(4, bid.getId());
+        statement.executeUpdate();
+
+        String bidId = String.valueOf(bid.getId());
+        return findById(bidId);
     }
 
-
     public Bid findMaxBidByAuctionId(String auctionId) throws SQLException {
-        String query = "SELECT ID, CLIENT_ID, AUCTION_ID, MAX(VALUE) FROM BID WHERE AUCTION_ID = ? GROUP BY AUCTION_ID";
-        PreparedStatement statement = this.connection.prepareStatement(query);
+        PreparedStatement statement = this.connection.prepareStatement(FIND_MAXIMAL_BID_FOR_AUCTION);
         statement.setString(1, auctionId);
         ResultSet rs = statement.executeQuery();
-        if (rs.next()) {
-            Bid bid = new Bid();
-            bid.setId(rs.getInt("ID"));
-            bid.setAuctionId(Long.parseLong(auctionId));
-            bid.setClientId(rs.getInt("CLIENT_ID"));
-            bid.setValue(rs.getInt("MAX(VALUE)"));
-            return bid;
-        }
-        return null;
+        BidCreator bidCreator = new BidCreator();
+        return bidCreator.buildEntityFromResultSet(rs);
+    }
+
+    public boolean hasAnyBid(String auctionId) throws SQLException {
+        PreparedStatement statement = this.connection.prepareStatement(HAS_AUCTION_ANY_BID);
+        statement.setString(1, auctionId);
+        ResultSet rs = statement.executeQuery();
+        return rs.next();
     }
 }

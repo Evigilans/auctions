@@ -91,6 +91,8 @@ public final class ConnectionPool {
 
     public ConnectionWrapper takeConnection() {
         ConnectionWrapper connection = null;
+        System.out.println("Free: " + freeConnections.size());
+        System.out.println("Taken: " + workingConnections.size());
         try {
             connection = freeConnections.take();
             workingConnections.put(connection);
@@ -119,7 +121,6 @@ public final class ConnectionPool {
         while ((connection = workingConnections.poll()) != null) {
             connection.close();
         }
-
     }
 
     public void closePool() {

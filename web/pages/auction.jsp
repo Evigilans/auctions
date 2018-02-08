@@ -78,7 +78,7 @@
         <h1>Current maximal bid is: ${auction.currentMaximalBid.value}</h1>
 
         <c:choose>
-            <c:when test="${empty client}">
+            <c:when test="${empty user}">
                 <h1>Welcome, Guest</h1>
                 <p> Чтобы просматривать свой профиль, вам необходимо <a
                         href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/login.jsp">войти</a>

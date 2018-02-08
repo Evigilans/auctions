@@ -1,8 +1,9 @@
-package com.piankov.auctions.command;
+package com.piankov.auctions.command.user;
 
-import com.piankov.auctions.dao.ClientDAO;
-import com.piankov.auctions.entity.Client;
-import com.piankov.auctions.validator.Validator;
+import com.piankov.auctions.command.Command;
+import com.piankov.auctions.dao.UserDAO;
+import com.piankov.auctions.entity.User;
+import com.piankov.auctions.validator.EntityValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,23 +19,22 @@ public class RegistrationCommand implements Command {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        Validator validator = new Validator();
+        EntityValidator entityValidator = new EntityValidator();
 
-        if (validator.validateRegistrationData()) {
+        if (entityValidator.validateRegistrationData()) {
             try {
-                Client client = new Client();
+                User user = new User();
 
-                client.setLogin(login);
-                client.setName(name);
-                client.setEmail(email);
-                client.setPasswordHash(password);
+                user.setLogin(login);
+                user.setName(name);
+                user.setEmail(email);
 
-                ClientDAO clientDAO = new ClientDAO();
-                long  generatedId = clientDAO.create(client);
+                UserDAO clientDAO = new UserDAO();
+                long generatedId = clientDAO.create(user);
 
-                client.setId(generatedId);
+                user.setId(generatedId);
 
-                request.getSession().setAttribute("client", client);
+                request.getSession().setAttribute("client", user);
                 request.getRequestDispatcher("pages/profile.jsp").forward(request, response);
             } catch (SQLException | ServletException | IOException e) {
                 e.printStackTrace();

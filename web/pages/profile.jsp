@@ -10,7 +10,7 @@
 
 <main>
     <c:choose>
-        <c:when test="${empty client}">
+        <c:when test="${empty user}">
             <p> Чтобы просматривать свой профиль, вам необходимо <a
                     href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/login.jsp">войти</a>
                 или зарегистрироваться.
@@ -20,7 +20,7 @@
             <h3>Your profile</h3>
 
             <p>
-                Your Name: ${client.name}
+                Your Name: ${user.name}
             </p>
         </c:otherwise>
     </c:choose>

@@ -1,35 +1,29 @@
 package com.piankov.auctions.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Auction extends Entity {
-    private long id;
     private Lot lot;
-    private long stateId;
-    private long typeId;
-    private Bid currentMaximalBid;
+    private AuctionState state;
+    private AuctionType type;
+    private int daysDurations;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private Bid currentMaximalBid;
 
     public Auction() {
     }
 
-    public Auction(long id, Lot lot, long stateId, long typeId, Bid currentMaximalBid, LocalDateTime startDate, LocalDateTime endDate) {
+    public Auction(long id, Lot lot, AuctionState state, AuctionType type, int daysDurations, LocalDateTime startDate, LocalDateTime endDate, Bid currentMaximalBid) {
         this.id = id;
         this.lot = lot;
-        this.stateId = stateId;
-        this.typeId = typeId;
-        this.currentMaximalBid = currentMaximalBid;
+        this.state = state;
+        this.type = type;
+        this.daysDurations = daysDurations;
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.currentMaximalBid = currentMaximalBid;
     }
 
     public Lot getLot() {
@@ -40,28 +34,28 @@ public class Auction extends Entity {
         this.lot = lot;
     }
 
-    public long getStateId() {
-        return stateId;
+    public AuctionState getState() {
+        return state;
     }
 
-    public void setStateId(long stateId) {
-        this.stateId = stateId;
+    public void setState(AuctionState state) {
+        this.state = state;
     }
 
-    public long getTypeId() {
-        return typeId;
+    public AuctionType getType() {
+        return type;
     }
 
-    public void setTypeId(long typeId) {
-        this.typeId = typeId;
+    public void setType(AuctionType type) {
+        this.type = type;
     }
 
-    public Bid getCurrentMaximalBid() {
-        return currentMaximalBid;
+    public int getDaysDurations() {
+        return daysDurations;
     }
 
-    public void setCurrentMaximalBid(Bid currentMaximalBid) {
-        this.currentMaximalBid = currentMaximalBid;
+    public void setDaysDurations(int daysDurations) {
+        this.daysDurations = daysDurations;
     }
 
     public LocalDateTime getStartDate() {
@@ -78,5 +72,47 @@ public class Auction extends Entity {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public Bid getCurrentMaximalBid() {
+        return currentMaximalBid;
+    }
+
+    public void setCurrentMaximalBid(Bid currentMaximalBid) {
+        this.currentMaximalBid = currentMaximalBid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Auction)) return false;
+        Auction auction = (Auction) o;
+        return daysDurations == auction.daysDurations &&
+                Objects.equals(lot, auction.lot) &&
+                state == auction.state &&
+                type == auction.type &&
+                Objects.equals(startDate, auction.startDate) &&
+                Objects.equals(endDate, auction.endDate) &&
+                Objects.equals(currentMaximalBid, auction.currentMaximalBid);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(lot, state, type, daysDurations, startDate, endDate, currentMaximalBid);
+    }
+
+    @Override
+    public String toString() {
+        return "Auction{" +
+                "lot=" + lot +
+                ", state=" + state +
+                ", type=" + type +
+                ", daysDurations=" + daysDurations +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", currentMaximalBid=" + currentMaximalBid +
+                ", id=" + id +
+                "} " + super.toString();
     }
 }

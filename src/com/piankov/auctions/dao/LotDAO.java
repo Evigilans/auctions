@@ -1,5 +1,6 @@
 package com.piankov.auctions.dao;
 
+import com.piankov.auctions.creator.LotCreator;
 import com.piankov.auctions.entity.Lot;
 import com.piankov.auctions.pool.ConnectionPool;
 
@@ -7,66 +8,54 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LotDAO extends AbstractDAO<Lot> {
+    private static final String FIND_ALL_LOTS = "SELECT * FROM LOT";
+    private static final String FIND_LOT_BY_ID = "SELECT * FROM LOT WHERE ID = ?";
+    private static final String DELETE_LOT_BY_ID = "DELETE FROM LOT WHERE ID = ?";
+    private static final String UPDATE_LOT = "UPDATE LOT SET OWNER_ID = ?, START_PRICE = ?, NAME = ?, DESCRIPTION = ?  WHERE ID = ?";
+    private static final String CREATE_LOT = "INSERT INTO LOT (OWNER_ID, START_PRICE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
+    private static final String FIND_LOT_BY_AUCTION_ID = "SELECT * FROM LOT WHERE ID = (SELECT LOT_ID FROM AUCTION WHERE ID = ?)";
+
     public LotDAO() {
         this.connection = ConnectionPool.getInstance().takeConnection();
     }
 
     @Override
     public List<Lot> findAll() throws SQLException {
-        List<Lot> lots = new ArrayList<>();
-        String query = "SELECT * FROM LOT";
-        PreparedStatement statement = this.connection.prepareStatement(query);
+        PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_LOTS);
         ResultSet rs = statement.executeQuery();
-        while (rs.next()) {
-            Lot lot = new Lot();
-            lot.setId(rs.getInt("ID"));
-            lot.setOwnerId(rs.getInt("OWNER_ID"));
-            lot.setStartPrice(rs.getInt("START_PRICE"));
-            lot.setName(rs.getString("NAME"));
-            lot.setDescription(rs.getString("DESCRIPTION"));
-            lots.add(lot);
-        }
-        return lots;
+        LotCreator lotCreator = new LotCreator();
+        return lotCreator.buildListFromResultSet(rs);
     }
 
     @Override
     public Lot findById(String id) throws SQLException {
-        String query = "SELECT * FROM LOT WHERE LOT.ID = ?";
-        PreparedStatement statement = this.connection.prepareStatement(query);
+        PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_ID);
         statement.setString(1, id);
         ResultSet rs = statement.executeQuery();
-        if (rs.next()) {
-            Lot lot = new Lot();
-            lot.setId(rs.getInt("ID"));
-            lot.setOwnerId(rs.getInt("OWNER_ID"));
-            lot.setStartPrice(rs.getInt("START_PRICE"));
-            lot.setName(rs.getString("NAME"));
-            lot.setDescription(rs.getString("DESCRIPTION"));
-            return lot;
-        }
-        return null;
+        LotCreator lotCreator = new LotCreator();
+        return lotCreator.buildEntityFromResultSet(rs);
     }
 
     @Override
-    public boolean delete(String id) {
-        return false;
+    public boolean delete(String id) throws SQLException {
+        PreparedStatement statement = this.connection.prepareStatement(DELETE_LOT_BY_ID, Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, id);
+        return statement.execute();
     }
 
     @Override
-    public boolean delete(Lot entity) {
-        return false;
+    public boolean delete(Lot lot) throws SQLException {
+        return delete(String.valueOf(lot.getId()));
     }
 
     @Override
     public long create(Lot lot) throws SQLException {
-        String query = "INSERT INTO LOT (OWNER_ID, START_PRICE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
-        PreparedStatement statement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        statement.setString(1, String.valueOf(lot.getOwnerId()));
-        statement.setString(2, String.valueOf(lot.getStartPrice()));
+        PreparedStatement statement = this.connection.prepareStatement(CREATE_LOT, Statement.RETURN_GENERATED_KEYS);
+        statement.setLong(1, lot.getOwner().getId());
+        statement.setInt(2, lot.getStartPrice());
         statement.setString(3, lot.getName());
         statement.setString(4, lot.getDescription());
         statement.executeUpdate();
@@ -76,24 +65,22 @@ public class LotDAO extends AbstractDAO<Lot> {
     }
 
     @Override
-    public Lot update(Lot entity) {
-        return null;
+    public Lot update(Lot lot) throws SQLException {
+        PreparedStatement statement = this.connection.prepareStatement(UPDATE_LOT, Statement.RETURN_GENERATED_KEYS);
+        statement.setLong(1, lot.getOwner().getId());
+        statement.setInt(2, lot.getStartPrice());
+        statement.setString(3, lot.getName());
+        statement.setString(4, lot.getDescription());
+        statement.executeUpdate();
+        String bidId = String.valueOf(lot.getId());
+        return findById(bidId);
     }
 
     public Lot findByAuctionId(String auctionId) throws SQLException {
-        String query = "SELECT * FROM LOT WHERE ID = (SELECT LOT_ID FROM AUCTION WHERE ID = ?)";
-        PreparedStatement statement = this.connection.prepareStatement(query);
+        PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_AUCTION_ID);
         statement.setString(1, auctionId);
         ResultSet rs = statement.executeQuery();
-        if (rs.next()) {
-            Lot lot = new Lot();
-            lot.setId(rs.getInt("ID"));
-            lot.setOwnerId(rs.getInt("OWNER_ID"));
-            lot.setStartPrice(rs.getInt("START_PRICE"));
-            lot.setName(rs.getString("NAME"));
-            lot.setDescription(rs.getString("DESCRIPTION"));
-            return lot;
-        }
-        return null;
+        LotCreator lotCreator = new LotCreator();
+        return lotCreator.buildEntityFromResultSet(rs);
     }
 }

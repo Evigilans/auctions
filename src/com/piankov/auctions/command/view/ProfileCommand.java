@@ -1,7 +1,8 @@
-package com.piankov.auctions.command;
+package com.piankov.auctions.command.view;
 
-import com.piankov.auctions.dao.ClientDAO;
-import com.piankov.auctions.entity.Client;
+import com.piankov.auctions.command.Command;
+import com.piankov.auctions.dao.UserDAO;
+import com.piankov.auctions.entity.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +13,10 @@ import java.sql.SQLException;
 public class ProfileCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        ClientDAO clientDAO = new ClientDAO();
+        UserDAO clientDAO = new UserDAO();
         try {
-            Client client = clientDAO.findById(request.getParameter("id"));
-            request.setAttribute("client", client);
+            User user = clientDAO.findById(request.getParameter("id"));
+            request.setAttribute("user", user);
             request.getRequestDispatcher("pages/profile.jsp").forward(request, response);
         } catch (IOException | ServletException | SQLException e) {
             e.printStackTrace();
