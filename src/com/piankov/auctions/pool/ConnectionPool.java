@@ -2,58 +2,68 @@ package com.piankov.auctions.pool;
 
 import com.mysql.jdbc.Driver;
 import com.piankov.auctions.connection.ConnectionWrapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 public final class ConnectionPool {
-    private static ConnectionPool instance;
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
     private static final ReentrantLock LOCK = new ReentrantLock();
+
+    private static ConnectionPool instance;
+
+    private Deque<ConnectionWrapper> freeConnections;
+    private Deque<ConnectionWrapper> workingConnections;
+
+
+    //TODO: Что делать с этими параметрами???
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
     private String url;
     private String username;
     private String password;
-    private int poolSize;
-    //private AtomicInteger poolSize = new AtomicInteger();
+    private AtomicInteger poolSize = new AtomicInteger();
 
-    private BlockingQueue<ConnectionWrapper> freeConnections;
-    private BlockingQueue<ConnectionWrapper> workingConnections; //arraydeque
-
-    public String getUrl() {
+    private String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    private void setUrl(String url) {
         this.url = url;
     }
 
-    public String getUsername() {
+    private String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    private void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword() {
+    private String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    private void setPassword(String password) {
         this.password = password;
     }
 
-    public int getPoolSize() {
-        return poolSize;
+    private int getPoolSize() {
+        return poolSize.get();
     }
 
-    public void setPoolSize(int poolSize) {
-        this.poolSize = poolSize;
+    private void setPoolSize(int poolSize) {
+        this.poolSize.set(poolSize);
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static ConnectionPool getInstance() {
         if (instance == null) {
@@ -74,43 +84,32 @@ public final class ConnectionPool {
         return instance;
     }
 
-    public void init() {
+    private void init() {
         try {
             DriverManager.registerDriver(new Driver());
-            freeConnections = new ArrayBlockingQueue<>(getPoolSize());
-            workingConnections = new ArrayBlockingQueue<>(getPoolSize());
-            for (int i = 0; i < poolSize; i++) {
+            freeConnections = new ArrayDeque<>(getPoolSize());
+            workingConnections = new ArrayDeque<>(getPoolSize());
+            for (int i = 0; i < poolSize.get(); i++) {
                 ConnectionWrapper connection = new ConnectionWrapper(DriverManager.getConnection(getUrl(), getUsername(), getPassword()));
                 freeConnections.add(connection);
             }
         } catch (SQLException e) {
-            System.out.println("1");
-            System.err.println(e.getMessage());
+            //LOGGER.error("");
         }
     }
 
     public ConnectionWrapper takeConnection() {
+        //LOGGER.info("Trying to take connection.");
         ConnectionWrapper connection = null;
-        System.out.println("Free: " + freeConnections.size());
-        System.out.println("Taken: " + workingConnections.size());
-        try {
-            connection = freeConnections.take();
-            workingConnections.put(connection);
-        } catch (InterruptedException e) {
-            System.out.println("2");
-            System.err.println(e.getMessage());
-        }
+        connection = freeConnections.element();
+        workingConnections.add(connection);
+        LOGGER.info("Connection has successfully been given. Free connections left:" + freeConnections.size() + ", taken: " + workingConnections.size());
         return connection;
     }
 
     public void releaseConnection(ConnectionWrapper connection) {
-        try {
-            workingConnections.remove(connection);
-            freeConnections.put(connection);
-        } catch (InterruptedException e) {
-            System.out.println("3");
-            System.err.println(e.getMessage());
-        }
+        workingConnections.remove(connection);
+        freeConnections.add(connection);
     }
 
     private void clearConnectionQueue() throws SQLException {
@@ -129,8 +128,7 @@ public final class ConnectionPool {
                 instance.clearConnectionQueue();
                 instance = null;
             } catch (SQLException e) {
-                System.out.println("4");
-                System.err.println(e.getMessage());
+                //LOGGER.error("");
             }
         }
     }

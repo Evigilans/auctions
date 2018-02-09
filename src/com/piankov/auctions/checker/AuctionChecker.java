@@ -13,17 +13,16 @@ import java.util.concurrent.TimeUnit;
 public class AuctionChecker implements ServletContextListener {
     private static Logger LOGGER = LogManager.getLogger(AuctionChecker.class);
 
-    private static final int TIMEOUT_MINUTES = 1;
+    private static final int TIMEOUT_MINUTES = 3;
 
     private void checkInformation() throws InterruptedException, ApplicationContextListenerException {
-        AuctionDAO auctionDAO = new AuctionDAO();
         while (true) {
-            try {
+            try (AuctionDAO auctionDAO = new AuctionDAO()) {
                 LOGGER.info("Checking system information...");
                 auctionDAO.endOutdatedAuctions();
                 TimeUnit.MINUTES.sleep(TIMEOUT_MINUTES);
             } catch (SQLException e) {
-                throw new ApplicationContextListenerException("An error occurred during ContextListener's function execution.");
+                throw new ApplicationContextListenerException("An error occurred during execution a ContextListener's thread.");
             }
         }
     }
@@ -44,6 +43,5 @@ public class AuctionChecker implements ServletContextListener {
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
-    }
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {}
 }

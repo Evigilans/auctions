@@ -12,6 +12,10 @@ public final class ConnectionWrapper {
         this.connection = connection;
     }
 
+    public Statement createStatement() throws SQLException {
+        return connection.createStatement();
+    }
+
     public PreparedStatement prepareStatement(String statement) throws SQLException {
         return connection.prepareStatement(statement);
     }
@@ -42,9 +46,5 @@ public final class ConnectionWrapper {
 
     public void rollback() throws SQLException {
         connection.rollback();
-    }
-
-    public Statement createStatement() throws SQLException {
-        return connection.createStatement();
     }
 }

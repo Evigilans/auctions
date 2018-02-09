@@ -2,7 +2,6 @@ package com.piankov.auctions.dao;
 
 import com.piankov.auctions.creator.LotCreator;
 import com.piankov.auctions.entity.Lot;
-import com.piankov.auctions.pool.ConnectionPool;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +18,7 @@ public class LotDAO extends AbstractDAO<Lot> {
     private static final String FIND_LOT_BY_AUCTION_ID = "SELECT * FROM LOT WHERE ID = (SELECT LOT_ID FROM AUCTION WHERE ID = ?)";
 
     public LotDAO() {
-        this.connection = ConnectionPool.getInstance().takeConnection();
+        super();
     }
 
     @Override
@@ -33,8 +32,10 @@ public class LotDAO extends AbstractDAO<Lot> {
     @Override
     public Lot findById(String id) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_ID);
+
         statement.setString(1, id);
         ResultSet rs = statement.executeQuery();
+
         LotCreator lotCreator = new LotCreator();
         return lotCreator.buildEntityFromResultSet(rs);
     }
@@ -42,7 +43,9 @@ public class LotDAO extends AbstractDAO<Lot> {
     @Override
     public boolean delete(String id) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(DELETE_LOT_BY_ID, Statement.RETURN_GENERATED_KEYS);
+
         statement.setString(1, id);
+
         return statement.execute();
     }
 
@@ -54,11 +57,13 @@ public class LotDAO extends AbstractDAO<Lot> {
     @Override
     public long create(Lot lot) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(CREATE_LOT, Statement.RETURN_GENERATED_KEYS);
+
         statement.setLong(1, lot.getOwner().getId());
         statement.setInt(2, lot.getStartPrice());
         statement.setString(3, lot.getName());
         statement.setString(4, lot.getDescription());
         statement.executeUpdate();
+
         ResultSet resultSet = statement.getGeneratedKeys();
         resultSet.next();
         return resultSet.getLong(1);
@@ -67,19 +72,23 @@ public class LotDAO extends AbstractDAO<Lot> {
     @Override
     public Lot update(Lot lot) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(UPDATE_LOT, Statement.RETURN_GENERATED_KEYS);
+
         statement.setLong(1, lot.getOwner().getId());
         statement.setInt(2, lot.getStartPrice());
         statement.setString(3, lot.getName());
         statement.setString(4, lot.getDescription());
         statement.executeUpdate();
+
         String bidId = String.valueOf(lot.getId());
         return findById(bidId);
     }
 
     public Lot findByAuctionId(String auctionId) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_AUCTION_ID);
+
         statement.setString(1, auctionId);
         ResultSet rs = statement.executeQuery();
+
         LotCreator lotCreator = new LotCreator();
         return lotCreator.buildEntityFromResultSet(rs);
     }

@@ -4,13 +4,15 @@ import java.util.Objects;
 
 public class User extends Entity {
     private String login;
+    private char[] passwordHash;
     private String name;
     private String email;
     private int balance;
     private UserCategory category;
 
-    public User(String login, String name, String email, int balance, UserCategory category) {
+    public User(String login, char[] passwordHash, String name, String email, int balance, UserCategory category) {
         this.login = login;
+        this.passwordHash = passwordHash;
         this.name = name;
         this.email = email;
         this.balance = balance;
@@ -26,6 +28,14 @@ public class User extends Entity {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public char[] getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(char[] passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public String getName() {

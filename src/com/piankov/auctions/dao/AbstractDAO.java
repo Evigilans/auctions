@@ -6,13 +6,14 @@ import com.piankov.auctions.connection.ConnectionWrapper;
 import com.piankov.auctions.entity.Entity;
 import com.piankov.auctions.pool.ConnectionPool;
 
+import java.io.Closeable;
 import java.sql.SQLException;
 import java.util.List;
 
-public abstract class AbstractDAO<T extends Entity> {
+public abstract class AbstractDAO<T extends Entity> implements Closeable {
     protected ConnectionWrapper connection;
 
-    public AbstractDAO() {
+    AbstractDAO() {
         this.connection = ConnectionPool.getInstance().takeConnection();
     }
 
@@ -38,13 +39,8 @@ public abstract class AbstractDAO<T extends Entity> {
         }
     }
 
+    @Override
     public void close() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            // генерация исключения, т.к. нарушается работа пула
-        }
+        ConnectionPool.getInstance().releaseConnection(connection);
     }
 }

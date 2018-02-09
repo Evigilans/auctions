@@ -2,34 +2,34 @@ package com.piankov.auctions.dao;
 
 import com.piankov.auctions.creator.AuctionCreator;
 import com.piankov.auctions.entity.Auction;
-import com.piankov.auctions.pool.ConnectionPool;
+import com.piankov.auctions.entity.AuctionState;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AuctionDAO extends AbstractDAO<Auction> {
     private static final String FIND_ALL_AUCTIONS = "SELECT * FROM AUCTION";
     private static final String FIND_AUCTION_BY_ID = "SELECT * FROM AUCTION WHERE ID = ?";
     private static final String DELETE_AUCTION_BY_ID = "DELETE FROM AUCTION WHERE ID = ?";
-    //TODO: DATES
-    private static final String UPDATE_AUCTION = "UPDATE AUCTION SET LOT_ID = ?, AUCTION_STATE_ID = ?, AUCTION_TYPE_ID = ?  WHERE ID = ?";
-    private static final String CREATE_AUCTION = "INSERT INTO AUCTION () VALUES (?, ?, ?)";
+    private static final String UPDATE_AUCTION = "UPDATE AUCTION SET LOT_ID = ?, AUCTION_STATE_ID = ?, AUCTION_TYPE_ID = ?, DAYS_DURATION = ?, START_DATE = ?, END_DATE = ? WHERE ID = ?";
+    private static final String CREATE_AUCTION = "INSERT INTO AUCTION (LOT_ID, AUCTION_STATE_ID, AUCTION_TYPE_ID, DAYS_DURATION, START_DATE, END_DATE) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String FIND_AUCTIONS_BY_STATE = "SELECT * FROM AUCTION WHERE AUCTION_STATE_ID = ?";
-    private static final String FIND_OUTDATED_AUCTIONS = "SELECT ID FROM AUCTION WHERE (AUCTION_STATE_ID = 2 and END_DATE < NOW())";
+    private static final String FIND_OUTDATED_AUCTIONS = "SELECT * FROM AUCTION WHERE (AUCTION_STATE_ID = 2 and END_DATE < NOW())";
     private static final String END_OUTDATED_AUCTIONS = "UPDATE AUCTION SET AUCTION_STATE_ID = ? WHERE ID = ?";
 
     public AuctionDAO() {
-        this.connection = ConnectionPool.getInstance().takeConnection();
+        super();
     }
 
     @Override
     public List<Auction> findAll() throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_AUCTIONS);
+
         ResultSet rs = statement.executeQuery();
+
         AuctionCreator auctionCreator = new AuctionCreator();
         return auctionCreator.buildListFromResultSet(rs);
     }
@@ -37,7 +37,9 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     @Override
     public Auction findById(String id) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(FIND_AUCTION_BY_ID);
+
         statement.setString(1, id);
+
         ResultSet rs = statement.executeQuery();
         AuctionCreator auctionCreator = new AuctionCreator();
         return auctionCreator.buildEntityFromResultSet(rs);
@@ -46,7 +48,9 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     @Override
     public boolean delete(String auctionId) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(DELETE_AUCTION_BY_ID, Statement.RETURN_GENERATED_KEYS);
+
         statement.setString(1, auctionId);
+
         return statement.execute();
     }
 
@@ -58,6 +62,7 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     @Override
     public long create(Auction auction) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(CREATE_AUCTION, Statement.RETURN_GENERATED_KEYS);
+
         statement.setLong(1, auction.getLot().getId());
         statement.setLong(2, auction.getState().ordinal());
         statement.setLong(3, auction.getType().ordinal());
@@ -71,6 +76,7 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     @Override
     public Auction update(Auction auction) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(UPDATE_AUCTION, Statement.RETURN_GENERATED_KEYS);
+
         statement.setLong(1, auction.getLot().getId());
         statement.setLong(2, auction.getState().ordinal());
         statement.setLong(3, auction.getType().ordinal());
@@ -83,36 +89,38 @@ public class AuctionDAO extends AbstractDAO<Auction> {
 
     public List<Auction> findAuctionsByState(int stateId) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(FIND_AUCTIONS_BY_STATE);
+
         statement.setInt(1, stateId);
         ResultSet rs = statement.executeQuery();
+
         AuctionCreator auctionCreator = new AuctionCreator();
         return auctionCreator.buildListFromResultSet(rs);
     }
 
     public void endOutdatedAuctions() throws SQLException {
-        List<String> outdatedAuctions = findOutdatedAuctions();
-        BidDAO bidDAO = new BidDAO();
+        try (BidDAO bidDAO = new BidDAO()) {
+            List<Auction> outdatedAuctions = findOutdatedAuctions();
+            for (Auction auction : outdatedAuctions) {
+                //TODO: Куда вынести statement???
+                PreparedStatement statement = this.connection.prepareStatement(END_OUTDATED_AUCTIONS);
 
-        for (String auctionId : outdatedAuctions) {
-            PreparedStatement statement = this.connection.prepareStatement(END_OUTDATED_AUCTIONS);
-            if (bidDAO.hasAnyBid(auctionId)) {
-                statement.setInt(1, 3);
-            } else {
-                statement.setInt(1, 4);
+                if (bidDAO.hasAnyBid(auction.getId())) {
+                    statement.setInt(1, AuctionState.SUCCESSFUL.ordinal());
+                } else {
+                    statement.setInt(1, AuctionState.UNSUCCESSFUL.ordinal());
+                }
+                statement.setLong(2, auction.getId());
+                statement.executeUpdate();
             }
-            statement.setString(2, auctionId);
-            statement.executeUpdate();
         }
     }
 
-    private List<String> findOutdatedAuctions() throws SQLException {
+    private List<Auction> findOutdatedAuctions() throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(FIND_OUTDATED_AUCTIONS);
+
         ResultSet rs = statement.executeQuery();
 
-        List<String> outdatedAuctions = new ArrayList<>();
-        while (rs.next()) {
-            outdatedAuctions.add(rs.getString("ID"));
-        }
-        return outdatedAuctions;
+        AuctionCreator auctionCreator = new AuctionCreator();
+        return auctionCreator.buildListFromResultSet(rs);
     }
 }

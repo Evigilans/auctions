@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class PaymentCreator extends AbstractCreator<Payment> {
     @Override
-    public Payment buildEntityFromMap(Map<String, String> parameters) {
+    public Payment buildEntityFromMap(Map<String, String[]> parameterMap) {
         return null;
     }
 

@@ -13,8 +13,7 @@ import java.sql.SQLException;
 public class ShowAuctionCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        AuctionDAO auctionDAO = new AuctionDAO();
-        try {
+        try (AuctionDAO auctionDAO = new AuctionDAO();) {
             Auction auction = auctionDAO.findById(request.getParameter("id"));
             request.setAttribute("auction", auction);
             request.getRequestDispatcher("pages/auction.jsp").forward(request, response);

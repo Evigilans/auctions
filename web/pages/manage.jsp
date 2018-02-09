@@ -9,15 +9,12 @@
 <jsp:include page="service/header.jsp"></jsp:include>
 
 <main>
-
     <c:choose>
-        <c:when test="${user.category != 1}">
-            Данная страница доступна только для администратора! <br>
+        <c:when test="${user.admin}">
+            Управление аукционами: <br>
         </c:when>
         <c:otherwise>
-            Управление аукционами:
-
-            <br/>
+            Данная страница доступна только для администратора! <br>
         </c:otherwise>
     </c:choose>
 

@@ -50,7 +50,8 @@
             <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/create.jsp">Create
                 auction</a></li>
 
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=list&auctionsState=active">Auctions List</a></li>
+            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=list&auctionsState=active">Auctions
+                List</a></li>
             <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=profile&id=${user.id}">My
                 Profile</a></li>
             <c:if test="${user.admin}">
@@ -62,7 +63,7 @@
     <script src="${pageContext.request.contextPath}/js/temp.js"></script>
 
     <div id="lang-menu">
-        <div><img src="${pageContext.request.contextPath}/images/UK.png"> EN</div>
+        <div><img src="${pageContext.request.contextPath}/images/RU.png"> RU</div>
         <ul>
             <li>
                 <a href="${pageContext.request.contextPath}/ApplicationServlet?command=language&language_id=en_US"><img

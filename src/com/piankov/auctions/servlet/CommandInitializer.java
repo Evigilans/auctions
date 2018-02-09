@@ -15,6 +15,7 @@ import com.piankov.auctions.command.view.ShowAuctionCommand;
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO: вынести в ENUM???
 public class CommandInitializer {
     static Map<String, Command> initializeCommandMap() {
         Map<String, Command> commandMap = new HashMap<>();

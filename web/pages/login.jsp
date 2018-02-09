@@ -60,7 +60,7 @@
                         <label>
                             Login<span class="req">*</span>
                         </label>
-                        <input type="email" name="userName" required autocomplete="off"/>
+                        <input type="text" name="userName" required autocomplete="off"/>
                     </div>
                     <div class="field-wrap">
                         <label>
