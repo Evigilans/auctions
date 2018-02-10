@@ -93,7 +93,7 @@
                         <label>
                             Value<span class="req">*</span>
                         </label>
-                        <input type="text" name="value" required autocomplete="off"/>
+                        <input type="text" name="bidValue" required autocomplete="off"/>
                     </div>
                     <button type="submit" class="button button-block"/>
                     Make a bid!</button>

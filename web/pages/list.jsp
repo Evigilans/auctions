@@ -22,7 +22,7 @@
             <c:forEach var="auction" items="${auctions}">
                 <li>
                     <h2>
-                        <a href="${pageContext.request.contextPath}/ApplicationServlet?command=auction&id=${auction.id}">${auction.lot.name}</a>
+                        <a href="${pageContext.request.contextPath}/ApplicationServlet?command=auction&auctionId=${auction.id}">${auction.lot.name}</a>
                     </h2>
                     <p>Auction description</p>
                     <span class="author">Jean</span><span class="date">11/11/15</span><span class="time">7:22pm</span>

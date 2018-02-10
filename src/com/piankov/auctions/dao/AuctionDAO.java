@@ -4,10 +4,7 @@ import com.piankov.auctions.creator.AuctionCreator;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.AuctionState;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 public class AuctionDAO extends AbstractDAO<Auction> {
@@ -66,6 +63,9 @@ public class AuctionDAO extends AbstractDAO<Auction> {
         statement.setLong(1, auction.getLot().getId());
         statement.setLong(2, auction.getState().ordinal());
         statement.setLong(3, auction.getType().ordinal());
+        statement.setLong(4, auction.getDaysDurations());
+        statement.setTimestamp(5, Timestamp.valueOf(auction.getStartDate()));
+        statement.setTimestamp(6, Timestamp.valueOf(auction.getEndDate()));
         statement.executeUpdate();
 
         ResultSet resultSet = statement.getGeneratedKeys();

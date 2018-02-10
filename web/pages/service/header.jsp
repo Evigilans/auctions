@@ -52,7 +52,7 @@
 
             <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=list&auctionsState=active">Auctions
                 List</a></li>
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=profile&id=${user.id}">My
+            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=profile&userId=${user.id}">My
                 Profile</a></li>
             <c:if test="${user.admin}">
             <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/manage.jsp">Auction

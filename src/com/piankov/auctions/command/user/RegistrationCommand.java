@@ -1,10 +1,11 @@
 package com.piankov.auctions.command.user;
 
+import com.piankov.auctions.action.UserAction;
 import com.piankov.auctions.command.Command;
-import com.piankov.auctions.creator.UserCreator;
-import com.piankov.auctions.dao.UserDAO;
+import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.User;
 import com.piankov.auctions.exception.CommandExecutionException;
+import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.validator.DataValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RegistrationCommand implements Command {
@@ -22,20 +23,18 @@ public class RegistrationCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
         DataValidator dataValidator = new DataValidator();
-        Map<String, String[]> parameterMap = request.getParameterMap();
+        UserAction userAction = new UserAction();
+
+        Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
 
         if (dataValidator.validateRegistrationData(parameterMap)) {
-            try (UserDAO userDAO = new UserDAO()) {
-                UserCreator userCreator = new UserCreator();
-                User user = userCreator.buildEntityFromMap(parameterMap);
+            try {
+                User user = userAction.registerUser(parameterMap);
 
-                long generatedId = userDAO.create(user);
-                user.setId(generatedId);
-
-                request.getSession().setAttribute("user", user);
-                request.getRequestDispatcher("pages/profile.jsp").forward(request, response);
-            } catch (SQLException | ServletException | IOException e) {
-                throw new CommandExecutionException("An error occurred during execution a command.");
+                request.getSession().setAttribute(ParameterConstant.PARAMETER_USER, user);
+                request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
+            } catch (ServletException | IOException e) {
+                e.printStackTrace();
             }
         }
     }

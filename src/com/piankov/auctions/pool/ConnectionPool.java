@@ -9,73 +9,42 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public final class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
-    private static final ReentrantLock LOCK = new ReentrantLock();
+    private static final String RB_PATH = "resource.database";
+    private static final String RB_URL = "database.url";
+    private static final String RB_USER = "database.user";
+    private static final String RB_PASSWORD = "database.password";
+    private static final String RB_POOL_SIZE = "database.poolSize";
+
+    private static final Lock LOCK = new ReentrantLock();
 
     private static ConnectionPool instance;
 
     private Deque<ConnectionWrapper> freeConnections;
     private Deque<ConnectionWrapper> workingConnections;
-
-
-    //TODO: Что делать с этими параметрами???
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private String url;
-    private String username;
-    private String password;
     private AtomicInteger poolSize = new AtomicInteger();
-
-    private String getUrl() {
-        return url;
-    }
-
-    private void setUrl(String url) {
-        this.url = url;
-    }
-
-    private String getUsername() {
-        return username;
-    }
-
-    private void setUsername(String username) {
-        this.username = username;
-    }
-
-    private String getPassword() {
-        return password;
-    }
-
-    private void setPassword(String password) {
-        this.password = password;
-    }
-
-    private int getPoolSize() {
-        return poolSize.get();
-    }
-
-    private void setPoolSize(int poolSize) {
-        this.poolSize.set(poolSize);
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static ConnectionPool getInstance() {
         if (instance == null) {
             LOCK.lock();
             try {
                 if (instance == null) {
+                    ResourceBundle resourceBundle = ResourceBundle.getBundle(RB_PATH);
+
+                    String url = resourceBundle.getString(RB_URL);
+                    String user = resourceBundle.getString(RB_USER);
+                    String password = resourceBundle.getString(RB_PASSWORD);
+                    String poolSizeString = resourceBundle.getString(RB_POOL_SIZE);
+
                     instance = new ConnectionPool();
-                    instance.setUrl("jdbc:mysql://localhost:3306/auctions");
-                    instance.setUsername("root");
-                    instance.setPassword("root");
-                    instance.setPoolSize(30);
-                    instance.init();
+                    instance.init(url, user, password, poolSizeString);
                 }
             } finally {
                 LOCK.unlock();
@@ -84,13 +53,16 @@ public final class ConnectionPool {
         return instance;
     }
 
-    private void init() {
+    private void init(String url, String user, String password, String poolSizeString) {
         try {
             DriverManager.registerDriver(new Driver());
-            freeConnections = new ArrayDeque<>(getPoolSize());
-            workingConnections = new ArrayDeque<>(getPoolSize());
-            for (int i = 0; i < poolSize.get(); i++) {
-                ConnectionWrapper connection = new ConnectionWrapper(DriverManager.getConnection(getUrl(), getUsername(), getPassword()));
+            setPoolSize(Integer.parseInt(poolSizeString));
+
+            freeConnections = new ArrayDeque<>(poolSize.get());
+            workingConnections = new ArrayDeque<>(poolSize.get());
+
+            for (int i = 0; i < this.poolSize.get(); i++) {
+                ConnectionWrapper connection = new ConnectionWrapper(DriverManager.getConnection(url, user, password));
                 freeConnections.add(connection);
             }
         } catch (SQLException e) {
@@ -100,10 +72,11 @@ public final class ConnectionPool {
 
     public ConnectionWrapper takeConnection() {
         //LOGGER.info("Trying to take connection.");
-        ConnectionWrapper connection = null;
-        connection = freeConnections.element();
+
+        ConnectionWrapper connection = freeConnections.remove();
         workingConnections.add(connection);
-        LOGGER.info("Connection has successfully been given. Free connections left:" + freeConnections.size() + ", taken: " + workingConnections.size());
+
+        LOGGER.info("Connection has successfully been taken. Free connections left: " + freeConnections.size() + ", taken: " + workingConnections.size());
         return connection;
     }
 
@@ -112,7 +85,7 @@ public final class ConnectionPool {
         freeConnections.add(connection);
     }
 
-    private void clearConnectionQueue() throws SQLException {
+    private void clearConnectionDeque() throws SQLException {
         ConnectionWrapper connection;
         while ((connection = freeConnections.poll()) != null) {
             connection.close();
@@ -124,12 +97,25 @@ public final class ConnectionPool {
 
     public void closePool() {
         if (instance != null) {
+            LOCK.lock();
             try {
-                instance.clearConnectionQueue();
-                instance = null;
+                if (instance != null) {
+                    instance.clearConnectionDeque();
+                    instance = null;
+                }
             } catch (SQLException e) {
                 //LOGGER.error("");
+            } finally {
+                LOCK.unlock();
             }
         }
+    }
+
+    private int getPoolSize() {
+        return poolSize.get();
+    }
+
+    private void setPoolSize(int poolSize) {
+        this.poolSize.set(poolSize);
     }
 }

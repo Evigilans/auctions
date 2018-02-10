@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractCreator<T extends Entity> {
-    public abstract T buildEntityFromMap(Map<String, String[]> parameterMap);
+    public abstract T buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects);
 
     public abstract T buildEntityFromResultSet(ResultSet resultSet) throws SQLException;
 

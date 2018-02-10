@@ -5,6 +5,8 @@ import com.piankov.auctions.dao.LotDAO;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.AuctionState;
 import com.piankov.auctions.entity.AuctionType;
+import com.piankov.auctions.entity.Lot;
+import com.piankov.auctions.constant.ParameterConstant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,9 +27,19 @@ public class AuctionCreator extends AbstractCreator<Auction> {
     private static final String START_DATE = "START_DATE";
     private static final String END_DATE = "END_DATE";
 
+
     @Override
-    public Auction buildEntityFromMap(Map<String, String[]> parameterMap) {
-        return null;
+    public Auction buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
+        LotCreator lotCreator = new LotCreator();
+        Lot lot = lotCreator.buildEntityFromMap(parameterMap);
+
+        Auction auction = new Auction();
+        auction.setLot(lot);
+        auction.setState(AuctionState.ON_VERIFICATION);
+        auction.setType(AuctionType.DIRECT);
+        auction.setDaysDurations(Integer.parseInt(parameterMap.get(ParameterConstant.PARAMETER_DAYS)[0]));
+
+        return auction;
     }
 
     @Override

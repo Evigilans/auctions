@@ -1,49 +1,36 @@
 package com.piankov.auctions.command.entity;
 
+import com.piankov.auctions.action.AuctionAction;
 import com.piankov.auctions.command.Command;
-import com.piankov.auctions.dao.AuctionDAO;
-import com.piankov.auctions.dao.LotDAO;
-import com.piankov.auctions.entity.*;
-import com.piankov.auctions.validator.EntityValidator;
+import com.piankov.auctions.command.CommandType;
+import com.piankov.auctions.constant.ParameterConstant;
+import com.piankov.auctions.entity.Auction;
+import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.CommandExecutionException;
+import com.piankov.auctions.exception.UnauthorizedAccessException;
+import com.piankov.auctions.validator.DataValidator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateAuctionCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        int startPrice = Integer.parseInt(request.getParameter("startPrice"));
-        int days = Integer.parseInt(request.getParameter("days"));
-        User user = (User) request.getSession().getAttribute("user");
+        DataValidator dataValidator = new DataValidator();
+        AuctionAction auctionAction = new AuctionAction();
 
-        EntityValidator entityValidator = new EntityValidator();
+        Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
 
-        if (entityValidator.validateRegistrationData()) {
+        if (dataValidator.validateAuctionData(parameterMap)) {
             try {
-                LotDAO lotDAO = new LotDAO();
-                Lot lot = new Lot();
-                lot.setName(name);
-                lot.setDescription(description);
-                lot.setOwner(user);
-                lot.setStartPrice(startPrice);
-                long generatedLotId = lotDAO.create(lot);
-                lot.setId(generatedLotId);
+                User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
+                Auction auction = auctionAction.createAuction(parameterMap, user);
 
-                AuctionDAO auctionDAO = new AuctionDAO();
-                Auction auction = new Auction();
-                auction.setLot(lot);
-                auction.setState(AuctionState.IN_PROGRESS);
-                auction.setType(AuctionType.DIRECT);
-                long generatedAuctionId = auctionDAO.create(auction);
-                auction.setId(generatedAuctionId);
-
-                request.getRequestDispatcher("pages/home.jsp").forward(request, response);
-            } catch (SQLException | ServletException | IOException e) {
+                request.setAttribute(ParameterConstant.PARAMETER_AUCTION_ID, auction.getId());
+                CommandType.SHOW_AUCTION.getCommand().execute(request, response);
+            } catch (UnauthorizedAccessException | CommandExecutionException e) {
                 e.printStackTrace();
             }
         }

@@ -1,6 +1,8 @@
 package com.piankov.auctions.creator;
 
+import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Bid;
+import com.piankov.auctions.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,9 +20,17 @@ public class BidCreator extends AbstractCreator<Bid> {
     private static final String AUCTION_ID = "AUCTION_ID";
     private static final String VALUE = "VALUE";
 
+
     @Override
-    public Bid buildEntityFromMap(Map<String, String[]> parameterMap) {
-        return null;
+    public Bid buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
+        Bid bid = new Bid();
+        User user = (User) objects[0];
+
+        bid.setClientId(user.getId());
+        bid.setAuctionId(Long.parseLong(parameterMap.get(ParameterConstant.PARAMETER_AUCTION_ID)[0]));
+        bid.setValue(Integer.parseInt(parameterMap.get(ParameterConstant.PARAMETER_BID_VALUE)[0]));
+
+        return bid;
     }
 
     @Override

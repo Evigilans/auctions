@@ -28,4 +28,24 @@ public class DataValidator {
     public boolean validateEmail(String email) {
         return Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
     }
+
+    public boolean validateLoginData(String login, String password) {
+        return true;
+    }
+
+    public boolean validateBidData(Map<String, String[]> parameterMap) {
+        //int value = Integer.parseInt(request.getParameter("value"));
+        //String auctionId = request.getParameter("auctionId");
+        //User user = (User) request.getSession().getAttribute("user");
+        return true;
+    }
+
+    public boolean validateAuctionData(Map<String, String[]> parameterMap) {
+        //String name = request.getParameter("name");
+        //String description = request.getParameter("description");
+        //int startPrice = Integer.parseInt(request.getParameter("startPrice"));
+        //int days = Integer.parseInt(request.getParameter("days"));
+        //User user = (User) request.getSession().getAttribute("user");
+        return true;
+    }
 }

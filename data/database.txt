@@ -1,4 +1,0 @@
-url=jdbc:mysql://localhost:3306/auctions
-username=root
-password=root
-poolSize=30

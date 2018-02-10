@@ -32,13 +32,13 @@
                         <label>
                             Name<span class="req">*</span>
                         </label>
-                        <input type="text" name="name" required autocomplete="off"/>
+                        <input type="text" name="lotName" required autocomplete="off"/>
                     </div>
                     <div class="field-wrap">
                         <label>
                             Description<span class="req">*</span>
                         </label>
-                        <input type="text" name="description" required autocomplete="off"/>
+                        <input type="text" name="lotDescription" required autocomplete="off"/>
                     </div>
                     <div class="field-wrap">
                         <label>

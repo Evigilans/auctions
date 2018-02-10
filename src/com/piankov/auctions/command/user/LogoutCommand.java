@@ -2,6 +2,8 @@ package com.piankov.auctions.command.user;
 
 import com.piankov.auctions.command.Command;
 import com.piankov.auctions.exception.CommandExecutionException;
+import com.piankov.auctions.constant.PageConstant;
+import com.piankov.auctions.constant.ParameterConstant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,8 +18,9 @@ public class LogoutCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
         try {
-            request.getSession().setAttribute("user", null);
-            request.getRequestDispatcher("pages/home.jsp").forward(request, response);
+            //Надо что-то?
+            request.getSession().removeAttribute(ParameterConstant.PARAMETER_USER);
+            request.getRequestDispatcher(PageConstant.PAGE_HOME).forward(request, response);
         } catch (ServletException | IOException e) {
             throw new CommandExecutionException("An error occurred during execution a command.");
         }

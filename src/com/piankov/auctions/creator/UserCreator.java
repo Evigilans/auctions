@@ -1,5 +1,6 @@
 package com.piankov.auctions.creator;
 
+import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.User;
 import com.piankov.auctions.entity.UserCategory;
 import org.apache.logging.log4j.LogManager;
@@ -22,15 +23,16 @@ public class UserCreator extends AbstractCreator<User> {
     private static final String BALANCE = "BALANCE";
     private static final String CATEGORY = "CATEGORY";
 
+
     @Override
-    public User buildEntityFromMap(Map<String, String[]> parameterMap) {
+    public User buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
         User user = new User();
 
-        user.setLogin(parameterMap.get(LOGIN.toLowerCase())[0]);
+        user.setLogin(parameterMap.get(ParameterConstant.PARAMETER_LOGIN)[0]);
         //TODO: Что делать с паролем???
-        user.setPasswordHash(parameterMap.get("password")[0].toCharArray());
-        user.setName(parameterMap.get(NAME.toLowerCase())[0]);
-        user.setEmail(parameterMap.get(EMAIL.toLowerCase())[0]);
+        //user.setPasswordHash(parameterMap.get(ParameterConstant.PARAMETER_LOGIN)[0]);
+        user.setName(parameterMap.get(ParameterConstant.PARAMETER_NAME)[0]);
+        user.setEmail(parameterMap.get(ParameterConstant.PARAMETER_EMAIL)[0]);
         user.setBalance(0);
         user.setCategory(UserCategory.CLIENT);
 

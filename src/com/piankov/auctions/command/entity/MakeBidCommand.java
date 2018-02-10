@@ -1,43 +1,41 @@
 package com.piankov.auctions.command.entity;
 
+import com.piankov.auctions.action.AuctionAction;
 import com.piankov.auctions.command.Command;
-import com.piankov.auctions.dao.BidDAO;
-import com.piankov.auctions.entity.Bid;
+import com.piankov.auctions.command.CommandType;
+import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.User;
-import com.piankov.auctions.validator.EntityValidator;
+import com.piankov.auctions.exception.CommandExecutionException;
+import com.piankov.auctions.exception.UnauthorizedAccessException;
+import com.piankov.auctions.validator.DataValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MakeBidCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(MakeBidCommand.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        int value = Integer.parseInt(request.getParameter("value"));
-        String auctionId = request.getParameter("auctionId");
-        User user = (User) request.getSession().getAttribute("user");
+        DataValidator dataValidator = new DataValidator();
+        AuctionAction auctionAction = new AuctionAction();
 
-        EntityValidator entityValidator = new EntityValidator();
+        Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
 
-        if (entityValidator.validateRegistrationData()) {
+        if (dataValidator.validateBidData(parameterMap)) {
             try {
-                Bid bid = new Bid();
-                bid.setClientId(user.getId());
-                bid.setAuctionId(Long.parseLong(auctionId));
-                bid.setValue(value);
+                User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
+                auctionAction.makeBid(parameterMap, user);
 
-                BidDAO bidDAO = new BidDAO();
-                long generatedId = bidDAO.create(bid);
-
-                bid.setId(generatedId);
-
-                request.getRequestDispatcher("pages/home.jsp").forward(request, response);
-            } catch (ServletException | IOException | SQLException e) {
+                request.setAttribute(ParameterConstant.PARAMETER_AUCTION_ID, parameterMap.get(ParameterConstant.PARAMETER_AUCTION_ID));
+                CommandType.SHOW_AUCTION.getCommand().execute(request, response);
+            } catch (UnauthorizedAccessException | CommandExecutionException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }
