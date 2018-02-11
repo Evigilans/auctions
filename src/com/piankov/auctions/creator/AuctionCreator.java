@@ -30,12 +30,11 @@ public class AuctionCreator extends AbstractCreator<Auction> {
 
     @Override
     public Auction buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
-        LotCreator lotCreator = new LotCreator();
-        Lot lot = lotCreator.buildEntityFromMap(parameterMap);
-
         Auction auction = new Auction();
+
+        Lot lot = (Lot) objects[0];
+
         auction.setLot(lot);
-        auction.setState(AuctionState.ON_VERIFICATION);
         auction.setType(AuctionType.DIRECT);
         auction.setDaysDurations(Integer.parseInt(parameterMap.get(ParameterConstant.PARAMETER_DAYS)[0]));
 
@@ -50,16 +49,18 @@ public class AuctionCreator extends AbstractCreator<Auction> {
             if (resultSet.next()) {
                 Auction auction = new Auction();
 
-                //TODO: из базы данных или resultSet???
                 String auctionId = resultSet.getString(ID);
                 auction.setId(Long.parseLong(auctionId));
                 auction.setLot(lotDAO.findByAuctionId(auctionId));
                 auction.setState(AuctionState.getStateFromValue(resultSet.getInt(AUCTION_STATE_ID)));
                 auction.setType(AuctionType.getTypeFromValue(resultSet.getInt(AUCTION_TYPE_ID)));
                 auction.setDaysDurations(resultSet.getInt(DAYS_DURATION));
-                auction.setStartDate(resultSet.getTimestamp(START_DATE).toLocalDateTime());
-                auction.setEndDate(resultSet.getTimestamp(END_DATE).toLocalDateTime());
-                auction.setCurrentMaximalBid(bidDAO.findMaxBidByAuctionId(auctionId));
+
+                if (auction.getState() != AuctionState.ON_VERIFICATION) {
+                    auction.setStartDate(resultSet.getTimestamp(START_DATE).toLocalDateTime());
+                    auction.setEndDate(resultSet.getTimestamp(END_DATE).toLocalDateTime());
+                    auction.setCurrentMaximalBid(bidDAO.findMaxBidByAuctionId(auctionId));
+                }
 
                 return auction;
             }
@@ -76,19 +77,22 @@ public class AuctionCreator extends AbstractCreator<Auction> {
             while (resultSet.next()) {
                 Auction auction = new Auction();
 
-                //TODO: из базы данных или resultSet???
                 String auctionId = resultSet.getString(ID);
                 auction.setId(Long.parseLong(auctionId));
                 auction.setLot(lotDAO.findByAuctionId(auctionId));
                 auction.setState(AuctionState.getStateFromValue(resultSet.getInt(AUCTION_STATE_ID)));
                 auction.setType(AuctionType.getTypeFromValue(resultSet.getInt(AUCTION_TYPE_ID)));
                 auction.setDaysDurations(resultSet.getInt(DAYS_DURATION));
-                auction.setStartDate(resultSet.getTimestamp(START_DATE).toLocalDateTime());
-                auction.setEndDate(resultSet.getTimestamp(END_DATE).toLocalDateTime());
-                auction.setCurrentMaximalBid(bidDAO.findMaxBidByAuctionId(auctionId));
+
+                if (auction.getState() != AuctionState.ON_VERIFICATION) {
+                    auction.setStartDate(resultSet.getTimestamp(START_DATE).toLocalDateTime());
+                    auction.setEndDate(resultSet.getTimestamp(END_DATE).toLocalDateTime());
+                    auction.setCurrentMaximalBid(bidDAO.findMaxBidByAuctionId(auctionId));
+                }
 
                 auctions.add(auction);
             }
+
             return auctions;
         }
     }

@@ -70,9 +70,18 @@ public class User extends Entity {
         this.category = category;
     }
 
+    public boolean isClient() {
+        return category == UserCategory.CLIENT;
+    }
+
+    public boolean isAdvanced() {
+        return category == UserCategory.ADVANCED;
+    }
+
     public boolean isAdmin() {
         return category == UserCategory.ADMIN;
     }
+
 
     @Override
     public boolean equals(Object o) {

@@ -26,6 +26,7 @@ public class LotCreator extends AbstractCreator<Lot> {
     @Override
     public Lot buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
         Lot lot = new Lot();
+
         User user = (User) objects[0];
 
         lot.setOwner(user);

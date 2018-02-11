@@ -438,7 +438,6 @@ button .square-btn:active {
     opacity: 0.5;
     position: relative;
     top: 0;
-
 }
 
 #pagination-wrap ul li.active {
@@ -446,7 +445,6 @@ button .square-btn:active {
     height: 12px;
     top: 3px;
     opacity: 1;
-    box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 0px;
 }
 
 #slider-wrap ul, #pagination-wrap ul li {
@@ -455,4 +453,56 @@ button .square-btn:active {
     -o-transition: all 0.3s cubic-bezier(1, .01, .32, 1);
     -ms-transition: all 0.3s cubic-bezier(1, .01, .32, 1);
     transition: all 0.3s cubic-bezier(1, .01, .32, 1);
+}
+
+#profile {
+    position: relative;
+    margin: 90px auto;
+    width: 324px;
+}
+
+#profile .img {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    margin: 0 0 0 -42px;
+    width: 76px;
+    height: 76px;
+    border: 4px solid #ecf0f1;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    -moz-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04);
+    -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04);
+    background: #ecf0f1 url("http://img.lukepeters.me/jack.jpg") 0 0 no-repeat;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+
+#profile .btn:hover, #profile .btn:visited:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: #ea6557;
+}
+#profile .btn.btn_left, #profile .btn:visited.btn_left {
+    left: 10px;
+}
+#profile .btn.btn_right, #profile .btn:visited.btn_right {
+    right: 10px;
+}
+#profile .info {
+    position: relative;
+    padding: 42px 22px 18px 22px;
+    font-family: "Helvetica Neue", "Helvetica", sans-serif;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 100;
+    letter-spacing: 1px;
+    color: #ecf0f1;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+}
+#profile .info strong {
+    font-weight: 400;
 }

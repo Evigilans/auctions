@@ -17,4 +17,7 @@ public class ParameterConstant {
     public static final String PARAMETER_LOT_DESCRIPTION = "lotDescription";
     public static final String PARAMETER_NAME = "name";
     public static final String PARAMETER_EMAIL = "email";
+    public static final String PARAMETER_AUCTION = "auction";
+    public static final String PARAMETER_AUCTIONS = "auctions";
+    public static final String PARAMETER_USER_PROFILE = "userProfile";
 }

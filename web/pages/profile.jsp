@@ -2,7 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>Profile</title>
+    <title>Title</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/controls.css" type="text/css" media="screen">
 </head>
 <body>
 
@@ -11,17 +12,39 @@
 <main>
     <c:choose>
         <c:when test="${empty user}">
-            <p> Чтобы просматривать свой профиль, вам необходимо <a
-                    href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/login.jsp">войти</a>
-                или зарегистрироваться.
+            <p>Чтобы просматривать профили, Вам необходимо <a
+                    href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/login.jsp"><strong>войти
+                или зарегистрироваться.</strong></a>
             </p>
         </c:when>
         <c:otherwise>
-            <h3>Your profile</h3>
+            <c:choose>
+                <c:when test="${user == userProfile}">
+                    <h3>Welcome to your profile, ${userProfile.name}!</h3>
 
-            <p>
-                Your Name: ${user.name}
-            </p>
+                    <div id="profile">
+                        <div class="img"></div>
+                        <a href="" class="btn btn_left">${userProfile.email}</a>
+                        <div class="info">
+                            Your login: <strong>${userProfile.login}</strong> <br>
+                            Your balance: <strong>${userProfile.balance}</strong> <br>
+                        </div>
+                    </div>
+
+                </c:when>
+                <c:otherwise>
+                    <h3>Welcome to profile of user ${userProfile.name}!</h3>
+
+                    <div id="profile">
+                        <div class="img"></div>
+                        <a href="" class="btn btn_left">${userProfile.email}</a>
+                        <div class="info">
+                            Your login: <strong>${userProfile.login}</strong> <br>
+                        </div>
+                    </div>
+
+                </c:otherwise>
+            </c:choose>
         </c:otherwise>
     </c:choose>
 </main>

@@ -11,7 +11,13 @@
 <main>
     <c:choose>
         <c:when test="${user.admin}">
-            Управление аукционами: <br>
+            <h3>Available functions: </h3>
+            <li>
+                <a href="${pageContext.request.contextPath}/ApplicationServlet?command=verifyingAuctionsList">Verify auctions</a>
+            </li>
+            <li>
+                <a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/home.jsp">Edit users</a>
+            </li>
         </c:when>
         <c:otherwise>
             Данная страница доступна только для администратора! <br>

@@ -63,17 +63,12 @@ public class BidDAO extends AbstractDAO<Bid> {
         PreparedStatement statement = this.connection.prepareStatement(CREATE_BID, Statement.RETURN_GENERATED_KEYS);
 
         statement.setLong(1, bid.getClientId());
-        System.out.println("000");
         statement.setLong(2, bid.getAuctionId());
-        System.out.println("000");
         statement.setLong(3, bid.getValue());
-        System.out.println("000");
         statement.executeUpdate();
 
-        System.out.println("000");
         ResultSet resultSet = statement.getGeneratedKeys();
         resultSet.next();
-        System.out.println("000");
         return resultSet.getLong(1);
     }
 

@@ -20,7 +20,7 @@ public class ProfileCommand implements Command {
         try {
             User user = userAction.findUser(userId);
 
-            request.setAttribute(ParameterConstant.PARAMETER_USER, user);
+            request.setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, user);
             request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
         } catch (IOException | ServletException e) {
             e.printStackTrace();

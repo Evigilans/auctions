@@ -5,12 +5,17 @@ public enum AuctionState {
 
     ON_VERIFICATION(1), IN_PROGRESS(2), SUCCESSFUL(3), UNSUCCESSFUL(4), WITHDRAW_FROM_SALES(5);
 
-    public int value;
+    private final int value;
 
     AuctionState(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     public static AuctionState getStateFromValue(int value) {
-        return AuctionState.values()[value];
+        return AuctionState.values()[value - 1];
     }
 }
