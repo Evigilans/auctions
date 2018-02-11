@@ -1,0 +1,163 @@
+body, input, .sort {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+}
+
+#sandbox {
+    position: relative;
+    width: 60rem;
+    margin: 0 auto;
+    transition: ease-in
+}
+
+.sort {
+    padding: 8px 30px;
+    border-radius: 6px;
+    border: none;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    background-color: #28a8e0;
+    height: 36px;
+    margin: 0 5px;
+}
+
+.sort:hover {
+    text-decoration: none;
+    background-color: #1b8aba;
+}
+
+.sort:focus {
+    outline: none;
+}
+
+.sort:after {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    content: "";
+    position: relative;
+    top: -10px;
+    right: -5px;
+}
+
+.sort .asc:after {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #fff;
+    content: "";
+    position: relative;
+    top: 13px;
+    right: -5px;
+}
+
+.sort .desc:after {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #fff;
+    content: "";
+    position: relative;
+    top: -10px;
+    right: -5px;
+}
+
+.list-au {
+    margin: 0;
+    padding: 20px 0 0;
+}
+
+.list-au li {
+    display: block;
+    background-color: #eee;
+    padding: 10px;
+    box-shadow: inset 0 1px 0 #fff;
+    height: 250px;
+    margin-bottom: 10px;
+}
+
+.list-au li img {
+    float: left;
+    padding-right: 20px;
+}
+
+.list-au li h3 {
+    font-size: 2em;
+    margin: 0 0 0.3rem;
+    font-weight: 600;
+}
+
+.list-au li .project-title {
+    margin: 0;
+    font-weight: 400;
+    font-size: 1.5em;
+}
+
+.list-au li .project-label {
+    margin: 0;
+    font-style: italic;
+}
+
+.list-au li i {
+    float: right;
+    color: black;
+    display: block;
+}
+
+.list-au li i:hover {
+    color: #3498db;
+}
+
+.grid-au {
+    list-style: none;
+}
+
+.grid-au img {
+    float: left;
+    padding-right: 20px;
+}
+
+.grid-au li {
+    width: 30%;
+    display: inline-block;
+    background-color: #eee;
+    box-shadow: inset 0 1px 0 #fff;
+    margin-bottom: 20px;
+}
+
+.grid-au li:nth-of-type(3n+2) {
+    margin: 0 20px;
+}
+
+.grid-au li h3 {
+    font-size: 2em;
+    margin: 0 0 0.3rem;
+    font-weight: 600;
+}
+
+.grid-au li .project-title {
+    margin: 0;
+    font-weight: 400;
+    font-size: 1.5em;
+}
+
+.grid-au li .project-label {
+    margin: 0;
+    font-style: italic;
+}
+
+.grid-au li i {
+    float: right;
+    margin: 0 10px 0 0;
+    color: black;
+    display: block;
+}
+
+.grid-au li i:hover {
+    color: #3498db;
+}

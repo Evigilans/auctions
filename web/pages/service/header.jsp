@@ -23,13 +23,13 @@
                 <c:when test="${empty user}">
                     <li>Welcome, Guest</li>
                     <li>
-                        <a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/login.jsp">Login/Register</a>
+                        <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp">Login/Register</a>
                     </li>
                 </c:when>
                 <c:otherwise>
                     <li>Welcome, ${user.name}</li>
                     <li>
-                        <a href="${pageContext.request.contextPath}/ApplicationServlet?command=logout">Logout</a>
+                        <a href="${pageContext.request.contextPath}/ApplicationController?command=logout">Logout</a>
                     </li>
                 </c:otherwise>
             </c:choose>
@@ -45,19 +45,20 @@
 
     <div class="menu">
         <ul class="menu-ul">
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/home.jsp">Home</a>
+            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/home.jsp">Home</a>
             </li>
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/create.jsp">Create
-                auction</a></li>
-
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=list&auctionsState=active">Auctions
+            <li>
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/auction/create.jsp">Create
+                    auction</a></li>
+            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=activeAuctionsList">Auctions
                 List</a></li>
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=profile&userId=${user.id}">My
+            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=profile&userId=${user.id}">My
                 Profile</a></li>
             <c:if test="${user.admin}">
-            <li><a href="${pageContext.request.contextPath}/ApplicationServlet?command=link&url=pages/manage.jsp">Auction
-                Manage</a>
-                </c:if>
+                <li>
+                    <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/admin/manage.jsp">Auction
+                        Manage</a></li>
+            </c:if>
         </ul>
     </div>
     <script src="${pageContext.request.contextPath}/js/temp.js"></script>
@@ -66,15 +67,15 @@
         <div><img src="${pageContext.request.contextPath}/images/RU.png"> RU</div>
         <ul>
             <li>
-                <a href="${pageContext.request.contextPath}/ApplicationServlet?command=language&language_id=en_US"><img
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=language&language_id=en_US"><img
                         src="${pageContext.request.contextPath}/images/UK.png"> EN</a>
             </li>
             <li>
-                <a href="${pageContext.request.contextPath}/ApplicationServlet?command=language&language_id=ru_RU"><img
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=language&language_id=ru_RU"><img
                         src="${pageContext.request.contextPath}/images/RU.png"> RU</a>
             </li>
             <li>
-                <a href="${pageContext.request.contextPath}/ApplicationServlet?command=language&language_id=ru_RU"><img
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=language&language_id=ru_RU"><img
                         src="${pageContext.request.contextPath}/images/BY.png"> BY</a>
             </li>
         </ul>

@@ -78,13 +78,18 @@ public class UserDAO extends AbstractDAO<User> {
     public User update(User user) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(UPDATE_USER, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setString(1, user.getLogin());
-        statement.setString(2, String.valueOf(user.getPasswordHash()));
-        statement.setString(3, user.getName());
-        statement.setString(4, user.getEmail());
-        statement.setInt(5, user.getBalance());
-        statement.setInt(6, user.getCategory().ordinal());
-        statement.executeUpdate();
+        try {
+            statement.setString(1, user.getLogin());
+            statement.setString(2, user.getLogin());
+            statement.setString(3, user.getName());
+            statement.setString(4, user.getEmail());
+            statement.setInt(5, user.getBalance());
+            statement.setInt(6, user.getCategory().getValue());
+            statement.setLong(7, user.getId());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String userId = String.valueOf(user.getId());
         return findById(userId);

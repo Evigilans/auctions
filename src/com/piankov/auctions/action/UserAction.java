@@ -1,5 +1,6 @@
 package com.piankov.auctions.action;
 
+import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.creator.UserCreator;
 import com.piankov.auctions.dao.UserDAO;
 import com.piankov.auctions.entity.User;
@@ -46,5 +47,27 @@ public class UserAction {
         }
 
         return user;
+    }
+
+    public User updateUser(String userId, Map<String, String[]> parameterMap) {
+        try (UserDAO userDAO = new UserDAO()) {
+            User user = userDAO.findById(userId);
+
+            String name = parameterMap.get(ParameterConstant.PARAMETER_NAME)[0];
+            if (name != null) {
+                user.setName(name);
+            }
+
+            String email = parameterMap.get(ParameterConstant.PARAMETER_EMAIL)[0];
+            if (email != null) {
+                user.setEmail(email);
+            }
+
+            return userDAO.update(user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

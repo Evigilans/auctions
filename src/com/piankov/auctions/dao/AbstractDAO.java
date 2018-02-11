@@ -4,7 +4,7 @@ package com.piankov.auctions.dao;
 import com.mysql.jdbc.Statement;
 import com.piankov.auctions.connection.ConnectionWrapper;
 import com.piankov.auctions.entity.Entity;
-import com.piankov.auctions.pool.ConnectionPool;
+import com.piankov.auctions.connection.ConnectionPool;
 
 import java.io.Closeable;
 import java.sql.SQLException;

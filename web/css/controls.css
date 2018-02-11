@@ -129,6 +129,10 @@ input:focus, textarea:focus {
     border-color: #000000;
 }
 
+input:disabled {
+    background: #efefef;
+}
+
 textarea {
     border: 2px solid #000000;
     resize: vertical;

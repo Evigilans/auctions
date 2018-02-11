@@ -5,29 +5,31 @@
          version="3.1">
 
     <servlet>
-        <servlet-name>applicationServlet</servlet-name>
-        <servlet-class>com.piankov.auctions.servlet.ApplicationServlet</servlet-class>
+        <servlet-name>ApplicationController</servlet-name>
+        <servlet-class>com.piankov.auctions.controller.ApplicationController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>applicationServlet</servlet-name>
+        <servlet-name>ApplicationController</servlet-name>
         <url-pattern>/auctions/*</url-pattern>
     </servlet-mapping>
 
+    <!--
     <servlet>
         <servlet-name>errorHandlerServlet</servlet-name>
-        <servlet-class>com.piankov.auctions.servlet.ErrorHandlerServlet</servlet-class>
+        <servlet-class>com.piankov.auctions.controller.ErrorHandlerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>errorHandlerServlet</servlet-name>
         <url-pattern>/error</url-pattern>
     </servlet-mapping>
+    -->
 
     <error-page>
         <location>/pages/service/error.jsp</location>
     </error-page>
 
     <listener>
-        <listener-class>com.piankov.auctions.checker.AuctionChecker</listener-class>
+        <listener-class>com.piankov.auctions.util.DatabaseUpdater</listener-class>
     </listener>
 
     <!--
