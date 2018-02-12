@@ -31,7 +31,7 @@
             </c:when>
             <c:otherwise>
                 <h1>Mak your own bid!</h1>
-                <form action="${pageContext.request.contextPath}/ApplicationController?command=bid&auctionId=${auction.id}"
+                <form action="${pageContext.request.contextPath}/ApplicationController?command=make-bid&auctionId=${auction.id}"
                       method="post">
                     <div class="field-wrap">
                         <label>

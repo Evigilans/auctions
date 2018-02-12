@@ -8,4 +8,5 @@ public class PageConstant {
     public static final String PAGE_VERIFYING_AUCTIONS_LIST = "pages/list/verifyingAuctionsList.jsp";
     public static final String PAGE_VERIFYING_AUCTION = "pages/auction/verifyingAuction.jsp";
     public static final String PAGE_EDIT_PROFILE = "pages/edit/editUser.jsp";
+    public static final String PAGE_LOGIN = "pages/user/login.jsp";
 }

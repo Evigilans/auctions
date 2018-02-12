@@ -12,7 +12,7 @@ public class ChangeLanguageCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.getSession().setAttribute(ParameterConstant.PARAMETER_LANGUAGE, request.getParameter(ParameterConstant.PARAMETER_LANGUAGE_ID));
-            response.sendRedirect(request.getHeader(ParameterConstant.REFER));
+            response.sendRedirect(request.getHeader(ParameterConstant.REFERER));
         } catch (IOException e) {
             e.printStackTrace();
         }

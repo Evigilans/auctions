@@ -1,16 +1,19 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.language}" scope="session"/>
+<fmt:setBundle basename="resource.content" var="rb"/>
 
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Sample</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/temp.css" type="text/css" media="screen">
 </head>
-<body>
 
+<body>
 <header>
     <div class="topheader">
         <ul class="social">
@@ -45,12 +48,13 @@
 
     <div class="menu">
         <ul class="menu-ul">
-            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/home.jsp">Home</a>
+            <li>
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/home.jsp">Home</a>
             </li>
             <li>
                 <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/auction/create.jsp">Create
                     auction</a></li>
-            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=activeAuctionsList">Auctions
+            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=active-auctions-list">Auctions
                 List</a></li>
             <li><a href="${pageContext.request.contextPath}/ApplicationController?command=profile&userId=${user.id}">My
                 Profile</a></li>
@@ -67,21 +71,21 @@
         <div><img src="${pageContext.request.contextPath}/images/RU.png"> RU</div>
         <ul>
             <li>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=language&language_id=en_US"><img
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=change-language&language_id=en_US"><img
                         src="${pageContext.request.contextPath}/images/UK.png"> EN</a>
             </li>
             <li>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=language&language_id=ru_RU"><img
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=change-language&language_id=ru_RU"><img
                         src="${pageContext.request.contextPath}/images/RU.png"> RU</a>
             </li>
             <li>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=language&language_id=ru_RU"><img
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=change-language&language_id=ru_RU"><img
                         src="${pageContext.request.contextPath}/images/BY.png"> BY</a>
             </li>
         </ul>
     </div>
     <script src="${pageContext.request.contextPath}/js/language.js"></script>
 </header>
-
 </body>
+
 </html>

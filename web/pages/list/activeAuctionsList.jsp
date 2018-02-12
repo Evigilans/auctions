@@ -29,7 +29,7 @@
                 <li>
                     <img src="http://placehold.it/120x120" alt="#"/>
                     <h3 class="project-name"><a
-                            href="${pageContext.request.contextPath}/ApplicationController?command=auction&auctionId=${auction.id}">${auction.lot.name}</a>
+                            href="${pageContext.request.contextPath}/ApplicationController?command=show-active-auction&auctionId=${auction.id}">${auction.lot.name}</a>
                     </h3>
                     <p>${auction.lot.description}</p>
                     <p class="project-label">Maximal bid: </p>

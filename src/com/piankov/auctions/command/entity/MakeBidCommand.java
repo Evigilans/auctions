@@ -2,7 +2,7 @@ package com.piankov.auctions.command.entity;
 
 import com.piankov.auctions.action.AuctionAction;
 import com.piankov.auctions.command.Command;
-import com.piankov.auctions.command.CommandType;
+import com.piankov.auctions.controller.CommandType;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.User;
 import com.piankov.auctions.exception.CommandExecutionException;
@@ -32,7 +32,7 @@ public class MakeBidCommand implements Command {
                 auctionAction.makeBid(parameterMap, user);
 
                 request.setAttribute(ParameterConstant.PARAMETER_AUCTION_ID, parameterMap.get(ParameterConstant.PARAMETER_AUCTION_ID));
-                CommandType.SHOW_AUCTION.getCommand().execute(request, response);
+                CommandType.SHOW_ACTIVE_AUCTION.getCommand().execute(request, response);
             } catch (UnauthorizedAccessException | CommandExecutionException e) {
                 e.printStackTrace();
             }

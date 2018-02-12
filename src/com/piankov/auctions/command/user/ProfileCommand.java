@@ -14,14 +14,26 @@ import java.io.IOException;
 public class ProfileCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        UserAction userAction = new UserAction();
-
-        String userId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
         try {
-            User user = userAction.findUser(userId);
+            User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
 
-            request.setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, user);
-            request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
+            if (user != null) {
+                UserAction userAction = new UserAction();
+
+                String userId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
+                User userProfile = userAction.findUser(userId);
+
+                if (userProfile != null) {
+                    request.setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, userProfile);
+                    request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
+
+                } else {
+                    request.setAttribute(ParameterConstant.PARAMETER_ERROR_MESSAGE, "Can't find user profile!");
+                    request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
+                }
+            } else {
+                request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
+            }
         } catch (IOException | ServletException e) {
             e.printStackTrace();
         }

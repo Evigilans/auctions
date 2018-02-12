@@ -1,5 +1,6 @@
 package com.piankov.auctions.action;
 
+import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.creator.AuctionCreator;
 import com.piankov.auctions.creator.BidCreator;
 import com.piankov.auctions.creator.LotCreator;
@@ -126,5 +127,33 @@ public class AuctionAction {
         }
 
         return auctions;
+    }
+
+    public Auction updateLot(String auctionId, Map<String, String[]> parameterMap) {
+        return null;
+    }
+
+    public Auction updateAuction(Auction auction, Map<String, String[]> parameterMap) {
+        try (AuctionDAO auctionDAO = new AuctionDAO()) {
+            String startPrice = parameterMap.get(ParameterConstant.PARAMETER_START_PRICE)[0];
+            if (startPrice != null) {
+                //auction.setName(startPrice);
+            }
+
+            String days = parameterMap.get(ParameterConstant.PARAMETER_DAYS)[0];
+            if (days != null) {
+                auction.setDaysDurations(Integer.parseInt(days));
+            }
+
+            return auctionDAO.update(auction);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Auction updateBid(String bidId, Map<String, String[]> parameterMap) {
+        return null;
     }
 }

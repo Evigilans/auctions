@@ -1,42 +1,54 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.language}" scope="session"/>
 <fmt:setBundle basename="resource.content" var="rb"/>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>SOLD.BY - прродавай и покупай!</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/controls.css" type="text/css" media="screen">
+    <title>Title</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/list.css" type="text/css" media="screen">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
 </head>
+
 <body>
-
 <jsp:include page="${pageContext.request.contextPath}/pages/service/header.jsp"></jsp:include>
-
 <main>
-    <div id="container">
-        <div class="buttons">
-            View:
-            <button class="grid square-btn"><i class="fa fa-th-large fa-3x"></i></button>
-            <button class="list square-btn"><i class="fa fa-bars fa-3x"></i></button>
-        </div>
-        <ul class="list">
-            <c:forEach var="auction" items="${auctions}">
-                <li>
-                    <h2>
-                        <a href="${pageContext.request.contextPath}/ApplicationController?command=verifyingAuction&auctionId=${auction.id}">${auction.lot.name}</a>
-                    </h2>
-                    <p>Auction description</p>
-                    <span class="author">Jean</span><span class="date">11/11/15</span><span class="time">7:22pm</span>
-                </li>
-            </c:forEach>
-        </ul>
-    </div>
+    <c:choose>
+        <c:when test="${not empty user && user.admin}">
+            <div id="sandbox">
+                <button class="sort" data-sort="project-name">
+                    Sort by name
+                </button>
+                <button class="sort" data-sort="project-title">
+                    Sort by Project
+                </button>
+                <button class="sort" id="viewSwitch">
+                    Change View
+                </button>
+
+                <ul class="list-au" id="list-au">
+                    <c:forEach var="auction" items="${auctions}">
+                        <li>
+                            <img src="http://placehold.it/120x120" alt="#"/>
+                            <h3 class="project-name"><a
+                                    href="${pageContext.request.contextPath}/ApplicationController?command=show-verifying-auction&auctionId=${auction.id}">${auction.lot.name}</a>
+                            </h3>
+                            <p>${auction.lot.description}</p>
+                            <p class="project-label">Maximal bid: </p>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </div>
+            <script src="${pageContext.request.contextPath}/js/list.js"></script>
+        </c:when>
+        <c:otherwise>
+            <h1>We are sorry, but you do not have permission to view this page.</h1>
+        </c:otherwise>
+    </c:choose>
 </main>
-<script src="${pageContext.request.contextPath}/js/list.js"></script>
-
 <jsp:include page="${pageContext.request.contextPath}/pages/service/footer.jsp"></jsp:include>
-
 </body>
+
 </html>

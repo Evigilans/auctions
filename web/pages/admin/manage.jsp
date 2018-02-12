@@ -12,12 +12,14 @@
     <c:choose>
         <c:when test="${user.admin}">
             <h3>Available functions: </h3>
-            <li>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=verifyingAuctionsList">Verify auctions</a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/home.jsp">Edit users</a>
-            </li>
+            <p>
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=verifying-auctions-list">Verify
+                    auctions</a>
+            </p>
+            <p>
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/home.jsp">Edit
+                    users</a>
+            </p>
         </c:when>
         <c:otherwise>
             Данная страница доступна только для администратора! <br>

@@ -1,7 +1,7 @@
 package com.piankov.auctions.controller;
 
 import com.piankov.auctions.command.Command;
-import com.piankov.auctions.command.list.ShowVerifyingAuctionCommand;
+import com.piankov.auctions.command.entity.ShowVerifyingAuctionCommand;
 import com.piankov.auctions.command.entity.VerifyAuctionCommand;
 import com.piankov.auctions.command.list.VerifyingAuctionsListCommand;
 import com.piankov.auctions.command.edit.EditUserCommand;
@@ -15,7 +15,7 @@ import com.piankov.auctions.command.user.LogoutCommand;
 import com.piankov.auctions.command.user.RegisterCommand;
 import com.piankov.auctions.command.list.ActiveAuctionsListCommand;
 import com.piankov.auctions.command.user.ProfileCommand;
-import com.piankov.auctions.command.entity.ShowAuctionCommand;
+import com.piankov.auctions.command.entity.ShowActiveAuctionCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class CommandInitializer {
         commandMap.put("logout", new LogoutCommand());
         commandMap.put("profile", new ProfileCommand());
         commandMap.put("activeAuctionsList", new ActiveAuctionsListCommand());
-        commandMap.put("auction", new ShowAuctionCommand());
+        commandMap.put("auction", new ShowActiveAuctionCommand());
         commandMap.put("createAuction", new CreateAuctionCommand());
         commandMap.put("bid", new MakeBidCommand());
         commandMap.put("verify", new VerifyAuctionCommand());

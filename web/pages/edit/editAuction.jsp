@@ -1,30 +1,57 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.language}" scope="session"/>
 <fmt:setBundle basename="resource.content" var="rb"/>
+
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>SOLD.BY - прродавай и покупай!</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/controls.css" type="text/css" media="screen">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
+
 <body>
-
-<jsp:include page="${pageContext.request.contextPath}/service/header.jsp"></jsp:include>
-
+<jsp:include page="${pageContext.request.contextPath}/pages/service/header.jsp"></jsp:include>
 <main>
-    <h2 class="heading"><fmt:message key="home.label.welcome" bundle="${rb}"/></h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus voluptate obcaecati nesciunt porro laudantium,
-        autem expedita cum fugit cupiditate itaque debitis sint, tenetur accusamus, omnis! WHAT</p>
-
-    <p>Est, dolorum, inventore? Soluta illo necessitatibus facilis omnis nam ipsam, laudantium voluptas veniam ipsa. Ea
-        debitis, explicabo! Fugit repudiandae ex unde assumenda, numquam aliquam architecto?</p>
-
-    <p>Beatae minima, ipsam nisi rerum commodi. Culpa quod quibusdam, odit ut! Reprehenderit officiis sint suscipit,
-        neque, mollitia minus? Ab earum cum nam at, quos id!</p>
+    <c:choose>
+        <c:when test="${not empty user && (user == userProfile || user.admin)}">
+            <div class="form">
+                <h1>Edit a profile!</h1>
+                <form action="${pageContext.request.contextPath}/ApplicationController?command=edit-user&userId=${userProfile.id}"
+                      method="post">
+                    <div class="field-wrap">
+                        <label>
+                            Current login: ${userProfile.name}
+                        </label>
+                        <input type="text" disabled="disabled" required autocomplete="off"/>
+                    </div>
+                    <div class="field-wrap">
+                        <label>
+                            Current name: ${userProfile.name}
+                        </label>
+                        <input type="text" name="name" required autocomplete="off"/>
+                    </div>
+                    <div class="field-wrap">
+                        <label>
+                            Current email: ${userProfile.email}
+                        </label>
+                        <input type="text" name="email" required autocomplete="off"/>
+                    </div>
+                    <button type="submit" class="button button-block"/>
+                    Apply Changes!</button>
+                </form>
+            </div>
+            <script src="${pageContext.request.contextPath}/js/login.js"></script>
+        </c:when>
+        <c:otherwise>
+            <h1>We are sorry, but you do not have permission to view this page.</h1>
+        </c:otherwise>
+    </c:choose>
 </main>
-
-<jsp:include page="${pageContext.request.contextPath}/service/footer.jsp"></jsp:include>
-
+<jsp:include page="${pageContext.request.contextPath}/pages/service/footer.jsp"></jsp:include>
 </body>
+
 </html>

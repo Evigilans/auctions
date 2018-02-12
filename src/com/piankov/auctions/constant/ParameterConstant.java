@@ -1,7 +1,7 @@
 package com.piankov.auctions.constant;
 
 public class ParameterConstant {
-    public static final String REFER = "Refer";
+    public static final String REFERER = "Referer";
     public static final String PARAMETER_LOGIN = "login";
     public static final String PARAMETER_PASSWORD = "password";
     public static final String PARAMETER_USER = "user";
@@ -20,4 +20,9 @@ public class ParameterConstant {
     public static final String PARAMETER_AUCTION = "auction";
     public static final String PARAMETER_AUCTIONS = "auctions";
     public static final String PARAMETER_USER_PROFILE = "userProfile";
+    public static final String PARAMETER_LOT_ID = "lotId";
+    public static final String PARAMETER_BID_ID = "bidId";
+    public static final String PARAMETER_LOGIN_ERROR_MESSAGE = "loginErrorMessage";
+    public static final String PARAMETER_REGISTER_ERROR_MESSAGE = "registerErrorMessage";
+    public static final String PARAMETER_ERROR_MESSAGE = "errorMessage";
 }
