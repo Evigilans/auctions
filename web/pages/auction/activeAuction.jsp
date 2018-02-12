@@ -16,21 +16,36 @@
     <h3>Информация об аукционе #${auction.id} ${auction.lot.name}</h3>
     <p>Описание лота: ${auction.lot.description}</p>
 
-    <p>Текущая максимальная ставка: ${auction.lot.description}</p>
+    <c:choose>
+        <c:when test="">
+
+        </c:when>
+        <c:otherwise>
+
+        </c:otherwise>
+    </c:choose>
 
     <div class="form">
-        <h1>Current maximal bid is: ${auction.currentMaximalBid.value}</h1>
-
         <c:choose>
             <c:when test="${empty user}">
                 <h1>Welcome, Guest</h1>
-                <p> Чтобы просматривать свой профиль, вам необходимо <a
-                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp">войти</a>
-                    или зарегистрироваться.
+                <p>
+                    Чтобы просматривать свой профиль, вам необходимо <a
+                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp"><strong>войти
+                    или зарегистрироваться.</strong></a>
                 </p>
             </c:when>
             <c:otherwise>
-                <h1>Mak your own bid!</h1>
+                <c:choose>
+                    <c:when test="${empty auction.currentMaximalBid}">
+                        <h1>Make first bid!</h1>
+                        <h1>Start price is ${auction.lot.startPrice}$</h1>
+                    </c:when>
+                    <c:otherwise>
+                        <h1>Make your bid!</h1>
+                        <h1>Current maximal bid is ${auction.currentMaximalBid.value}$</h1>
+                    </c:otherwise>
+                </c:choose>
                 <form action="${pageContext.request.contextPath}/ApplicationController?command=make-bid&auctionId=${auction.id}"
                       method="post">
                     <div class="field-wrap">

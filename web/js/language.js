@@ -16,6 +16,7 @@ $(document).ready(function () {
     $("#lang-menu ul li").on("click", function () {
         //select lang and apply changes
         $lang = $(this).text();
+        console.log($lang);
         $("#lang-menu div").text($lang);
     });
 

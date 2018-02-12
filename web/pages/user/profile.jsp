@@ -8,7 +8,7 @@
 
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/controls.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css" media="screen">
 </head>
 
 <body>
@@ -24,47 +24,66 @@
         </c:when>
         <c:otherwise>
             <c:choose>
-                <c:when test="${empty errorMessage}">
-                    <c:choose>
-                        <c:when test="${user == userProfile}">
-                            <h3>Welcome to your profile, ${userProfile.name}!</h3>
-                            <div id="profile">
-                                <div class="img"></div>
-                                <a href="" class="btn btn_left">${userProfile.email}</a>
-                                <div class="info">
-                                    Your login: <strong>${userProfile.login}</strong> <br>
-                                    Your balance: <strong>${userProfile.balance}</strong> <br>
-                                </div>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <h3>Welcome to profile of user ${userProfile.name}!</h3>
-                            <div id="profile">
-                                <div class="img"></div>
-                                <a href="" class="btn btn_left">${userProfile.email}</a>
-                                <div class="info">
-                                    User login: <strong>${userProfile.login}</strong> <br>
-                                </div>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                    <c:if test="${user == userProfile}">
-                        <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
-                            here to edit your profile</a>
-                    </c:if>
-                    <c:if test="${user.admin}">
-                        <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
-                            here to edit this user profile profile</a>
-                        <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
-                            here to promote this user to 'Advanced'</a>
-                    </c:if>
+                <c:when test="${user == userProfile}">
+                    <h1>Welcome to your profile, ${userProfile.name}!</h1>
                 </c:when>
                 <c:otherwise>
-                    <h3>${errorMessage}</h3>
+                    <h1>Welcome to profile of user ${userProfile.name}!</h1>
                 </c:otherwise>
             </c:choose>
+            <section>
+                <c:choose>
+                    <c:when test="${user == userProfile || user.admin}">
+                        <div id="profile-pic">
+                            <img class="profile" src="images/avatar/avatar_${user.id}.png"/>
+                        </div>
+                        <div id="details">
+                            <h1>Name: ${user.name}</h1>
+                            <h1>Login: ${user.login}</h1>
+                            <h1>Email: ${user.email}</h1>
+                            <h1>Balance: ${user.balance}$</h1>
+                            <h1>Category: ${user.category}</h1>
+                        </div>
+                        <ul>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
+                                    here to edit your profile</a>
+                            </li>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
+                                    here to view lots</a>
+                            </li>
+                            <c:if test="${user.admin}">
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
+                                        here to promote this user to 'Advanced'</a>
+                                </li>
+                            </c:if>
+                        </ul>
+                    </c:when>
+                    <c:otherwise>
+                        <div id="profile-pic">
+                            <img class="profile" src="images/avatar/avatar_${user.id}.png"/>
+                        </div>
+                        <div id="details">
+                            <h1>Name: ${user.name}</h1>
+                            <h1>Email: ${user.email}</h1>
+                            <h1>Category: ${user.category}</h1>
+                        </div>
+                        <ul>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
+                                    here to view lots</a>
+                            </li>
+                        </ul>
+                    </c:otherwise>
+                </c:choose>
+            </section>
+
+
         </c:otherwise>
     </c:choose>
+
 </main>
 <jsp:include page="../service/footer.jsp"></jsp:include>
 </body>

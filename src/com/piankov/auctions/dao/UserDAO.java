@@ -13,8 +13,8 @@ public class UserDAO extends AbstractDAO<User> {
     private static final String FIND_ALL_USERS = "SELECT * FROM USER";
     private static final String FIND_USER_BY_ID = "SELECT * FROM USER WHERE ID = ?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM USER WHERE ID = ?";
-    private static final String UPDATE_USER = "UPDATE USER SET LOGIN = ?, PASSWORD_HASH = ?, NAME = ?, EMAIL = ?, BALANCE = ?, CATEGORY = ? WHERE ID = ?";
-    private static final String CREATE_USER = "INSERT INTO USER (LOGIN, PASSWORD_HASH, NAME, EMAIL, BALANCE, CATEGORY) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_USER = "UPDATE USER SET LOGIN = ?, PASSWORD_HASH = ?, NAME = ?, EMAIL = ?, BALANCE = ?, CATEGORY = ? AVATAR = ? WHERE ID = ?";
+    private static final String CREATE_USER = "INSERT INTO USER (LOGIN, PASSWORD_HASH, NAME, EMAIL, BALANCE, CATEGORY, AVATAR) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_AUTHORIZATION_DATA = "SELECT * FROM USER WHERE LOGIN = ? AND PASSWORD_HASH = ?";
 
     public UserDAO() {
@@ -61,11 +61,12 @@ public class UserDAO extends AbstractDAO<User> {
         PreparedStatement statement = this.connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS);
 
         statement.setString(1, user.getLogin());
-        statement.setString(2, String.valueOf(user.getPasswordHash()));
+        statement.setString(2, user.getPasswordHash());
         statement.setString(3, user.getName());
         statement.setString(4, user.getEmail());
         statement.setInt(5, user.getBalance());
-        statement.setInt(6, user.getCategory().ordinal());
+        statement.setInt(6, user.getCategory().getValue());
+        statement.setBlob(7, user.getAvatar());
         statement.executeUpdate();
 
         ResultSet resultSet = statement.getGeneratedKeys();
@@ -80,12 +81,13 @@ public class UserDAO extends AbstractDAO<User> {
 
         try {
             statement.setString(1, user.getLogin());
-            statement.setString(2, user.getLogin());
+            statement.setString(2, user.getPasswordHash());
             statement.setString(3, user.getName());
             statement.setString(4, user.getEmail());
             statement.setInt(5, user.getBalance());
             statement.setInt(6, user.getCategory().getValue());
-            statement.setLong(7, user.getId());
+            statement.setBlob(7, user.getAvatar());
+            statement.setLong(8, user.getId());
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

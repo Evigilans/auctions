@@ -16,6 +16,7 @@
 <jsp:include page="service/header.jsp"></jsp:include>
 <main>
     <h2 class="heading"><fmt:message key="home.label.welcome" bundle="${rb}"/></h2>
+
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus voluptate obcaecati nesciunt porro laudantium,
         autem expedita cum fugit cupiditate itaque debitis sint, tenetur accusamus, omnis! WHAT</p>
 

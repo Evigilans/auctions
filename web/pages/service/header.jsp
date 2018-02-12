@@ -54,8 +54,10 @@
             <li>
                 <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/auction/create.jsp">Create
                     auction</a></li>
-            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=active-auctions-list">Auctions
-                List</a></li>
+            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=active-auctions-list">Active
+                Auctions</a></li>
+            <li><a href="${pageContext.request.contextPath}/ApplicationController?command=ended-auctions-list">Ended
+                Auctions</a></li>
             <li><a href="${pageContext.request.contextPath}/ApplicationController?command=profile&userId=${user.id}">My
                 Profile</a></li>
             <c:if test="${user.admin}">
@@ -71,16 +73,12 @@
         <div><img src="${pageContext.request.contextPath}/images/RU.png"> RU</div>
         <ul>
             <li>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=change-language&language_id=en_US"><img
-                        src="${pageContext.request.contextPath}/images/UK.png"> EN</a>
-            </li>
-            <li>
                 <a href="${pageContext.request.contextPath}/ApplicationController?command=change-language&language_id=ru_RU"><img
                         src="${pageContext.request.contextPath}/images/RU.png"> RU</a>
             </li>
             <li>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=change-language&language_id=ru_RU"><img
-                        src="${pageContext.request.contextPath}/images/BY.png"> BY</a>
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=change-language&language_id=en_US"><img
+                        src="${pageContext.request.contextPath}/images/UK.png"> EN</a>
             </li>
         </ul>
     </div>

@@ -1,12 +1,12 @@
 package com.piankov.auctions.entity;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Auction extends Entity {
     private Lot lot;
     private AuctionState state;
     private AuctionType type;
+    private int startPrice;
     private int daysDurations;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -15,11 +15,11 @@ public class Auction extends Entity {
     public Auction() {
     }
 
-    public Auction(long id, Lot lot, AuctionState state, AuctionType type, int daysDurations, LocalDateTime startDate, LocalDateTime endDate, Bid currentMaximalBid) {
-        this.id = id;
+    public Auction(Lot lot, AuctionState state, AuctionType type, int startPrice, int daysDurations, LocalDateTime startDate, LocalDateTime endDate, Bid currentMaximalBid) {
         this.lot = lot;
         this.state = state;
         this.type = type;
+        this.startPrice = startPrice;
         this.daysDurations = daysDurations;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -48,6 +48,14 @@ public class Auction extends Entity {
 
     public void setType(AuctionType type) {
         this.type = type;
+    }
+
+    public int getStartPrice() {
+        return startPrice;
+    }
+
+    public void setStartPrice(int startPrice) {
+        this.startPrice = startPrice;
     }
 
     public int getDaysDurations() {
@@ -86,20 +94,32 @@ public class Auction extends Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Auction)) return false;
+        if (!super.equals(o)) return false;
+
         Auction auction = (Auction) o;
-        return daysDurations == auction.daysDurations &&
-                Objects.equals(lot, auction.lot) &&
-                state == auction.state &&
-                type == auction.type &&
-                Objects.equals(startDate, auction.startDate) &&
-                Objects.equals(endDate, auction.endDate) &&
-                Objects.equals(currentMaximalBid, auction.currentMaximalBid);
+
+        if (startPrice != auction.startPrice) return false;
+        if (daysDurations != auction.daysDurations) return false;
+        if (lot != null ? !lot.equals(auction.lot) : auction.lot != null) return false;
+        if (state != auction.state) return false;
+        if (type != auction.type) return false;
+        if (startDate != null ? !startDate.equals(auction.startDate) : auction.startDate != null) return false;
+        if (endDate != null ? !endDate.equals(auction.endDate) : auction.endDate != null) return false;
+        return currentMaximalBid != null ? currentMaximalBid.equals(auction.currentMaximalBid) : auction.currentMaximalBid == null;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(lot, state, type, daysDurations, startDate, endDate, currentMaximalBid);
+        int result = super.hashCode();
+        result = 31 * result + (lot != null ? lot.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + startPrice;
+        result = 31 * result + daysDurations;
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
+        result = 31 * result + (currentMaximalBid != null ? currentMaximalBid.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -108,6 +128,7 @@ public class Auction extends Entity {
                 "lot=" + lot +
                 ", state=" + state +
                 ", type=" + type +
+                ", startPrice=" + startPrice +
                 ", daysDurations=" + daysDurations +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +

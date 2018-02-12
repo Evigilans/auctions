@@ -13,8 +13,8 @@ public class LotDAO extends AbstractDAO<Lot> {
     private static final String FIND_ALL_LOTS = "SELECT * FROM LOT";
     private static final String FIND_LOT_BY_ID = "SELECT * FROM LOT WHERE ID = ?";
     private static final String DELETE_LOT_BY_ID = "DELETE FROM LOT WHERE ID = ?";
-    private static final String UPDATE_LOT = "UPDATE LOT SET OWNER_ID = ?, START_PRICE = ?, NAME = ?, DESCRIPTION = ?  WHERE ID = ?";
-    private static final String CREATE_LOT = "INSERT INTO LOT (OWNER_ID, START_PRICE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
+    private static final String UPDATE_LOT = "UPDATE LOT SET OWNER_ID = ?, NAME = ?, DESCRIPTION = ? WHERE ID = ?";
+    private static final String CREATE_LOT = "INSERT INTO LOT (OWNER_ID, NAME, DESCRIPTION) VALUES (?, ?, ?)";
     private static final String FIND_LOT_BY_AUCTION_ID = "SELECT * FROM LOT WHERE ID = (SELECT LOT_ID FROM AUCTION WHERE ID = ?)";
 
     public LotDAO() {
@@ -59,9 +59,8 @@ public class LotDAO extends AbstractDAO<Lot> {
         PreparedStatement statement = this.connection.prepareStatement(CREATE_LOT, Statement.RETURN_GENERATED_KEYS);
 
         statement.setLong(1, lot.getOwner().getId());
-        statement.setInt(2, lot.getStartPrice());
-        statement.setString(3, lot.getName());
-        statement.setString(4, lot.getDescription());
+        statement.setString(2, lot.getName());
+        statement.setString(3, lot.getDescription());
         statement.executeUpdate();
 
         ResultSet resultSet = statement.getGeneratedKeys();
@@ -74,9 +73,8 @@ public class LotDAO extends AbstractDAO<Lot> {
         PreparedStatement statement = this.connection.prepareStatement(UPDATE_LOT, Statement.RETURN_GENERATED_KEYS);
 
         statement.setLong(1, lot.getOwner().getId());
-        statement.setInt(2, lot.getStartPrice());
-        statement.setString(3, lot.getName());
-        statement.setString(4, lot.getDescription());
+        statement.setString(2, lot.getName());
+        statement.setString(3, lot.getDescription());
         statement.executeUpdate();
 
         String bidId = String.valueOf(lot.getId());

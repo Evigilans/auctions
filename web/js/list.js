@@ -1,14 +1,27 @@
-var options = {
-    valueNames: [ 'project-name', 'project-title', 'project-label' ]
-};
+var downloadGrid = (function () {
 
-var userList = new List('sandbox', options);
+    "use strict";
 
-$('#viewSwitch').on('click',function(e) {
-    if ($('ul').hasClass('grid-au')) {
-        $('ul').removeClass('grid-au').addClass('list-au');
+    var $cardContainer = $('.download-cards');
+    var $downloadCard = $('.download-card__content-box');
+    var $viewTrigger = $('button').attr('data', 'trigger');
+
+    function swapTriggerActiveClass(e) {
+        $viewTrigger.removeClass('active');
+        $(e.target).addClass('active');
     }
-    else if($('ul').hasClass('list-au')) {
-        $('ul').removeClass('list-au').addClass('grid-au');
+
+    function swapView(e) {
+        var $currentView = $(e.target).attr('data-trigger');
+        $cardContainer.attr('data-view', $currentView);
     }
-});
+
+    $(document).ready(function () {
+        // Event Listener
+        $viewTrigger.click(function (e) {
+            swapTriggerActiveClass(e);
+            swapView(e);
+        });
+    });
+
+})();

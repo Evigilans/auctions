@@ -21,7 +21,8 @@
         <div data-view="list-view" class="download-cards">
             <c:forEach var="auction" items="${auctions}">
                 <article class="download-card">
-                    <div class="download-card__icon-box"><img src="images/question-512.png"/></div>
+                    <div class="download-card__icon-box"><img
+                            src="images/question-512.png"/></div>
                     <div class="download-card__content-box">
                         <div class="content">
                             <h3 class="download-card__content-box__title">

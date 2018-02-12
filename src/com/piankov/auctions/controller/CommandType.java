@@ -4,6 +4,7 @@ import com.piankov.auctions.command.Command;
 import com.piankov.auctions.command.edit.EditUserCommand;
 import com.piankov.auctions.command.entity.*;
 import com.piankov.auctions.command.list.ActiveAuctionsListCommand;
+import com.piankov.auctions.command.list.EndedAuctionsListCommand;
 import com.piankov.auctions.command.list.VerifyingAuctionsListCommand;
 import com.piankov.auctions.command.page.EditUserPageCommand;
 import com.piankov.auctions.command.page.LinkCommand;
@@ -19,8 +20,10 @@ public enum CommandType {
     MAKE_BID(new MakeBidCommand()),
     SHOW_ACTIVE_AUCTION(new ShowActiveAuctionCommand()),
     SHOW_VERIFYING_AUCTION(new ShowVerifyingAuctionCommand()),
+    SHOW_ENDED_AUCTION(new ShowEndedAuctionCommand()),
     VERIFY_AUCTION(new VerifyAuctionCommand()),
     ACTIVE_AUCTIONS_LIST(new ActiveAuctionsListCommand()),
+    ENDED_AUCTIONS_LIST(new EndedAuctionsListCommand()),
     VERIFYING_AUCTIONS_LIST(new VerifyingAuctionsListCommand()),
     EDIT_USER_PAGE(new EditUserPageCommand()),
     LINK(new LinkCommand()),

@@ -95,7 +95,6 @@
                     </div>
                 </div>
             </div>
-            <script src="${pageContext.request.contextPath}/js/login.js"></script>
         </c:when>
         <c:otherwise>
             <p>
@@ -108,5 +107,6 @@
 </main>
 <jsp:include page="../service/footer.jsp"></jsp:include>
 </body>
+<script src="${pageContext.request.contextPath}/js/login.js"></script>
 
 </html>

@@ -10,36 +10,40 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body>
-<jsp:include page="${pageContext.request.contextPath}/service/header.jsp"></jsp:include>
+<jsp:include page="../service/header.jsp"></jsp:include>
 
 <main>
     <h3>Информация об аукционе #${auction.id} ${auction.lot.name}</h3>
     <p>Описание лота: ${auction.lot.description}</p>
 
-    <div class="form">
-        <h1>Current maximal bid is: ${auction.currentMaximalBid.value}</h1>
+    <c:choose>
+        <c:when test="">
 
+        </c:when>
+        <c:otherwise>
+
+        </c:otherwise>
+    </c:choose>
+
+    <div class="form">
         <c:choose>
             <c:when test="${empty user}">
                 <h1>Welcome, Guest</h1>
-                <p> Чтобы просматривать свой профиль, вам необходимо <a
-                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp">войти</a>
-                    или зарегистрироваться.
+                <p>
+                    Чтобы просматривать свой профиль, вам необходимо <a
+                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp"><strong>войти
+                    или зарегистрироваться.</strong></a>
                 </p>
             </c:when>
             <c:otherwise>
-                <h1>Mak your own bid!</h1>
-                <form action="${pageContext.request.contextPath}/ApplicationController?command=bid&auctionId=${auction.id}"
-                      method="post">
-                    <div class="field-wrap">
-                        <label>
-                            Value<span class="req">*</span>
-                        </label>
-                        <input type="text" name="bidValue" required autocomplete="off"/>
-                    </div>
-                    <button type="submit" class="button button-block"/>
-                    Make a bid!</button>
-                </form>
+                <c:choose>
+                    <c:when test="${empty auction.currentMaximalBid}">
+                        <h1>Auction ended unsuccessfully</h1>
+                    </c:when>
+                    <c:otherwise>
+                        <h1>Wiiner bid is ${auction.currentMaximalBid.value}$</h1>
+                    </c:otherwise>
+                </c:choose>
             </c:otherwise>
         </c:choose>
     </div>
@@ -47,6 +51,6 @@
 
 </main>
 
-<jsp:include page="${pageContext.request.contextPath}/service/footer.jsp"></jsp:include>
+<jsp:include page="../service/footer.jsp"></jsp:include>
 </body>
 </html>

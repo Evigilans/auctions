@@ -1,7 +1,8 @@
 package com.piankov.auctions.entity;
 
 public enum AuctionType {
-    DIRECT(1), REVERSE(2);
+    DIRECT(1),
+    REVERSE(2);
 
     private final int value;
 
@@ -9,11 +10,11 @@ public enum AuctionType {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
     public static AuctionType getTypeFromValue(int value) {
         return AuctionType.values()[value - 1];
+    }
+
+    public int getValue() {
+        return value;
     }
 }

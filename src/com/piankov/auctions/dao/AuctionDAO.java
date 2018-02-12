@@ -11,9 +11,9 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     private static final String FIND_ALL_AUCTIONS = "SELECT * FROM AUCTION";
     private static final String FIND_AUCTION_BY_ID = "SELECT * FROM AUCTION WHERE ID = ?";
     private static final String DELETE_AUCTION_BY_ID = "DELETE FROM AUCTION WHERE ID = ?";
-    private static final String UPDATE_AUCTION = "UPDATE AUCTION SET LOT_ID = ?, AUCTION_STATE_ID = ?, AUCTION_TYPE_ID = ?, DAYS_DURATION = ?, START_DATE = ?, END_DATE = ? WHERE ID = ?";
-    private static final String CREATE_AUCTION = "INSERT INTO AUCTION (LOT_ID, AUCTION_STATE_ID, AUCTION_TYPE_ID, DAYS_DURATION, START_DATE, END_DATE) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String CREATE_VERIFYING_AUCTION = "INSERT INTO AUCTION (LOT_ID, AUCTION_STATE_ID, AUCTION_TYPE_ID, DAYS_DURATION) VALUES (?, 1, ?, ?)";
+    private static final String UPDATE_AUCTION = "UPDATE AUCTION SET LOT_ID = ?, AUCTION_STATE_ID = ?, AUCTION_TYPE_ID = ?, START_PRICE = ?, DAYS_DURATION = ?, START_DATE = ?, END_DATE = ? WHERE ID = ?";
+    private static final String CREATE_AUCTION = "INSERT INTO AUCTION (LOT_ID, AUCTION_STATE_ID, AUCTION_TYPE_ID, START_PRICE, DAYS_DURATION, START_DATE, END_DATE) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String CREATE_VERIFYING_AUCTION = "INSERT INTO AUCTION (LOT_ID, AUCTION_STATE_ID, AUCTION_TYPE_ID, START_PRICE, DAYS_DURATION) VALUES (?, 1, ?, ?, ?)";
     private static final String FIND_AUCTIONS_BY_STATE = "SELECT * FROM AUCTION WHERE AUCTION_STATE_ID = ?";
     private static final String FIND_OUTDATED_AUCTIONS = "SELECT * FROM AUCTION WHERE (AUCTION_STATE_ID = 2 and END_DATE < NOW())";
     private static final String END_OUTDATED_AUCTIONS = "UPDATE AUCTION SET AUCTION_STATE_ID = ? WHERE ID = ?";
@@ -64,9 +64,10 @@ public class AuctionDAO extends AbstractDAO<Auction> {
         statement.setLong(1, auction.getLot().getId());
         statement.setLong(2, auction.getState().getValue());
         statement.setLong(3, auction.getType().getValue());
-        statement.setLong(4, auction.getDaysDurations());
-        statement.setTimestamp(5, Timestamp.valueOf(auction.getStartDate()));
-        statement.setTimestamp(6, Timestamp.valueOf(auction.getEndDate()));
+        statement.setLong(4, auction.getStartPrice());
+        statement.setLong(5, auction.getDaysDurations());
+        statement.setTimestamp(6, Timestamp.valueOf(auction.getStartDate()));
+        statement.setTimestamp(7, Timestamp.valueOf(auction.getEndDate()));
         statement.executeUpdate();
 
         ResultSet resultSet = statement.getGeneratedKeys();
@@ -79,7 +80,8 @@ public class AuctionDAO extends AbstractDAO<Auction> {
 
         statement.setLong(1, auction.getLot().getId());
         statement.setLong(2, auction.getType().getValue());
-        statement.setLong(3, auction.getDaysDurations());
+        statement.setLong(3, auction.getStartPrice());
+        statement.setLong(4, auction.getDaysDurations());
         statement.executeUpdate();
 
         ResultSet resultSet = statement.getGeneratedKeys();
@@ -95,9 +97,10 @@ public class AuctionDAO extends AbstractDAO<Auction> {
         statement.setLong(2, auction.getState().getValue());
         statement.setLong(3, auction.getType().getValue());
         statement.setLong(4, auction.getDaysDurations());
-        statement.setTimestamp(5, Timestamp.valueOf(auction.getStartDate()));
-        statement.setTimestamp(6,Timestamp.valueOf(auction.getEndDate()));
-        statement.setLong(7, auction.getId());
+        statement.setLong(5, auction.getStartPrice());
+        statement.setTimestamp(6, Timestamp.valueOf(auction.getStartDate()));
+        statement.setTimestamp(7,Timestamp.valueOf(auction.getEndDate()));
+        statement.setLong(8, auction.getId());
         statement.executeUpdate();
 
         String bidId = String.valueOf(auction.getId());
@@ -118,7 +121,6 @@ public class AuctionDAO extends AbstractDAO<Auction> {
         try (BidDAO bidDAO = new BidDAO()) {
             List<Auction> outdatedAuctions = findOutdatedAuctions();
             for (Auction auction : outdatedAuctions) {
-                //TODO: Куда вынести statement???
                 PreparedStatement statement = this.connection.prepareStatement(END_OUTDATED_AUCTIONS);
 
                 if (bidDAO.hasAnyBid(auction.getId())) {

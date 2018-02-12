@@ -20,7 +20,7 @@
             <h3>Информация об аукционе #${auction.id} ${auction.lot.name}</h3>
             <p>Описание лота: ${auction.lot.description}</p>
             <div class="form">
-                <h1>Verify auction!</h1>
+                <h1>Verify auction?</h1>
                 <form action="${pageContext.request.contextPath}/ApplicationController?command=verify-auction&auctionId=${auction.id}" method="post">
                     <button type="submit" name="acceptAuction" class="button button-block"/>Accept auction!</button> <br>
                     <button type="submit" name="declineAuction" class="button button-block"/>Decline auction!</button>

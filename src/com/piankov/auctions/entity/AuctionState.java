@@ -1,9 +1,11 @@
 package com.piankov.auctions.entity;
 
 public enum AuctionState {
-    //TODO: как получать значения???
-
-    ON_VERIFICATION(1), IN_PROGRESS(2), SUCCESSFUL(3), UNSUCCESSFUL(4), WITHDRAW_FROM_SALES(5);
+    ON_VERIFICATION(1),
+    IN_PROGRESS(2),
+    SUCCESSFUL(3),
+    UNSUCCESSFUL(4),
+    WITHDRAW_FROM_SALES(5);
 
     private final int value;
 
@@ -11,11 +13,11 @@ public enum AuctionState {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
     public static AuctionState getStateFromValue(int value) {
         return AuctionState.values()[value - 1];
+    }
+
+    public int getValue() {
+        return value;
     }
 }

@@ -1,34 +1,38 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-<head>
-    <title>Profile</title>
-</head>
-<body>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.language}" scope="session"/>
+<fmt:setBundle basename="resource.content" var="rb"/>
 
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sold.by - <fmt:message key="title" bundle="${rb}"/></title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+
+<body>
 <jsp:include page="../service/header.jsp"></jsp:include>
 
 <main>
     <c:choose>
-        <c:when test="${user.admin}">
-            <h3>Available functions: </h3>
+        <c:when test="${not empty user && user.admin}">
+            <h1>Available functions: </h1>
             <p>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=verifying-auctions-list">Verify
-                    auctions</a>
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=verifying-auctions-list"><strong>Verify
+                    auctions</strong></a>
             </p>
             <p>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/home.jsp">Edit
-                    users</a>
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/home.jsp"><strong>Edit
+                    users</strong></a>
             </p>
         </c:when>
         <c:otherwise>
-            Данная страница доступна только для администратора! <br>
+            <p> Данная страница доступна только для администратора! </p>
         </c:otherwise>
     </c:choose>
-
 </main>
-
 <jsp:include page="../service/footer.jsp"></jsp:include>
-
 </body>
 </html>

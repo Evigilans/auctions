@@ -1,9 +1,14 @@
 package com.piankov.auctions.entity;
 
-import java.util.Objects;
-
 public class Entity {
     protected long id;
+
+    public Entity() {
+    }
+
+    public Entity(long id) {
+        this.id = id;
+    }
 
     public long getId() {
         return id;
@@ -17,13 +22,15 @@ public class Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Entity)) return false;
+
         Entity entity = (Entity) o;
+
         return id == entity.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override

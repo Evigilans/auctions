@@ -1,25 +1,26 @@
 package com.piankov.auctions.entity;
 
-import java.util.Objects;
+import java.sql.Blob;
 
 public class User extends Entity {
     private String login;
-    private char[] passwordHash;
+    private String passwordHash;
     private String name;
     private String email;
     private int balance;
     private UserCategory category;
+    private Blob avatar;
 
-    public User(String login, char[] passwordHash, String name, String email, int balance, UserCategory category) {
+    public User() {}
+
+    public User(String login, String passwordHash, String name, String email, int balance, UserCategory category, Blob avatar) {
         this.login = login;
         this.passwordHash = passwordHash;
         this.name = name;
         this.email = email;
         this.balance = balance;
         this.category = category;
-    }
-
-    public User() {
+        this.avatar = avatar;
     }
 
     public String getLogin() {
@@ -30,11 +31,11 @@ public class User extends Entity {
         this.login = login;
     }
 
-    public char[] getPasswordHash() {
+    public String getPasswordHash() {
         return passwordHash;
     }
 
-    public void setPasswordHash(char[] passwordHash) {
+    public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
 
@@ -70,45 +71,63 @@ public class User extends Entity {
         this.category = category;
     }
 
-    public boolean isClient() {
-        return category == UserCategory.CLIENT;
+    public Blob getAvatar() {
+        return avatar;
     }
 
-    public boolean isAdvanced() {
-        return category == UserCategory.ADVANCED;
+    public void setAvatar(Blob avatar) {
+        this.avatar = avatar;
     }
-
-    public boolean isAdmin() {
-        return category == UserCategory.ADMIN;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+
         User user = (User) o;
-        return balance == user.balance &&
-                Objects.equals(login, user.login) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(email, user.email) &&
-                category == user.category;
+
+        if (balance != user.balance) return false;
+        if (login != null ? !login.equals(user.login) : user.login != null) return false;
+        if (passwordHash != null ? !passwordHash.equals(user.passwordHash) : user.passwordHash != null) return false;
+        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (category != user.category) return false;
+        return avatar != null ? avatar.equals(user.avatar) : user.avatar == null;
+    }
+
+    public boolean isClient() {
+        return this.category == UserCategory.CLIENT;
+    }
+
+    public boolean isAdmin() {
+        return this.category == UserCategory.ADMIN;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, name, email, balance, category);
+        int result = super.hashCode();
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (passwordHash != null ? passwordHash.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + balance;
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
-        String sb = "User{" + "login='" + login + '\'' +
+        return "User{" +
+                "login='" + login + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", balance=" + balance +
                 ", category=" + category +
+                ", avatar=" + avatar +
                 ", id=" + id +
-                '}';
-        return sb;
+                "} " + super.toString();
     }
 }

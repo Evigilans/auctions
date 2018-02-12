@@ -1,7 +1,5 @@
 package com.piankov.auctions.entity;
 
-import java.util.Objects;
-
 public class Bid extends Entity implements Comparable<Bid> {
     private long clientId;
     private long auctionId;
@@ -10,8 +8,7 @@ public class Bid extends Entity implements Comparable<Bid> {
     public Bid() {
     }
 
-    public Bid(long id, long clientId, long auctionId, int value) {
-        this.id = id;
+    public Bid(long clientId, long auctionId, int value) {
         this.clientId = clientId;
         this.auctionId = auctionId;
         this.value = value;
@@ -50,16 +47,22 @@ public class Bid extends Entity implements Comparable<Bid> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Bid)) return false;
+        if (!super.equals(o)) return false;
+
         Bid bid = (Bid) o;
-        return clientId == bid.clientId &&
-                auctionId == bid.auctionId &&
-                value == bid.value;
+
+        if (clientId != bid.clientId) return false;
+        if (auctionId != bid.auctionId) return false;
+        return value == bid.value;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(clientId, auctionId, value);
+        int result = super.hashCode();
+        result = 31 * result + (int) (clientId ^ (clientId >>> 32));
+        result = 31 * result + (int) (auctionId ^ (auctionId >>> 32));
+        result = 31 * result + value;
+        return result;
     }
 
     @Override

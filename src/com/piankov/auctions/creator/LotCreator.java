@@ -46,7 +46,6 @@ public class LotCreator extends AbstractCreator<Lot> {
 
                 lot.setId(resultSet.getInt(ID));
                 lot.setOwner(userDAO.findById(resultSet.getString(OWNER_ID)));
-                lot.setStartPrice(resultSet.getInt(START_PRICE));
                 lot.setName(resultSet.getString(NAME));
                 lot.setDescription(resultSet.getString(DESCRIPTION));
 
@@ -66,7 +65,6 @@ public class LotCreator extends AbstractCreator<Lot> {
 
                 lot.setId(resultSet.getInt(ID));
                 lot.setOwner(userDAO.findById(resultSet.getString(OWNER_ID)));
-                lot.setStartPrice(resultSet.getInt(START_PRICE));
                 lot.setName(resultSet.getString(NAME));
                 lot.setDescription(resultSet.getString(DESCRIPTION));
 

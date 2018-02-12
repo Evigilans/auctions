@@ -26,6 +26,7 @@ public class AuctionCreator extends AbstractCreator<Auction> {
     private static final String DAYS_DURATION = "DAYS_DURATION";
     private static final String START_DATE = "START_DATE";
     private static final String END_DATE = "END_DATE";
+    private static final String START_PRICE = "START_PRICE";
 
 
     @Override
@@ -54,6 +55,7 @@ public class AuctionCreator extends AbstractCreator<Auction> {
                 auction.setLot(lotDAO.findByAuctionId(auctionId));
                 auction.setState(AuctionState.getStateFromValue(resultSet.getInt(AUCTION_STATE_ID)));
                 auction.setType(AuctionType.getTypeFromValue(resultSet.getInt(AUCTION_TYPE_ID)));
+                auction.setStartPrice(resultSet.getInt(START_PRICE));
                 auction.setDaysDurations(resultSet.getInt(DAYS_DURATION));
 
                 if (auction.getState() != AuctionState.ON_VERIFICATION) {
@@ -82,6 +84,7 @@ public class AuctionCreator extends AbstractCreator<Auction> {
                 auction.setLot(lotDAO.findByAuctionId(auctionId));
                 auction.setState(AuctionState.getStateFromValue(resultSet.getInt(AUCTION_STATE_ID)));
                 auction.setType(AuctionType.getTypeFromValue(resultSet.getInt(AUCTION_TYPE_ID)));
+                auction.setStartPrice(resultSet.getInt(START_PRICE));
                 auction.setDaysDurations(resultSet.getInt(DAYS_DURATION));
 
                 if (auction.getState() != AuctionState.ON_VERIFICATION) {
