@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class EntityCreatorTest {
+public class EntityActionTest {
     private Service service = new Service();
     private List<Object[]> parameters;
     private double delta = 0.001;

@@ -1,6 +1,5 @@
 package test.com.piankov.auctions;
 
-import com.piankov.auctions.exception.InputDataException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +14,7 @@ public class DataReader {
     private static final Logger LOGGER = LogManager.getLogger(DataReader.class);
     private List<String> inputLines = new ArrayList<>();
 
-    public void readData(String filepath) throws InputDataException {
+    public void readData(String filepath) {
         try {
             Scanner inputData = new Scanner(new File(filepath));
             while (inputData.hasNextLine()) {
@@ -25,7 +24,7 @@ public class DataReader {
             }
             inputData.close();
         } catch (FileNotFoundException e) {
-            throw new InputDataException("Wrong file!");
+            LOGGER.error("Wrong file!");
         }
     }
 

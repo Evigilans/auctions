@@ -6,36 +6,43 @@ import com.piankov.auctions.creator.BidCreator;
 import com.piankov.auctions.dao.AuctionDAO;
 import com.piankov.auctions.dao.BidDAO;
 import com.piankov.auctions.entity.*;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.DAOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 public class AuctionAction {
-    public void makeBid(Map<String, String[]> parameterMap, User user) {
+    private static Logger LOGGER = LogManager.getLogger(AuctionAction.class);
+
+    public void makeBid(Map<String, String[]> parameterMap, User user) throws ActionPerformingException {
+        LOGGER.info("Performing 'Make Bid' action.");
+
         try (BidDAO bidDAO = new BidDAO()) {
+            LOGGER.info("Creating and inserting bid in database.");
             BidCreator bidCreator = new BidCreator();
             Bid bid = bidCreator.buildEntityFromMap(parameterMap, user);
 
             long generatedId = bidDAO.create(bid);
             bid.setId(generatedId);
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new ActionPerformingException("An exception occurred during performing 'Make Bid' action.", e);
         }
     }
 
-
-
-    public Auction createActiveAuction(Map<String, String[]> parameterMap, User user) {
-        Auction auction = null;
+    public Auction createActiveAuction(Map<String, String[]> parameterMap, User user) throws ActionPerformingException {
+        LOGGER.info("Performing 'Create Active Auction' action.");
 
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
+            LOGGER.info("Creating and inserting active auction in database.");
             LotAction lotAction = new LotAction();
             Lot lot = lotAction.createLot(parameterMap, user);
 
             AuctionCreator auctionCreator = new AuctionCreator();
-            auction = auctionCreator.buildEntityFromMap(parameterMap, lot);
+            Auction auction = auctionCreator.buildEntityFromMap(parameterMap, lot);
 
             auction.setState(AuctionState.IN_PROGRESS);
             auction.setStartDate(LocalDateTime.now());
@@ -46,20 +53,20 @@ public class AuctionAction {
 
             return auction;
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new ActionPerformingException("An exception occurred during performing 'Create Active Auction' action.", e);
         }
-        return auction;
     }
 
-    public Auction createVerifyingAuction(Map<String, String[]> parameterMap, User user) {
-        Auction auction = null;
+    public Auction createVerifyingAuction(Map<String, String[]> parameterMap, User user) throws ActionPerformingException {
+        LOGGER.info("Performing 'Create Verifying auction' action.");
 
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
+            LOGGER.info("Creating and inserting verifying auction in database.");
             LotAction lotAction = new LotAction();
             Lot lot = lotAction.createLot(parameterMap, user);
 
             AuctionCreator auctionCreator = new AuctionCreator();
-            auction = auctionCreator.buildEntityFromMap(parameterMap, lot);
+            Auction auction = auctionCreator.buildEntityFromMap(parameterMap, lot);
 
             auction.setState(AuctionState.ON_VERIFICATION);
 
@@ -68,57 +75,53 @@ public class AuctionAction {
 
             return auction;
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new ActionPerformingException("An exception occurred during performing 'Find User' action.", e);
         }
-
-        return auction;
     }
 
-    public Auction findAuctionById(String auctionId) {
-        Auction auction = null;
+    public Auction findAuctionById(String auctionId) throws ActionPerformingException {
+        LOGGER.info("Performing 'Find Auction By ID' action.");
 
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
-            auction = auctionDAO.findById(auctionId);
-            System.out.println(auction);
+            return auctionDAO.findById(auctionId);
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new ActionPerformingException("An exception occurred during performing 'Find Auction By ID' action.", e);
         }
-
-        return auction;
     }
 
-    public Auction verifyAuction(Auction auction) {
+    public Auction verifyAuction(Auction auction) throws ActionPerformingException {
+        LOGGER.info("Performing 'Verify Auction' action.");
+
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
+            LOGGER.info("Finding and updating auction in database.");
             auction.setState(AuctionState.IN_PROGRESS);
             auction.setStartDate(LocalDateTime.now());
             auction.setEndDate(auction.getStartDate().plusDays(auction.getDaysDurations()));
 
             return auctionDAO.update(auction);
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new ActionPerformingException("An exception occurred during performing 'Verify Auction' action.", e);
         }
-
-        return auction;
     }
 
-    public List<Auction> findAllAuctionsByState(int stateId) {
-        List<Auction> auctions = null;
+    public List<Auction> findAllAuctionsByState(int stateId) throws ActionPerformingException {
+        LOGGER.info("Performing 'Find All Auction By ID' action.");
 
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
-            auctions = auctionDAO.findAuctionsByState(stateId);
+            LOGGER.info("Finding in database and creating auction list.");
+
+            return auctionDAO.findAuctionsByState(stateId);
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new ActionPerformingException("An exception occurred during performing 'Find All Auction By ID' action.", e);
         }
-
-        return auctions;
     }
 
-    public Auction updateLot(String auctionId, Map<String, String[]> parameterMap) {
-        return null;
-    }
+    public Auction updateAuction(Auction auction, Map<String, String[]> parameterMap) throws ActionPerformingException {
+        LOGGER.info("Performing 'Update Auction' action.");
 
-    public Auction updateAuction(Auction auction, Map<String, String[]> parameterMap) {
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
+            LOGGER.info("Resetting fields and updating in database.");
+
             String startPrice = parameterMap.get(ParameterConstant.PARAMETER_START_PRICE)[0];
             if (startPrice != null) {
                 //auction.setName(startPrice);
@@ -131,13 +134,11 @@ public class AuctionAction {
 
             return auctionDAO.update(auction);
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new ActionPerformingException("An exception occurred during performing 'Update Auction' action.", e);
         }
-
-        return null;
     }
 
-    public Auction updateBid(String bidId, Map<String, String[]> parameterMap) {
+    public Auction updateLot(String auctionId, Map<String, String[]> parameterMap) {
         return null;
     }
 

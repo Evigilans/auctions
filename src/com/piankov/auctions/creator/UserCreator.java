@@ -3,7 +3,7 @@ package com.piankov.auctions.creator;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.User;
 import com.piankov.auctions.entity.UserCategory;
-import com.piankov.auctions.exception.DAOException;
+import com.piankov.auctions.exception.EntityCreationException;
 import com.piankov.auctions.util.PasswordEncryptor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,35 +27,39 @@ public class UserCreator extends AbstractCreator<User> {
 
     @Override
     public User buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
-        User user = null;
+        LOGGER.info("Creating user from parameter map.");
 
         try {
-            user = new User();
+            User user = new User();
 
             String password = parameterMap.get(ParameterConstant.PARAMETER_PASSWORD)[0];
             PasswordEncryptor passwordEncryptor = new PasswordEncryptor();
             String passwordHash = passwordEncryptor.encrypt(password);
 
+            LOGGER.info("Setting user fields.");
             user.setEmail(parameterMap.get(ParameterConstant.PARAMETER_EMAIL)[0]);
             user.setPasswordHash(passwordHash);
             user.setName(parameterMap.get(ParameterConstant.PARAMETER_NAME)[0]);
             user.setBalance(0);
             user.setCategory(UserCategory.CLIENT);
 
+            LOGGER.info("Created user: " + user);
             return user;
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.error("Cannot create user due wrong encrypting algorithm.");
+            return null;
         }
-
-        return user;
     }
 
     @Override
-    public User buildEntityFromResultSet(ResultSet resultSet) throws DAOException {
+    public User createEntityFromResultSet(ResultSet resultSet) throws EntityCreationException {
+        LOGGER.info("Creating user from result set.");
+
         try {
             if (resultSet.next()) {
                 User user = new User();
 
+                LOGGER.info("Setting user fields.");
                 user.setId(resultSet.getInt(ID));
                 user.setEmail(resultSet.getString(EMAIL));
                 user.setPasswordHash(resultSet.getString(PASSWORD_HASH));
@@ -63,21 +67,25 @@ public class UserCreator extends AbstractCreator<User> {
                 user.setBalance(resultSet.getInt(BALANCE));
                 user.setCategory(UserCategory.getCategoryFromValue(resultSet.getInt(CATEGORY)));
 
+                LOGGER.info("Created user: " + user);
                 return user;
             }
             return null;
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new EntityCreationException("Cannot create user from received result set.", e);
         }
     }
 
     @Override
-    public List<User> buildListFromResultSet(ResultSet resultSet) throws DAOException {
+    public List<User> createListFromResultSet(ResultSet resultSet) throws EntityCreationException {
+        LOGGER.info("Creating list of user from result set.");
+
         try {
             List<User> users = new ArrayList<>();
             while (resultSet.next()) {
                 User user = new User();
 
+                LOGGER.info("Setting user fields.");
                 user.setId(resultSet.getInt(ID));
                 user.setEmail(resultSet.getString(EMAIL));
                 user.setPasswordHash(resultSet.getString(PASSWORD_HASH));
@@ -85,11 +93,12 @@ public class UserCreator extends AbstractCreator<User> {
                 user.setBalance(resultSet.getInt(BALANCE));
                 user.setCategory(UserCategory.getCategoryFromValue(resultSet.getInt(CATEGORY)));
 
+                LOGGER.info("Added user to list: " + user);
                 users.add(user);
             }
             return users;
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new EntityCreationException("Cannot create users list from received result set.", e);
         }
     }
 }

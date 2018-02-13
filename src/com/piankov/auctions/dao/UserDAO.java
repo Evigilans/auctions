@@ -3,6 +3,7 @@ package com.piankov.auctions.dao;
 import com.piankov.auctions.creator.UserCreator;
 import com.piankov.auctions.entity.User;
 import com.piankov.auctions.exception.DAOException;
+import com.piankov.auctions.exception.EntityCreationException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,11 +30,10 @@ public class UserDAO extends AbstractDAO<User> {
             PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_USERS);
             ResultSet rs = statement.executeQuery();
 
-
             UserCreator userCreator = new UserCreator();
-            return userCreator.buildListFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return userCreator.createListFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding all users.", e);
         }
     }
 
@@ -46,9 +46,9 @@ public class UserDAO extends AbstractDAO<User> {
             ResultSet rs = statement.executeQuery();
 
             UserCreator userCreator = new UserCreator();
-            return userCreator.buildEntityFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return userCreator.createEntityFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding lot by ID.", e);
         }
     }
 
@@ -61,7 +61,7 @@ public class UserDAO extends AbstractDAO<User> {
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during deleting user.", e);
         }
     }
 
@@ -87,7 +87,7 @@ public class UserDAO extends AbstractDAO<User> {
 
             return resultSet.getLong(1);
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during creating user.", e);
         }
     }
 
@@ -107,36 +107,36 @@ public class UserDAO extends AbstractDAO<User> {
             String userId = String.valueOf(user.getId());
             return findById(userId);
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during updating user.", e);
         }
     }
 
-    public User findClient(String clientName, String passwordHash) throws DAOException {
+    public User findClient(String email, String passwordHash) throws DAOException {
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_AUTHORIZATION_DATA);
 
-            statement.setString(1, clientName);
+            statement.setString(1, email);
             statement.setString(2, passwordHash);
             ResultSet rs = statement.executeQuery();
 
             UserCreator userCreator = new UserCreator();
-            return userCreator.buildEntityFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return userCreator.createEntityFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding user by authorization data.", e);
         }
     }
 
-    public boolean canCreate(String login) throws DAOException {
+    public boolean canCreate(String email) throws DAOException {
         try {
             PreparedStatement statement = this.connection.prepareStatement(CHECK_EMAIL_EXISTANCE);
 
-            statement.setString(1, login);
+            statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
 
 
             return !rs.next();
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during checking if user can be created.", e);
         }
     }
 }

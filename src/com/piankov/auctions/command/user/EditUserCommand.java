@@ -5,8 +5,10 @@ import com.piankov.auctions.command.Command;
 import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.exception.UnauthorizedAccessException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditUserCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(EditUserCommand.class);
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException, UnauthorizedAccessException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
         try {
             Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
 
@@ -28,8 +32,8 @@ public class EditUserCommand implements Command {
 
             request.getSession().setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, user);
             request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
+        } catch (ServletException | IOException | ActionPerformingException e) {
+            throw  new CommandExecutionException("An exception occurred during 'Edit User' command execution.", e);
         }
     }
 }

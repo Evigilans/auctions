@@ -21,7 +21,7 @@ public class LogoutCommand implements Command {
             request.getSession().removeAttribute(ParameterConstant.PARAMETER_USER);
             request.getRequestDispatcher(PageConstant.PAGE_LOGIN).forward(request, response);
         } catch (IOException | ServletException e) {
-            e.printStackTrace();
+            throw  new CommandExecutionException("An exception occurred during 'Logout' command execution.", e);
         }
     }
 }

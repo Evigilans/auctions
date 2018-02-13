@@ -5,6 +5,10 @@ import com.piankov.auctions.command.Command;
 import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.ActionPerformingException;
+import com.piankov.auctions.exception.CommandExecutionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ProfileCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(ProfileCommand.class);
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
         try {
             User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
 
@@ -34,8 +40,8 @@ public class ProfileCommand implements Command {
             } else {
                 request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
             }
-        } catch (IOException | ServletException e) {
-            e.printStackTrace();
+        } catch (IOException | ServletException | ActionPerformingException e) {
+            throw  new CommandExecutionException("An exception occurred during 'Profile' command execution.", e);
         }
     }
 }

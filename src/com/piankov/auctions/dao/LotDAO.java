@@ -3,6 +3,7 @@ package com.piankov.auctions.dao;
 import com.piankov.auctions.creator.LotCreator;
 import com.piankov.auctions.entity.Lot;
 import com.piankov.auctions.exception.DAOException;
+import com.piankov.auctions.exception.EntityCreationException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,24 +29,24 @@ public class LotDAO extends AbstractDAO<Lot> {
             PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_LOTS);
             ResultSet rs = statement.executeQuery();
             LotCreator lotCreator = new LotCreator();
-            return lotCreator.buildListFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return lotCreator.createListFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding all lost.", e);
         }
     }
 
     @Override
     public Lot findById(String id) throws DAOException {
         try {
+            LotCreator lotCreator = new LotCreator();
             PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_ID);
 
             statement.setString(1, id);
-            ResultSet rs = statement.executeQuery();
 
-            LotCreator lotCreator = new LotCreator();
-            return lotCreator.buildEntityFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            ResultSet rs = statement.executeQuery();
+            return lotCreator.createEntityFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding lot by ID.", e);
         }
     }
 
@@ -58,7 +59,7 @@ public class LotDAO extends AbstractDAO<Lot> {
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during deleting lot.", e);
         }
     }
 
@@ -81,7 +82,7 @@ public class LotDAO extends AbstractDAO<Lot> {
             resultSet.next();
             return resultSet.getLong(1);
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during creating lot.", e);
         }
     }
 
@@ -98,7 +99,7 @@ public class LotDAO extends AbstractDAO<Lot> {
             String bidId = String.valueOf(lot.getId());
             return findById(bidId);
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during updating lot.", e);
         }
     }
 
@@ -110,9 +111,9 @@ public class LotDAO extends AbstractDAO<Lot> {
             ResultSet rs = statement.executeQuery();
 
             LotCreator lotCreator = new LotCreator();
-            return lotCreator.buildEntityFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return lotCreator.createEntityFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding lot by auction ID.", e);
         }
     }
 }

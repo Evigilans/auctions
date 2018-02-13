@@ -7,8 +7,10 @@ import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.AuctionState;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.exception.UnauthorizedAccessException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +19,10 @@ import java.io.IOException;
 import java.util.List;
 
 public class VerifyingAuctionsListCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(VerifyingAuctionsListCommand.class);
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException, UnauthorizedAccessException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
         try {
             User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
 
@@ -31,8 +35,8 @@ public class VerifyingAuctionsListCommand implements Command {
             } else {
                 //
             }
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
+        } catch (ServletException | IOException | ActionPerformingException e) {
+            throw  new CommandExecutionException("An exception occurred during 'Verifying Auction List' command execution.", e);
         }
     }
 }

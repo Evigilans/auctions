@@ -5,9 +5,11 @@ import com.piankov.auctions.command.Command;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Lot;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.exception.UnauthorizedAccessException;
 import com.piankov.auctions.validator.LotValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,35 +18,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditLotCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(EditLotCommand.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException, UnauthorizedAccessException {
-        String lotId = request.getParameter(ParameterConstant.PARAMETER_LOT_ID);
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        try {
 
-        LotAction lotAction = new LotAction();
-        Lot lot = lotAction.findLotById(lotId);
+            String lotId = request.getParameter(ParameterConstant.PARAMETER_LOT_ID);
 
-        if (lot != null) {
-            User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
+            LotAction lotAction = new LotAction();
+            Lot lot = lotAction.findLotById(lotId);
 
-            if (user.equals(lot.getOwner()) || user.isAdmin()) {
+            if (lot != null) {
+                User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
 
-                LotValidator lotValidator = new LotValidator();
+                if (user.equals(lot.getOwner()) || user.isAdmin()) {
 
-                Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
+                    LotValidator lotValidator = new LotValidator();
 
-                if (lotValidator.validateLotData(parameterMap)) {
-                    try {
+                    Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
+
+                    if (lotValidator.validateLotData(parameterMap)) {
+
                         lot = lotAction.updateLot(lot, parameterMap);
 
                         response.sendRedirect(request.getHeader(ParameterConstant.REFERER));
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
                 }
             } else {
                 //
             }
+        } catch (IOException | ActionPerformingException e) {
+            throw  new CommandExecutionException("An exception occurred during 'Edit Lot' command execution.", e);
         }
     }
 }

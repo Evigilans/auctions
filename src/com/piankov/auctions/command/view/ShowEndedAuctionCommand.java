@@ -5,17 +5,21 @@ import com.piankov.auctions.command.Command;
 import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Auction;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.exception.UnauthorizedAccessException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ShowEndedAuctionCommand implements Command{
+public class ShowEndedAuctionCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(ShowEndedAuctionCommand.class);
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException, UnauthorizedAccessException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
         AuctionAction auctionAction = new AuctionAction();
 
         String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
@@ -26,8 +30,8 @@ public class ShowEndedAuctionCommand implements Command{
 
                 request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
                 request.getRequestDispatcher(PageConstant.PAGE_ENDED_AUCTION).forward(request, response);
-            } catch (ServletException | IOException e) {
-                e.printStackTrace();
+            } catch (ServletException | IOException | ActionPerformingException e) {
+                throw new CommandExecutionException("An exception occurred during 'Show Ended Auction' command execution.", e);
             }
         }
     }

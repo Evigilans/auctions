@@ -6,9 +6,11 @@ import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.controller.CommandType;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.exception.UnauthorizedAccessException;
 import com.piankov.auctions.validator.AuctionValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CancelBidCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(CancelBidCommand.class);
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException, UnauthorizedAccessException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
         try {
             AuctionValidator auctionValidator = new AuctionValidator();
 
@@ -42,8 +46,8 @@ public class CancelBidCommand implements Command {
             } else {
                 //
             }
-        } catch (UnauthorizedAccessException | CommandExecutionException e) {
-            e.printStackTrace();
+        } catch (CommandExecutionException | ActionPerformingException e) {
+            throw  new CommandExecutionException("An exception occurred during 'Cancel Bid' command execution.", e);
         }
     }
 }

@@ -6,8 +6,10 @@ import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.exception.UnauthorizedAccessException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class WithdrawAuctionCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(WithdrawAuctionCommand.class);
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException, UnauthorizedAccessException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
         try {
             AuctionAction auctionAction = new AuctionAction();
 
@@ -36,8 +40,8 @@ public class WithdrawAuctionCommand implements Command {
             } else {
                 //
             }
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
+        } catch (ServletException | IOException | ActionPerformingException e) {
+            throw  new CommandExecutionException("An exception occurred during 'Withdraw Auction' command execution.", e);
         }
     }
 }

@@ -6,9 +6,11 @@ import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.exception.UnauthorizedAccessException;
 import com.piankov.auctions.validator.AuctionValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +20,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditAuctionCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(EditAuctionCommand.class);
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException, UnauthorizedAccessException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Edit Auction' command.");
+
         try {
+            String page;
+
             AuctionAction auctionAction = new AuctionAction();
             AuctionValidator auctionValidator = new AuctionValidator();
 
@@ -46,8 +54,8 @@ public class EditAuctionCommand implements Command {
             } else {
                 //
             }
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
+        } catch (ServletException | IOException | ActionPerformingException e) {
+            throw new CommandExecutionException("An exception occurred during 'Edit Auction' command execution.", e);
         }
 
     }

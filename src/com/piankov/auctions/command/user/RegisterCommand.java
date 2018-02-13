@@ -5,6 +5,7 @@ import com.piankov.auctions.command.Command;
 import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
 import com.piankov.auctions.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
@@ -45,8 +46,8 @@ public class RegisterCommand implements Command {
                 request.setAttribute(ParameterConstant.PARAMETER_LOGIN_ERROR_MESSAGE, "Illegal register data.");
                 request.getRequestDispatcher(PageConstant.PAGE_LOGIN).forward(request, response);
             }
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
+        } catch (ServletException | IOException | ActionPerformingException e) {
+            throw  new CommandExecutionException("An exception occurred during 'Register' command execution.", e);
         }
     }
 }

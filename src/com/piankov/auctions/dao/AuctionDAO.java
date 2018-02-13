@@ -4,6 +4,7 @@ import com.piankov.auctions.creator.AuctionCreator;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.AuctionState;
 import com.piankov.auctions.exception.DAOException;
+import com.piankov.auctions.exception.EntityCreationException;
 
 import java.sql.*;
 import java.util.List;
@@ -31,9 +32,9 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             ResultSet rs = statement.executeQuery();
 
             AuctionCreator auctionCreator = new AuctionCreator();
-            return auctionCreator.buildListFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return auctionCreator.createListFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding all auction.", e);
         }
     }
 
@@ -46,9 +47,9 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             ResultSet rs = statement.executeQuery();
 
             AuctionCreator auctionCreator = new AuctionCreator();
-            return auctionCreator.buildEntityFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return auctionCreator.createEntityFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding auction by ID.", e);
         }
     }
 
@@ -61,7 +62,7 @@ public class AuctionDAO extends AbstractDAO<Auction> {
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during deleting auction.", e);
         }
     }
 
@@ -89,7 +90,7 @@ public class AuctionDAO extends AbstractDAO<Auction> {
 
             return resultSet.getLong(1);
         } catch (SQLException e) {
-            throw new DAOException("", e);
+            throw new DAOException("And exception occurred during creating auction.", e);
         }
     }
 
@@ -143,9 +144,9 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             ResultSet rs = statement.executeQuery();
 
             AuctionCreator auctionCreator = new AuctionCreator();
-            return auctionCreator.buildListFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return auctionCreator.createListFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding auctions by state.", e);
         }
     }
 
@@ -164,7 +165,7 @@ public class AuctionDAO extends AbstractDAO<Auction> {
                     statement.setLong(2, auction.getId());
                     statement.executeUpdate();
                 } catch (SQLException e) {
-                    throw new DAOException("", e);
+                    throw new DAOException("And exception occurred during ending outdated auctions.", e);
                 }
             }
         }
@@ -177,9 +178,9 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             ResultSet rs = statement.executeQuery();
 
             AuctionCreator auctionCreator = new AuctionCreator();
-            return auctionCreator.buildListFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DAOException("", e);
+            return auctionCreator.createListFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding outdated auctions.", e);
         }
     }
 }
