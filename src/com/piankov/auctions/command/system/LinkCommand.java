@@ -1,4 +1,4 @@
-package com.piankov.auctions.command.page;
+package com.piankov.auctions.command.system;
 
 import com.piankov.auctions.command.Command;
 import com.piankov.auctions.constant.ParameterConstant;

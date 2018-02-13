@@ -1,18 +1,22 @@
 package com.piankov.auctions.controller;
 
-import com.piankov.auctions.command.Command;
-import com.piankov.auctions.command.edit.EditUserCommand;
-import com.piankov.auctions.command.entity.*;
+import com.piankov.auctions.command.*;
+import com.piankov.auctions.command.auction.*;
 import com.piankov.auctions.command.list.ActiveAuctionsListCommand;
 import com.piankov.auctions.command.list.EndedAuctionsListCommand;
 import com.piankov.auctions.command.list.VerifyingAuctionsListCommand;
-import com.piankov.auctions.command.page.EditUserPageCommand;
-import com.piankov.auctions.command.page.LinkCommand;
+import com.piankov.auctions.command.bid.MakeBidCommand;
+import com.piankov.auctions.command.user.EditUserPageCommand;
+import com.piankov.auctions.command.system.LinkCommand;
 import com.piankov.auctions.command.system.ChangeLanguageCommand;
 import com.piankov.auctions.command.user.LoginCommand;
 import com.piankov.auctions.command.user.LogoutCommand;
-import com.piankov.auctions.command.user.ProfileCommand;
+import com.piankov.auctions.command.view.ProfileCommand;
 import com.piankov.auctions.command.user.RegisterCommand;
+import com.piankov.auctions.command.user.EditUserCommand;
+import com.piankov.auctions.command.view.ShowActiveAuctionCommand;
+import com.piankov.auctions.command.view.ShowEndedAuctionCommand;
+import com.piankov.auctions.command.view.ShowVerifyingAuctionCommand;
 
 public enum CommandType {
     EDIT_USER(new EditUserCommand()),

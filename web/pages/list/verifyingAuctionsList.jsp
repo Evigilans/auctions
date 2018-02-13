@@ -13,29 +13,38 @@
 <jsp:include page="${pageContext.request.contextPath}/pages/service/header.jsp"></jsp:include>
 
 <main>
-    <div class="container">
-        <div class="dc-view-switcher">
-            <button data-trigger="grid-view"></button>
-            <button data-trigger="list-view" class="active"></button>
-        </div>
-        <div data-view="list-view" class="download-cards">
-            <c:forEach var="auction" items="${auctions}">
-                <article class="download-card">
-                    <div class="download-card__icon-box"><img src="images/question-512.png"/></div>
-                    <div class="download-card__content-box">
-                        <div class="content">
-                            <h3 class="download-card__content-box__title">
-                                <a href="${pageContext.request.contextPath}/ApplicationController?command=show-active-auction&auctionId=${auction.id}">${auction.lot.name}</a>
-                            </h3>
-                            <p class="download-card__content-box__description">
-                                High & low-res photos for print and web media.
-                            </p>
-                        </div>
-                    </div>
-                </article>
-            </c:forEach>
-        </div>
-    </div>
+    <c:choose>
+        <c:when test="${user.admin}">
+            <div class="container">
+                <div class="dc-view-switcher">
+                    <button data-trigger="grid-view"></button>
+                    <button data-trigger="list-view" class="active"></button>
+                </div>
+                <div data-view="list-view" class="download-cards">
+                    <c:forEach var="auction" items="${auctions}">
+                        <article class="download-card">
+                            <div class="download-card__icon-box"><img src="images/question-512.png"/></div>
+                            <div class="download-card__content-box">
+                                <div class="content">
+                                    <h3 class="download-card__content-box__title">
+                                        <a href="${pageContext.request.contextPath}/ApplicationController?command=show-verifying-auction&auctionId=${auction.id}">${auction.lot.name}</a>
+                                    </h3>
+                                    <p class="download-card__content-box__description">
+                                        High & low-res photos for print and web media.
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    </c:forEach>
+                </div>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <h1>We are sorry, but you do not have permission to view this page.</h1>
+        </c:otherwise>
+    </c:choose>
+
+
 </main>
 <script src="${pageContext.request.contextPath}/js/list.js"></script>
 

@@ -26,7 +26,7 @@
                     <div class="download-card__content-box">
                         <div class="content">
                             <h3 class="download-card__content-box__title">
-                                <a href="${pageContext.request.contextPath}/ApplicationController?command=show-active-auction&auctionId=${auction.id}">${auction.lot.name}</a>
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=show-ended-auction&auctionId=${auction.id}">${auction.lot.name}</a>
                             </h3>
                             <p class="download-card__content-box__description">
                                 High & low-res photos for print and web media.

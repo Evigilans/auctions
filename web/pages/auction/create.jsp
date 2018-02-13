@@ -27,7 +27,7 @@
             </c:when>
             <c:otherwise>
                 <h1>Enter auction info</h1>
-                <form action="${pageContext.request.contextPath}/ApplicationController?command=createAuction"
+                <form action="${pageContext.request.contextPath}/ApplicationController?command=create-auction"
                       method="post">
                     <div class="field-wrap">
                         <label>

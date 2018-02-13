@@ -90,6 +90,10 @@ public class Auction extends Entity {
         this.currentMaximalBid = currentMaximalBid;
     }
 
+    public boolean isActive() {
+        return this.state == AuctionState.IN_PROGRESS;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

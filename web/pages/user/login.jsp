@@ -37,15 +37,15 @@
                               method="post">
                             <div class="field-wrap">
                                 <label>
-                                    Login<span class="req">*</span>
+                                    Email<span class="req">*</span>
                                 </label>
-                                <input type="text" name="login" required autocomplete="off"/>
+                                <input type="text" name="email" required>
                             </div>
                             <div class="field-wrap">
                                 <label>
                                     Password<span class="req">*</span>
                                 </label>
-                                <input type="password" name="password" required autocomplete="off"/>
+                                <input type="password" name="password" required>
                             </div>
                             <p class="forgot"><a href="#">Forgot Password?</a></p>
                             <button class="button button-block"/>
@@ -63,32 +63,25 @@
                         </c:choose>
                         <form action="${pageContext.request.contextPath}/ApplicationController?command=register"
                               method="post">
-                            <div class="top-row">
-                                <div class="field-wrap">
-                                    <label>
-                                        Login<span class="req">*</span>
-                                    </label>
-                                    <input type="text" name="login" required autocomplete="off"/>
-                                </div>
-                                <div class="field-wrap">
-                                    <label>
-                                        Full name<span class="req">*</span>
-                                    </label>
-                                    <input type="text" name="name" required autocomplete="off"/>
-                                </div>
-                            </div>
                             <div class="field-wrap">
                                 <label>
                                     Email address<span class="req">*</span>
                                 </label>
-                                <input type="email" name="email" required autocomplete="off"/>
+                                <input type="email" name="email">
+                            </div>
+                            <div class="field-wrap">
+                                <label>
+                                    Full name<span class="req">*</span>
+                                </label>
+                                <input type="text" name="name">
                             </div>
                             <div class="field-wrap">
                                 <label>
                                     Set a password<span class="req">*</span>
                                 </label>
-                                <input type="password" name="password" required autocomplete="off"/>
+                                <input type="password" name="password" required>
                             </div>
+                            <p class="forgot"><a href="#">Read a rules</a></p>
                             <button type="submit" class="button button-block"/>
                             Get Started</button>
                         </form>

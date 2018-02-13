@@ -3,6 +3,7 @@ package com.piankov.auctions.creator;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Bid;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.exception.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,33 +35,41 @@ public class BidCreator extends AbstractCreator<Bid> {
     }
 
     @Override
-    public Bid buildEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        if (resultSet.next()) {
-            Bid bid = new Bid();
+    public Bid buildEntityFromResultSet(ResultSet resultSet) throws DAOException {
+        try {
+            if (resultSet.next()) {
+                Bid bid = new Bid();
 
-            bid.setId(resultSet.getLong(ID));
-            bid.setClientId(resultSet.getInt(CLIENT_ID));
-            bid.setAuctionId(resultSet.getInt(AUCTION_ID));
-            bid.setValue(resultSet.getInt(VALUE));
+                bid.setId(resultSet.getLong(ID));
+                bid.setClientId(resultSet.getInt(CLIENT_ID));
+                bid.setAuctionId(resultSet.getInt(AUCTION_ID));
+                bid.setValue(resultSet.getInt(VALUE));
 
-            return bid;
+                return bid;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DAOException("", e);
         }
-        return null;
     }
 
     @Override
-    public List<Bid> buildListFromResultSet(ResultSet resultSet) throws SQLException {
-        List<Bid> bids = new ArrayList<>();
-        while (resultSet.next()) {
-            Bid bid = new Bid();
+    public List<Bid> buildListFromResultSet(ResultSet resultSet) throws DAOException {
+        try {
+            List<Bid> bids = new ArrayList<>();
+            while (resultSet.next()) {
+                Bid bid = new Bid();
 
-            bid.setId(resultSet.getLong(ID));
-            bid.setClientId(resultSet.getInt(CLIENT_ID));
-            bid.setAuctionId(resultSet.getInt(AUCTION_ID));
-            bid.setValue(resultSet.getInt(VALUE));
+                bid.setId(resultSet.getLong(ID));
+                bid.setClientId(resultSet.getInt(CLIENT_ID));
+                bid.setAuctionId(resultSet.getInt(AUCTION_ID));
+                bid.setValue(resultSet.getInt(VALUE));
 
-            bids.add(bid);
+                bids.add(bid);
+            }
+            return bids;
+        } catch (SQLException e) {
+            throw new DAOException("", e);
         }
-        return bids;
     }
 }

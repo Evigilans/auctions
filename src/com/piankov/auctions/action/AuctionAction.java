@@ -3,13 +3,11 @@ package com.piankov.auctions.action;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.creator.AuctionCreator;
 import com.piankov.auctions.creator.BidCreator;
-import com.piankov.auctions.creator.LotCreator;
 import com.piankov.auctions.dao.AuctionDAO;
 import com.piankov.auctions.dao.BidDAO;
-import com.piankov.auctions.dao.LotDAO;
 import com.piankov.auctions.entity.*;
+import com.piankov.auctions.exception.DAOException;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -22,34 +20,19 @@ public class AuctionAction {
 
             long generatedId = bidDAO.create(bid);
             bid.setId(generatedId);
-        } catch (SQLException e) {
+        } catch (DAOException e) {
             e.printStackTrace();
         }
     }
 
-    private Lot createLot(Map<String, String[]> parameterMap, User user) {
-        Lot lot = null;
 
-        try (LotDAO lotDAO = new LotDAO()) {
-            LotCreator lotCreator = new LotCreator();
-            lot = lotCreator.buildEntityFromMap(parameterMap, user);
-
-            long lotId = lotDAO.create(lot);
-            lot.setId(lotId);
-
-            return lot;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lot;
-    }
 
     public Auction createActiveAuction(Map<String, String[]> parameterMap, User user) {
         Auction auction = null;
 
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
-            Lot lot = createLot(parameterMap, user);
+            LotAction lotAction = new LotAction();
+            Lot lot = lotAction.createLot(parameterMap, user);
 
             AuctionCreator auctionCreator = new AuctionCreator();
             auction = auctionCreator.buildEntityFromMap(parameterMap, lot);
@@ -62,7 +45,7 @@ public class AuctionAction {
             auction.setId(generatedId);
 
             return auction;
-        } catch (SQLException e) {
+        } catch (DAOException e) {
             e.printStackTrace();
         }
         return auction;
@@ -72,7 +55,8 @@ public class AuctionAction {
         Auction auction = null;
 
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
-            Lot lot = createLot(parameterMap, user);
+            LotAction lotAction = new LotAction();
+            Lot lot = lotAction.createLot(parameterMap, user);
 
             AuctionCreator auctionCreator = new AuctionCreator();
             auction = auctionCreator.buildEntityFromMap(parameterMap, lot);
@@ -83,7 +67,7 @@ public class AuctionAction {
             auction.setId(generatedId);
 
             return auction;
-        } catch (SQLException e) {
+        } catch (DAOException e) {
             e.printStackTrace();
         }
 
@@ -96,7 +80,7 @@ public class AuctionAction {
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
             auction = auctionDAO.findById(auctionId);
             System.out.println(auction);
-        } catch (SQLException e) {
+        } catch (DAOException e) {
             e.printStackTrace();
         }
 
@@ -110,7 +94,7 @@ public class AuctionAction {
             auction.setEndDate(auction.getStartDate().plusDays(auction.getDaysDurations()));
 
             return auctionDAO.update(auction);
-        } catch (SQLException e) {
+        } catch (DAOException e) {
             e.printStackTrace();
         }
 
@@ -122,7 +106,7 @@ public class AuctionAction {
 
         try (AuctionDAO auctionDAO = new AuctionDAO()) {
             auctions = auctionDAO.findAuctionsByState(stateId);
-        } catch (SQLException e) {
+        } catch (DAOException e) {
             e.printStackTrace();
         }
 
@@ -146,7 +130,7 @@ public class AuctionAction {
             }
 
             return auctionDAO.update(auction);
-        } catch (SQLException e) {
+        } catch (DAOException e) {
             e.printStackTrace();
         }
 
@@ -154,6 +138,14 @@ public class AuctionAction {
     }
 
     public Auction updateBid(String bidId, Map<String, String[]> parameterMap) {
+        return null;
+    }
+
+    public Auction withdrawAuction(Auction auction) {
+        return null;
+    }
+
+    public Auction findBidById(String bidID) {
         return null;
     }
 }

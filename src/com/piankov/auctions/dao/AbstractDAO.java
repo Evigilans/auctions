@@ -5,6 +5,7 @@ import com.mysql.jdbc.Statement;
 import com.piankov.auctions.connection.ConnectionWrapper;
 import com.piankov.auctions.entity.Entity;
 import com.piankov.auctions.connection.ConnectionPool;
+import com.piankov.auctions.exception.DAOException;
 
 import java.io.Closeable;
 import java.sql.SQLException;
@@ -17,17 +18,17 @@ public abstract class AbstractDAO<T extends Entity> implements Closeable {
         this.connection = ConnectionPool.getInstance().takeConnection();
     }
 
-    public abstract List<T> findAll() throws SQLException;
+    public abstract List<T> findAll() throws DAOException;
 
-    public abstract T findById(String id) throws SQLException;
+    public abstract T findById(String id) throws DAOException;
 
-    public abstract boolean delete(String id) throws SQLException;
+    public abstract boolean delete(String id) throws DAOException;
 
-    public abstract boolean delete(T entity) throws SQLException;
+    public abstract boolean delete(T entity) throws DAOException;
 
-    public abstract long create(T entity) throws SQLException;
+    public abstract long create(T entity) throws DAOException;
 
-    public abstract T update(T entity) throws SQLException;
+    public abstract T update(T entity) throws DAOException;
 
     public void close(Statement st) {
         try {

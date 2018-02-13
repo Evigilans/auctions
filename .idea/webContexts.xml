@@ -5,8 +5,10 @@
       <map>
         <entry key="file://$PROJECT_DIR$/web/pages/list/activeAuctionsList.jsp" value="file://$PROJECT_DIR$/web" />
         <entry key="file://$PROJECT_DIR$/web/pages/list/endedAuctionsList.jsp" value="file://$PROJECT_DIR$/web" />
+        <entry key="file://$PROJECT_DIR$/web/pages/list/usersList.jsp" value="file://$PROJECT_DIR$/web" />
         <entry key="file://$PROJECT_DIR$/web/pages/list/verifyingAuctionsList.jsp" value="file://$PROJECT_DIR$/web" />
         <entry key="file://$PROJECT_DIR$/web/pages/login.jsp" value="file://$PROJECT_DIR$/web/pages" />
+        <entry key="file://$PROJECT_DIR$/web/pages/service/error.jsp" value="file://$PROJECT_DIR$/web" />
       </map>
     </option>
   </component>

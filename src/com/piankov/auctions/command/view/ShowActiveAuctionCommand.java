@@ -1,4 +1,4 @@
-package com.piankov.auctions.command.entity;
+package com.piankov.auctions.command.view;
 
 import com.piankov.auctions.action.AuctionAction;
 import com.piankov.auctions.command.Command;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ShowVerifyingAuctionCommand implements Command {
+public class ShowActiveAuctionCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         AuctionAction auctionAction = new AuctionAction();
@@ -23,7 +23,7 @@ public class ShowVerifyingAuctionCommand implements Command {
                 Auction auction = auctionAction.findAuctionById(auctionId);
 
                 request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
-                request.getRequestDispatcher(PageConstant.PAGE_VERIFYING_AUCTION).forward(request, response);
+                request.getRequestDispatcher(PageConstant.PAGE_ACTIVE_AUCTION).forward(request, response);
             } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }

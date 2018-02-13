@@ -1,4 +1,4 @@
-package com.piankov.auctions.command.user;
+package com.piankov.auctions.command.view;
 
 import com.piankov.auctions.action.UserAction;
 import com.piankov.auctions.command.Command;

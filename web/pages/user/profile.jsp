@@ -39,23 +39,22 @@
                         </div>
                         <div id="details">
                             <h1>Name: ${user.name}</h1>
-                            <h1>Login: ${user.login}</h1>
                             <h1>Email: ${user.email}</h1>
                             <h1>Balance: ${user.balance}$</h1>
                             <h1>Category: ${user.category}</h1>
                         </div>
                         <ul>
                             <li>
-                                <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=edit-user-page&userId=${userProfile.id}">Click
                                     here to edit your profile</a>
                             </li>
                             <li>
-                                <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=edit-user-page&userId=${userProfile.id}">Click
                                     here to view lots</a>
                             </li>
                             <c:if test="${user.admin}">
                                 <li>
-                                    <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
+                                    <a href="${pageContext.request.contextPath}/ApplicationController?command=edit-user-page&userId=${userProfile.id}">Click
                                         here to promote this user to 'Advanced'</a>
                                 </li>
                             </c:if>
@@ -72,7 +71,7 @@
                         </div>
                         <ul>
                             <li>
-                                <a href="${pageContext.request.contextPath}/ApplicationController?command=editUserPage&userId=${userProfile.id}">Click
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=edit-user-page&userId=${userProfile.id}">Click
                                     here to view lots</a>
                             </li>
                         </ul>

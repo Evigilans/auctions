@@ -2,12 +2,12 @@ package com.piankov.auctions.util;
 
 import com.piankov.auctions.dao.AuctionDAO;
 import com.piankov.auctions.exception.ApplicationContextListenerException;
+import com.piankov.auctions.exception.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class DatabaseUpdater implements ServletContextListener {
@@ -21,7 +21,7 @@ public class DatabaseUpdater implements ServletContextListener {
                 LOGGER.info("Checking system information...");
                 auctionDAO.endOutdatedAuctions();
                 TimeUnit.MINUTES.sleep(TIMEOUT_MINUTES);
-            } catch (SQLException e) {
+            } catch (DAOException e) {
                 throw new ApplicationContextListenerException("An error occurred during execution a ContextListener's thread.");
             }
         }

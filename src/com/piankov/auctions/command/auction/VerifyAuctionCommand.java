@@ -1,4 +1,4 @@
-package com.piankov.auctions.command.entity;
+package com.piankov.auctions.command.auction;
 
 import com.piankov.auctions.action.AuctionAction;
 import com.piankov.auctions.command.Command;
@@ -6,7 +6,6 @@ import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.validator.EntityValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,23 +15,31 @@ import java.io.IOException;
 public class VerifyAuctionCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
-        if (request.getParameter("acceptAuction") != null) {
-            EntityValidator entityValidator = new EntityValidator();
+        try {
             AuctionAction auctionAction = new AuctionAction();
 
             String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
             Auction auction = auctionAction.findAuctionById(auctionId);
-
-            if (auction != null && entityValidator.validate(auction)) {
-                try {
+            if (auction != null) {
+                if (request.getParameter("acceptAuction") != null) {
                     auction = auctionAction.verifyAuction(auction);
 
                     request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
-                    request.getRequestDispatcher(PageConstant.PAGE_AUCTION).forward(request, response);
-                } catch (ServletException | IOException e) {
-                    e.printStackTrace();
+                    request.getRequestDispatcher(PageConstant.PAGE_ACTIVE_AUCTION).forward(request, response);
+                } else if (request.getParameter("declineAuction") != null) {
+                    auction = auctionAction.withdrawAuction(auction);
+
+                    request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
+                    request.getRequestDispatcher(PageConstant.PAGE_ENDED_AUCTION).forward(request, response);
+                } else {
+                    //
                 }
+            } else {
+                //
             }
+
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
         }
     }
 }

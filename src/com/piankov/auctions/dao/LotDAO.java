@@ -2,6 +2,7 @@ package com.piankov.auctions.dao;
 
 import com.piankov.auctions.creator.LotCreator;
 import com.piankov.auctions.entity.Lot;
+import com.piankov.auctions.exception.DAOException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,72 +23,96 @@ public class LotDAO extends AbstractDAO<Lot> {
     }
 
     @Override
-    public List<Lot> findAll() throws SQLException {
-        PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_LOTS);
-        ResultSet rs = statement.executeQuery();
-        LotCreator lotCreator = new LotCreator();
-        return lotCreator.buildListFromResultSet(rs);
+    public List<Lot> findAll() throws DAOException {
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_LOTS);
+            ResultSet rs = statement.executeQuery();
+            LotCreator lotCreator = new LotCreator();
+            return lotCreator.buildListFromResultSet(rs);
+        } catch (SQLException e) {
+            throw new DAOException("", e);
+        }
     }
 
     @Override
-    public Lot findById(String id) throws SQLException {
-        PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_ID);
+    public Lot findById(String id) throws DAOException {
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_ID);
 
-        statement.setString(1, id);
-        ResultSet rs = statement.executeQuery();
+            statement.setString(1, id);
+            ResultSet rs = statement.executeQuery();
 
-        LotCreator lotCreator = new LotCreator();
-        return lotCreator.buildEntityFromResultSet(rs);
+            LotCreator lotCreator = new LotCreator();
+            return lotCreator.buildEntityFromResultSet(rs);
+        } catch (SQLException e) {
+            throw new DAOException("", e);
+        }
     }
 
     @Override
-    public boolean delete(String id) throws SQLException {
-        PreparedStatement statement = this.connection.prepareStatement(DELETE_LOT_BY_ID, Statement.RETURN_GENERATED_KEYS);
+    public boolean delete(String id) throws DAOException {
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(DELETE_LOT_BY_ID, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setString(1, id);
+            statement.setString(1, id);
 
-        return statement.execute();
+            return statement.execute();
+        } catch (SQLException e) {
+            throw new DAOException("", e);
+        }
     }
 
     @Override
-    public boolean delete(Lot lot) throws SQLException {
+    public boolean delete(Lot lot) throws DAOException {
         return delete(String.valueOf(lot.getId()));
     }
 
     @Override
-    public long create(Lot lot) throws SQLException {
-        PreparedStatement statement = this.connection.prepareStatement(CREATE_LOT, Statement.RETURN_GENERATED_KEYS);
+    public long create(Lot lot) throws DAOException {
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(CREATE_LOT, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setLong(1, lot.getOwner().getId());
-        statement.setString(2, lot.getName());
-        statement.setString(3, lot.getDescription());
-        statement.executeUpdate();
+            statement.setLong(1, lot.getOwner().getId());
+            statement.setString(2, lot.getName());
+            statement.setString(3, lot.getDescription());
+            statement.executeUpdate();
 
-        ResultSet resultSet = statement.getGeneratedKeys();
-        resultSet.next();
-        return resultSet.getLong(1);
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            return resultSet.getLong(1);
+        } catch (SQLException e) {
+            throw new DAOException("", e);
+        }
     }
 
     @Override
-    public Lot update(Lot lot) throws SQLException {
-        PreparedStatement statement = this.connection.prepareStatement(UPDATE_LOT, Statement.RETURN_GENERATED_KEYS);
+    public Lot update(Lot lot) throws DAOException {
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(UPDATE_LOT, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setLong(1, lot.getOwner().getId());
-        statement.setString(2, lot.getName());
-        statement.setString(3, lot.getDescription());
-        statement.executeUpdate();
+            statement.setLong(1, lot.getOwner().getId());
+            statement.setString(2, lot.getName());
+            statement.setString(3, lot.getDescription());
+            statement.executeUpdate();
 
-        String bidId = String.valueOf(lot.getId());
-        return findById(bidId);
+            String bidId = String.valueOf(lot.getId());
+            return findById(bidId);
+        } catch (SQLException e) {
+            throw new DAOException("", e);
+        }
     }
 
-    public Lot findByAuctionId(String auctionId) throws SQLException {
-        PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_AUCTION_ID);
+    public Lot findByAuctionId(String auctionId) throws DAOException {
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_AUCTION_ID);
 
-        statement.setString(1, auctionId);
-        ResultSet rs = statement.executeQuery();
+            statement.setString(1, auctionId);
+            ResultSet rs = statement.executeQuery();
 
-        LotCreator lotCreator = new LotCreator();
-        return lotCreator.buildEntityFromResultSet(rs);
+            LotCreator lotCreator = new LotCreator();
+            return lotCreator.buildEntityFromResultSet(rs);
+        } catch (SQLException e) {
+            throw new DAOException("", e);
+        }
     }
 }

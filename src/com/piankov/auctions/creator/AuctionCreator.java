@@ -7,6 +7,7 @@ import com.piankov.auctions.entity.AuctionState;
 import com.piankov.auctions.entity.AuctionType;
 import com.piankov.auctions.entity.Lot;
 import com.piankov.auctions.constant.ParameterConstant;
+import com.piankov.auctions.exception.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,7 +44,7 @@ public class AuctionCreator extends AbstractCreator<Auction> {
     }
 
     @Override
-    public Auction buildEntityFromResultSet(ResultSet resultSet) throws SQLException {
+    public Auction buildEntityFromResultSet(ResultSet resultSet) throws DAOException {
         try (LotDAO lotDAO = new LotDAO();
              BidDAO bidDAO = new BidDAO()) {
 
@@ -67,11 +68,13 @@ public class AuctionCreator extends AbstractCreator<Auction> {
                 return auction;
             }
             return null;
+        } catch (SQLException e) {
+            throw new DAOException("", e);
         }
     }
 
     @Override
-    public List<Auction> buildListFromResultSet(ResultSet resultSet) throws SQLException {
+    public List<Auction> buildListFromResultSet(ResultSet resultSet) throws DAOException {
         try (LotDAO lotDAO = new LotDAO();
              BidDAO bidDAO = new BidDAO()) {
 
@@ -97,6 +100,8 @@ public class AuctionCreator extends AbstractCreator<Auction> {
             }
 
             return auctions;
+        } catch (SQLException e) {
+            throw new DAOException("", e);
         }
     }
 }

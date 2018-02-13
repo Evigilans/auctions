@@ -39,7 +39,7 @@
                 <c:choose>
                     <c:when test="${empty auction.currentMaximalBid}">
                         <h1>Make first bid!</h1>
-                        <h1>Start price is ${auction.lot.startPrice}$</h1>
+                        <h1>Start price is ${auction.startPrice}$</h1>
                     </c:when>
                     <c:otherwise>
                         <h1>Make your bid!</h1>
