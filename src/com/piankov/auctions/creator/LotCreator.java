@@ -25,7 +25,7 @@ public class LotCreator extends AbstractCreator<Lot> {
 
 
     @Override
-    public Lot buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
+    public Lot createEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
         LOGGER.info("Creating lot from parameter map.");
 
         Lot lot = new Lot();

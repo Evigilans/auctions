@@ -21,13 +21,13 @@ public class LotValidator {
         return validateName(name) && validateDescription(description);
     }
 
-    private boolean validateName(String name) {
+    public boolean validateName(String name) {
         LOGGER.info("Validating lot name.");
 
         return name != null && Pattern.compile(NAME_PATTERN).matcher(name).matches();
     }
 
-    private boolean validateDescription(String description) {
+    public boolean validateDescription(String description) {
         LOGGER.info("Validating lot description.");
 
         return description.length() <= 500;

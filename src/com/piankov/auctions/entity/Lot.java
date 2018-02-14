@@ -8,8 +8,7 @@ public class Lot extends Entity {
     public Lot() {
     }
 
-    public Lot(long id, User owner, String name, String description) {
-        this.id = id;
+    public Lot(User owner, String name, String description) {
         this.owner = owner;
         this.name = name;
         this.description = description;

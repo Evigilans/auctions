@@ -28,9 +28,9 @@ public class AuctionValidator {
         return isPositiveInteger(bidValue);
     }
 
-    private boolean isPositiveInteger(String value) {
+    public boolean isPositiveInteger(String value) {
         LOGGER.info("Checking if value is positive Integer.");
 
-        return Pattern.compile(POSITIVE_INTEGER_PATTERN).matcher(value).matches();
+        return value != null && Pattern.compile(POSITIVE_INTEGER_PATTERN).matcher(value).matches();
     }
 }

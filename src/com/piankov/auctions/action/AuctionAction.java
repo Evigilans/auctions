@@ -24,7 +24,7 @@ public class AuctionAction {
         try (BidDAO bidDAO = new BidDAO()) {
             LOGGER.info("Creating and inserting bid in database.");
             BidCreator bidCreator = new BidCreator();
-            Bid bid = bidCreator.buildEntityFromMap(parameterMap, user);
+            Bid bid = bidCreator.createEntityFromMap(parameterMap, user);
 
             long generatedId = bidDAO.create(bid);
             bid.setId(generatedId);
@@ -42,7 +42,7 @@ public class AuctionAction {
             Lot lot = lotAction.createLot(parameterMap, user);
 
             AuctionCreator auctionCreator = new AuctionCreator();
-            Auction auction = auctionCreator.buildEntityFromMap(parameterMap, lot);
+            Auction auction = auctionCreator.createEntityFromMap(parameterMap, lot);
 
             auction.setState(AuctionState.IN_PROGRESS);
             auction.setStartDate(LocalDateTime.now());
@@ -66,7 +66,7 @@ public class AuctionAction {
             Lot lot = lotAction.createLot(parameterMap, user);
 
             AuctionCreator auctionCreator = new AuctionCreator();
-            Auction auction = auctionCreator.buildEntityFromMap(parameterMap, lot);
+            Auction auction = auctionCreator.createEntityFromMap(parameterMap, lot);
 
             auction.setState(AuctionState.ON_VERIFICATION);
 

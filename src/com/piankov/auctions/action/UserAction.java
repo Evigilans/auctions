@@ -35,7 +35,7 @@ public class UserAction {
         try (UserDAO userDAO = new UserDAO()) {
             LOGGER.info("Creating and inserting user in database.");
             UserCreator userCreator = new UserCreator();
-            user = userCreator.buildEntityFromMap(parameterMap);
+            user = userCreator.createEntityFromMap(parameterMap);
 
             long generatedId = userDAO.create(user);
             user.setId(generatedId);

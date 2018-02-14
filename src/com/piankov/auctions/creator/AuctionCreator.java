@@ -31,7 +31,7 @@ public class AuctionCreator extends AbstractCreator<Auction> {
 
 
     @Override
-    public Auction buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
+    public Auction createEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
         LOGGER.info("Creating auction from parameter map.");
 
         Auction auction = new Auction();
@@ -42,6 +42,7 @@ public class AuctionCreator extends AbstractCreator<Auction> {
         auction.setLot(lot);
         auction.setType(AuctionType.DIRECT);
         auction.setDaysDurations(Integer.parseInt(parameterMap.get(ParameterConstant.PARAMETER_DAYS)[0]));
+        auction.setStartPrice(Integer.parseInt(parameterMap.get(ParameterConstant.PARAMETER_START_PRICE)[0]));
 
         LOGGER.info("Created auction: " + auction);
         return auction;

@@ -34,7 +34,7 @@ public class ProfileCommand implements Command {
                     request.setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, userProfile);
                     request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
                 } else {
-                    System.out.println(ErrorMessenger.getMessage((String) request.getSession().getAttribute(ParameterConstant.PARAMETER_LANGUAGE), "error.finduser"));
+                    System.out.println(ErrorMessenger.getMessage((String) request.getSession().getAttribute(ParameterConstant.PARAMETER_LANGUAGE), "error.find.user"));
                     request.setAttribute(ParameterConstant.PARAMETER_ERROR_MESSAGE, ErrorMessenger.getMessage((String) request.getSession().getAttribute(ParameterConstant.PARAMETER_LANGUAGE), "error.find.user"));
                     request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
                 }

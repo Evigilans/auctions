@@ -33,7 +33,7 @@ public class LotAction {
         try (LotDAO lotDAO = new LotDAO()) {
             LOGGER.info("Creating and inserting lot in database.");
             LotCreator lotCreator = new LotCreator();
-            Lot lot = lotCreator.buildEntityFromMap(parameterMap, user);
+            Lot lot = lotCreator.createEntityFromMap(parameterMap, user);
 
             long lotId = lotDAO.create(lot);
             lot.setId(lotId);

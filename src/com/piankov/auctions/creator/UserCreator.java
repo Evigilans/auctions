@@ -26,7 +26,7 @@ public class UserCreator extends AbstractCreator<User> {
     private static final String CATEGORY = "CATEGORY";
 
     @Override
-    public User buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
+    public User createEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
         LOGGER.info("Creating user from parameter map.");
 
         try {

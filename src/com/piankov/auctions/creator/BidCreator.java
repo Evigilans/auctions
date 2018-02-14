@@ -23,7 +23,7 @@ public class BidCreator extends AbstractCreator<Bid> {
 
 
     @Override
-    public Bid buildEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
+    public Bid createEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {
         LOGGER.info("Creating bid from parameter map.");
 
         Bid bid = new Bid();

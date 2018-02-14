@@ -7,8 +7,10 @@ public class ParameterConstant {
     public static final String PARAMETER_AUCTION_ERROR_MESSAGE = "auctionErrorMessage";
     public static final String PARAMETER_AUCTION_ID = "auctionId";
     public static final String PARAMETER_AUCTIONS = "auctions";
+    public static final String PARAMETER_BALANCE = "balance";
     public static final String PARAMETER_BID_ID = "bidId";
     public static final String PARAMETER_BID_VALUE = "bidValue";
+    public static final String PARAMETER_CATEGORY = "category";
     public static final String PARAMETER_DAYS = "days";
     public static final String PARAMETER_EMAIL = "email";
     public static final String PARAMETER_ERROR_MESSAGE = "errorMessage";

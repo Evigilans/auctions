@@ -30,19 +30,19 @@ public class UserValidator {
         return validateEmail(email) && validatePassword(password);
     }
 
-    private boolean validateEmail(String email) {
+    public boolean validateEmail(String email) {
         LOGGER.info("Validating email.");
 
         return email != null && Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
     }
 
-    private boolean validatePassword(String password) {
+    public boolean validatePassword(String password) {
         LOGGER.info("Validating password.");
 
         return password != null && Pattern.compile(PASSWORD_PATTERN).matcher(password).matches();
     }
 
-    private boolean validateName(String name) {
+    public boolean validateName(String name) {
         LOGGER.info("Validating user name.");
 
         return name != null && Pattern.compile(FULL_NAME_PATTERN).matcher(name).matches();

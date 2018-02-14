@@ -1,4 +1,4 @@
-package test.com.piankov.auctions;
+package test.com.piankov.auctions.service;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -7,10 +7,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-class Service {
+public class Service {
     private Path testFile;
 
-    void setUp(String filepath, List<String> tests) {
+    public void setUp(String filepath, List<String> tests) {
         testFile = Paths.get(filepath);
         try {
             Files.write(testFile, tests, Charset.forName("UTF-8"));
@@ -19,7 +19,7 @@ class Service {
         }
     }
 
-    void dropFile() {
+    public void dropFile() {
         try {
             Files.delete(testFile);
         } catch (IOException e) {

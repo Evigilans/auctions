@@ -1,9 +1,9 @@
 package com.piankov.auctions.entity;
 
 public enum UserCategory {
-    CLIENT(0),
-    ADVANCED(1),
-    ADMIN(2);
+    CLIENT(1),
+    ADVANCED(2),
+    ADMIN(3);
 
     private final int value;
 
