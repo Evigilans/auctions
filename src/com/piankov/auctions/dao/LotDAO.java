@@ -4,6 +4,8 @@ import com.piankov.auctions.creator.LotCreator;
 import com.piankov.auctions.entity.Lot;
 import com.piankov.auctions.exception.DAOException;
 import com.piankov.auctions.exception.EntityCreationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +14,8 @@ import java.sql.Statement;
 import java.util.List;
 
 public class LotDAO extends AbstractDAO<Lot> {
+    private static final Logger LOGGER = LogManager.getLogger(LotDAO.class);
+
     private static final String FIND_ALL_LOTS = "SELECT * FROM LOT";
     private static final String FIND_LOT_BY_ID = "SELECT * FROM LOT WHERE ID = ?";
     private static final String DELETE_LOT_BY_ID = "DELETE FROM LOT WHERE ID = ?";
@@ -25,6 +29,8 @@ public class LotDAO extends AbstractDAO<Lot> {
 
     @Override
     public List<Lot> findAll() throws DAOException {
+        LOGGER.info("Searching all lots in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_LOTS);
             ResultSet rs = statement.executeQuery();
@@ -37,6 +43,8 @@ public class LotDAO extends AbstractDAO<Lot> {
 
     @Override
     public Lot findById(String id) throws DAOException {
+        LOGGER.info("Searching lot in database by ID.");
+
         try {
             LotCreator lotCreator = new LotCreator();
             PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_ID);
@@ -52,6 +60,8 @@ public class LotDAO extends AbstractDAO<Lot> {
 
     @Override
     public boolean delete(String id) throws DAOException {
+        LOGGER.info("Deleting lot from database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(DELETE_LOT_BY_ID, Statement.RETURN_GENERATED_KEYS);
 
@@ -70,6 +80,8 @@ public class LotDAO extends AbstractDAO<Lot> {
 
     @Override
     public long create(Lot lot) throws DAOException {
+        LOGGER.info("Creating lot and inserting in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(CREATE_LOT, Statement.RETURN_GENERATED_KEYS);
 
@@ -88,6 +100,8 @@ public class LotDAO extends AbstractDAO<Lot> {
 
     @Override
     public Lot update(Lot lot) throws DAOException {
+        LOGGER.info("Updating lot in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(UPDATE_LOT, Statement.RETURN_GENERATED_KEYS);
 
@@ -104,6 +118,8 @@ public class LotDAO extends AbstractDAO<Lot> {
     }
 
     public Lot findByAuctionId(String auctionId) throws DAOException {
+        LOGGER.info("Searching lot in database by auction ID.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_LOT_BY_AUCTION_ID);
 

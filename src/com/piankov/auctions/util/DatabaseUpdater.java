@@ -1,5 +1,6 @@
 package com.piankov.auctions.util;
 
+import com.piankov.auctions.connection.ConnectionPool;
 import com.piankov.auctions.dao.AuctionDAO;
 import com.piankov.auctions.exception.ApplicationContextListenerException;
 import com.piankov.auctions.exception.DAOException;
@@ -18,7 +19,8 @@ public class DatabaseUpdater implements ServletContextListener {
     private void checkInformation() throws InterruptedException, ApplicationContextListenerException {
         while (true) {
             try (AuctionDAO auctionDAO = new AuctionDAO()) {
-                LOGGER.info("Checking system information...");
+                LOGGER.info("Checking system information.");
+
                 auctionDAO.endOutdatedAuctions();
                 TimeUnit.MINUTES.sleep(TIMEOUT_MINUTES);
             } catch (DAOException e) {
@@ -29,7 +31,8 @@ public class DatabaseUpdater implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        LOGGER.info("Creating ContextListener's thread for application...");
+        LOGGER.info("Creating ContextListener's thread for application.");
+
         Thread daemonChecker = new Thread(() -> {
             try {
                 checkInformation();
@@ -39,9 +42,14 @@ public class DatabaseUpdater implements ServletContextListener {
         });
         daemonChecker.setDaemon(true);
         daemonChecker.start();
-        LOGGER.info("Checking thread was successfully created and started!");
+
+        LOGGER.info("Checking thread was successfully created and started.");
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {}
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        LOGGER.info("Ending work of application.");
+
+        ConnectionPool.getInstance().closePool();
+    }
 }

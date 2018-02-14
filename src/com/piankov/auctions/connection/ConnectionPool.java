@@ -31,10 +31,14 @@ public final class ConnectionPool {
     private AtomicInteger poolSize = new AtomicInteger();
 
     public static ConnectionPool getInstance() {
+        LOGGER.info("Getting instance of connection pool.");
+
         if (instance == null) {
             LOCK.lock();
             try {
                 if (instance == null) {
+                    LOGGER.info("Creating new instance of connection pool.");
+
                     ResourceBundle resourceBundle = ResourceBundle.getBundle(RB_PATH);
 
                     String url = resourceBundle.getString(RB_URL);
@@ -49,11 +53,15 @@ public final class ConnectionPool {
                 LOCK.unlock();
             }
         }
+
         return instance;
     }
 
     private void init(String url, String user, String password, String poolSizeString) {
+        LOGGER.info("Initializing connection pool.");
+
         try {
+            LOGGER.info("Registering drivers and initializing arrays.");
             DriverManager.registerDriver(new Driver());
             setPoolSize(Integer.parseInt(poolSizeString));
 
@@ -65,12 +73,12 @@ public final class ConnectionPool {
                 freeConnections.add(connection);
             }
         } catch (SQLException e) {
-            //LOGGER.error("");
+            LOGGER.error("And error occurred during connection pool initializing.", e);
         }
     }
 
     public ConnectionWrapper takeConnection() {
-        //LOGGER.info("Trying to take connection.");
+        LOGGER.info("Taking free connection.");
 
         ConnectionWrapper connection = freeConnections.remove();
         workingConnections.add(connection);
@@ -80,21 +88,33 @@ public final class ConnectionPool {
     }
 
     public void releaseConnection(ConnectionWrapper connection) {
+        LOGGER.info("Releasing taken connection.");
+
         workingConnections.remove(connection);
         freeConnections.add(connection);
+
+        LOGGER.info("Connection has successfully been release. Free connections left: " + freeConnections.size() + ", taken: " + workingConnections.size());
     }
 
     private void clearConnectionDeque() throws SQLException {
+        LOGGER.info("Clearing connection deque.");
+
         ConnectionWrapper connection;
         while ((connection = freeConnections.poll()) != null) {
+            LOGGER.info("Closing free connections.");
             connection.close();
         }
         while ((connection = workingConnections.poll()) != null) {
+            LOGGER.info("Closing working connections.");
             connection.close();
         }
+
+        LOGGER.info("Connection deque was successfully cleared.");
     }
 
     public void closePool() {
+        LOGGER.info("Closing connection pool.");
+
         if (instance != null) {
             LOCK.lock();
             try {
@@ -103,11 +123,13 @@ public final class ConnectionPool {
                     instance = null;
                 }
             } catch (SQLException e) {
-                //LOGGER.error("");
+                LOGGER.error("And error occurred during connection pool closing.", e);
             } finally {
                 LOCK.unlock();
             }
         }
+
+        LOGGER.info("Connection pool successfully closed.");
     }
 
     private int getPoolSize() {

@@ -5,11 +5,15 @@ import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.AuctionState;
 import com.piankov.auctions.exception.DAOException;
 import com.piankov.auctions.exception.EntityCreationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.List;
 
 public class AuctionDAO extends AbstractDAO<Auction> {
+    private static final Logger LOGGER = LogManager.getLogger(AuctionDAO.class);
+
     private static final String FIND_ALL_AUCTIONS = "SELECT * FROM AUCTION";
     private static final String FIND_AUCTION_BY_ID = "SELECT * FROM AUCTION WHERE ID = ?";
     private static final String DELETE_AUCTION_BY_ID = "DELETE FROM AUCTION WHERE ID = ?";
@@ -26,6 +30,8 @@ public class AuctionDAO extends AbstractDAO<Auction> {
 
     @Override
     public List<Auction> findAll() throws DAOException {
+        LOGGER.info("Searching all auctions in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_AUCTIONS);
 
@@ -34,12 +40,14 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             AuctionCreator auctionCreator = new AuctionCreator();
             return auctionCreator.createListFromResultSet(rs);
         } catch (SQLException | EntityCreationException e) {
-            throw new DAOException("And exception occurred during finding all auction.", e);
+            throw new DAOException("An exception occurred during finding all auction.", e);
         }
     }
 
     @Override
     public Auction findById(String id) throws DAOException {
+        LOGGER.info("Searching auction in database by ID.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_AUCTION_BY_ID);
             statement.setString(1, id);
@@ -49,20 +57,21 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             AuctionCreator auctionCreator = new AuctionCreator();
             return auctionCreator.createEntityFromResultSet(rs);
         } catch (SQLException | EntityCreationException e) {
-            throw new DAOException("And exception occurred during finding auction by ID.", e);
+            throw new DAOException("An exception occurred during finding auction by ID.", e);
         }
     }
 
     @Override
     public boolean delete(String auctionId) throws DAOException {
+        LOGGER.info("Deleting auction from database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(DELETE_AUCTION_BY_ID, Statement.RETURN_GENERATED_KEYS);
-
             statement.setString(1, auctionId);
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new DAOException("And exception occurred during deleting auction.", e);
+            throw new DAOException("An exception occurred during deleting auction.", e);
         }
     }
 
@@ -73,6 +82,8 @@ public class AuctionDAO extends AbstractDAO<Auction> {
 
     @Override
     public long create(Auction auction) throws DAOException {
+        LOGGER.info("Creating auction and inserting in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(CREATE_AUCTION, Statement.RETURN_GENERATED_KEYS);
 
@@ -86,15 +97,17 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
-            resultSet.next();
 
+            resultSet.next();
             return resultSet.getLong(1);
         } catch (SQLException e) {
-            throw new DAOException("And exception occurred during creating auction.", e);
+            throw new DAOException("An exception occurred during creating auction.", e);
         }
     }
 
     public long createVerifying(Auction auction) throws DAOException {
+        LOGGER.info("Creating verifying auction and inserting in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(CREATE_VERIFYING_AUCTION, Statement.RETURN_GENERATED_KEYS);
 
@@ -105,8 +118,8 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
-            resultSet.next();
 
+            resultSet.next();
             return resultSet.getLong(1);
         } catch (SQLException e) {
             throw new DAOException("", e);
@@ -115,6 +128,8 @@ public class AuctionDAO extends AbstractDAO<Auction> {
 
     @Override
     public Auction update(Auction auction) throws DAOException {
+        LOGGER.info("Updating auction in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(UPDATE_AUCTION, Statement.RETURN_GENERATED_KEYS);
 
@@ -129,7 +144,6 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             statement.executeUpdate();
 
             String bidId = String.valueOf(auction.getId());
-
             return findById(bidId);
         } catch (SQLException e) {
             throw new DAOException("", e);
@@ -137,10 +151,12 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     }
 
     public List<Auction> findAuctionsByState(int stateId) throws DAOException {
+        LOGGER.info("Searching auction in database by state.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_AUCTIONS_BY_STATE);
-
             statement.setInt(AuctionState.ON_VERIFICATION.getValue(), stateId);
+
             ResultSet rs = statement.executeQuery();
 
             AuctionCreator auctionCreator = new AuctionCreator();
@@ -151,8 +167,11 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     }
 
     public void endOutdatedAuctions() throws DAOException {
+        LOGGER.info("Ending outdated auction.");
+
         try (BidDAO bidDAO = new BidDAO()) {
             List<Auction> outdatedAuctions = findOutdatedAuctions();
+
             for (Auction auction : outdatedAuctions) {
                 try {
                     PreparedStatement statement = this.connection.prepareStatement(END_OUTDATED_AUCTIONS);
@@ -172,6 +191,8 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     }
 
     private List<Auction> findOutdatedAuctions() throws DAOException {
+        LOGGER.info("Searching outdated auction in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_OUTDATED_AUCTIONS);
 

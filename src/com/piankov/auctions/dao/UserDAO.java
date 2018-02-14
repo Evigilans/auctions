@@ -4,6 +4,8 @@ import com.piankov.auctions.creator.UserCreator;
 import com.piankov.auctions.entity.User;
 import com.piankov.auctions.exception.DAOException;
 import com.piankov.auctions.exception.EntityCreationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +14,8 @@ import java.sql.Statement;
 import java.util.List;
 
 public class UserDAO extends AbstractDAO<User> {
+    private static final Logger LOGGER = LogManager.getLogger(UserDAO.class);
+
     private static final String FIND_ALL_USERS = "SELECT * FROM USER";
     private static final String FIND_USER_BY_ID = "SELECT * FROM USER WHERE ID = ?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM USER WHERE ID = ?";
@@ -26,6 +30,8 @@ public class UserDAO extends AbstractDAO<User> {
 
     @Override
     public List<User> findAll() throws DAOException {
+        LOGGER.info("Searching all users in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_USERS);
             ResultSet rs = statement.executeQuery();
@@ -39,6 +45,8 @@ public class UserDAO extends AbstractDAO<User> {
 
     @Override
     public User findById(String id) throws DAOException {
+        LOGGER.info("Searching user in database by ID.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_USER_BY_ID);
 
@@ -54,6 +62,8 @@ public class UserDAO extends AbstractDAO<User> {
 
     @Override
     public boolean delete(String userId) throws DAOException {
+        LOGGER.info("Deleting user from database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(DELETE_USER_BY_ID, Statement.RETURN_GENERATED_KEYS);
 
@@ -72,6 +82,8 @@ public class UserDAO extends AbstractDAO<User> {
 
     @Override
     public long create(User user) throws DAOException {
+        LOGGER.info("Creating user and inserting in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS);
 
@@ -93,6 +105,8 @@ public class UserDAO extends AbstractDAO<User> {
 
     @Override
     public User update(User user) throws DAOException {
+        LOGGER.info("Updating user in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(UPDATE_USER, Statement.RETURN_GENERATED_KEYS);
 
@@ -112,6 +126,8 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public User findClient(String email, String passwordHash) throws DAOException {
+        LOGGER.info("Searching user in database by authorization data.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_AUTHORIZATION_DATA);
 
@@ -127,6 +143,8 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public boolean canCreate(String email) throws DAOException {
+        LOGGER.info("Checking if user can be created.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(CHECK_EMAIL_EXISTANCE);
 

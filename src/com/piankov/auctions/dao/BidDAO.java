@@ -4,6 +4,8 @@ import com.piankov.auctions.creator.BidCreator;
 import com.piankov.auctions.entity.Bid;
 import com.piankov.auctions.exception.DAOException;
 import com.piankov.auctions.exception.EntityCreationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +14,8 @@ import java.sql.Statement;
 import java.util.List;
 
 public class BidDAO extends AbstractDAO<Bid> {
+    private static final Logger LOGGER = LogManager.getLogger(BidDAO.class);
+
     private static final String FIND_ALL_BIDS = "SELECT * FROM BID";
     private static final String FIND_BID_BY_ID = "SELECT * FROM BID WHERE ID = ?";
     private static final String DELETE_BID_BY_ID = "DELETE FROM BID WHERE ID = ?";
@@ -26,6 +30,8 @@ public class BidDAO extends AbstractDAO<Bid> {
 
     @Override
     public List<Bid> findAll() throws DAOException {
+        LOGGER.info("Searching all bids in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_ALL_BIDS);
 
@@ -40,6 +46,8 @@ public class BidDAO extends AbstractDAO<Bid> {
 
     @Override
     public Bid findById(String bidId) throws DAOException {
+        LOGGER.info("Searching bid in database by ID.");
+
         try {
             BidCreator bidCreator = new BidCreator();
             PreparedStatement statement = this.connection.prepareStatement(FIND_BID_BY_ID);
@@ -55,6 +63,8 @@ public class BidDAO extends AbstractDAO<Bid> {
 
     @Override
     public boolean delete(String bidId) throws DAOException {
+        LOGGER.info("Deleting bid from database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(DELETE_BID_BY_ID, Statement.RETURN_GENERATED_KEYS);
 
@@ -73,6 +83,8 @@ public class BidDAO extends AbstractDAO<Bid> {
 
     @Override
     public long create(Bid bid) throws DAOException {
+        LOGGER.info("Creating bid and inserting in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(CREATE_BID, Statement.RETURN_GENERATED_KEYS);
 
@@ -91,6 +103,8 @@ public class BidDAO extends AbstractDAO<Bid> {
 
     @Override
     public Bid update(Bid bid) throws DAOException {
+        LOGGER.info("Updating bid in database.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(UPDATE_BID, Statement.RETURN_GENERATED_KEYS);
 
@@ -108,6 +122,8 @@ public class BidDAO extends AbstractDAO<Bid> {
     }
 
     public Bid findMaxBidByAuctionId(String auctionId) throws DAOException {
+        LOGGER.info("Searching bid in database by auction ID.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_MAXIMAL_BID_FOR_AUCTION);
 
@@ -122,6 +138,8 @@ public class BidDAO extends AbstractDAO<Bid> {
     }
 
     public boolean hasAnyBid(long auctionId) throws DAOException {
+        LOGGER.info("Checking if auction has any bid.");
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(HAS_AUCTION_ANY_BID);
 
