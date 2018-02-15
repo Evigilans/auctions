@@ -108,10 +108,10 @@ public class LotDAO extends AbstractDAO<Lot> {
             statement.setLong(1, lot.getOwner().getId());
             statement.setString(2, lot.getName());
             statement.setString(3, lot.getDescription());
+            statement.setLong(4, lot.getId());
             statement.executeUpdate();
 
-            String bidId = String.valueOf(lot.getId());
-            return findById(bidId);
+            return findById(String.valueOf(lot.getId()));
         } catch (SQLException e) {
             throw new DAOException("And exception occurred during updating lot.", e);
         }

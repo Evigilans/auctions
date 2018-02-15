@@ -34,31 +34,40 @@
                         <h1>Current maximal bid is ${auction.currentMaximalBid.value}$</h1>
                     </c:otherwise>
                 </c:choose>
+
                 <c:if test="${user != auction.lot.owner}">
                     <c:choose>
-                        <c:when test="${empty auction.currentMaximalBid}">
-                            <h1>Make first bid!</h1>
+                        <c:when test="${user.id == auction.currentMaximalBid.clientId}">
+                            <h1>Your bid is leading!</h1>
+                            <p>
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=cancel-bid&auctionId=${auction.id}"><strong>Click
+                                    here to undo your bid.</strong></a>
+                            </p>
                         </c:when>
                         <c:otherwise>
                             <h1>Make your bid!</h1>
+                            <form action="${pageContext.request.contextPath}/ApplicationController?command=make-bid&auctionId=${auction.id}"
+                                  method="post">
+                                <div class="field-wrap">
+                                    <label>
+                                        Value<span class="req">*</span>
+                                    </label>
+                                    <input type="text" name="bidValue" required autocomplete="off"/>
+                                </div>
+                                <button type="submit" class="button button-block"/>
+                                Make a bid!</button>
+                            </form>
                         </c:otherwise>
                     </c:choose>
-                    <form action="${pageContext.request.contextPath}/ApplicationController?command=make-bid&auctionId=${auction.id}"
-                          method="post">
-                        <div class="field-wrap">
-                            <label>
-                                Value<span class="req">*</span>
-                            </label>
-                            <input type="text" name="bidValue" required autocomplete="off"/>
-                        </div>
-                        <button type="submit" class="button button-block"/>
-                        Make a bid!</button>
-                    </form>
                 </c:if>
                 <c:if test="${user == auction.lot.owner || user.admin}">
                     <p>
                         <a href="${pageContext.request.contextPath}/ApplicationController?command=withdraw-auction&auctionId=${auction.id}"><strong>Click
                             here to withdraw auction.</strong></a>
+                    </p>
+                    <p>
+                        <a href="${pageContext.request.contextPath}/ApplicationController?command=edit-auction-page&auctionId=${auction.id}"><strong>Click
+                            here to edit auction.</strong></a>
                     </p>
                 </c:if>
             </c:otherwise>
@@ -70,3 +79,5 @@
 <jsp:include page="../service/footer.jsp"></jsp:include>
 </body>
 </html>
+
+

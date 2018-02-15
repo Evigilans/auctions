@@ -26,7 +26,7 @@
                     <c:forEach var="userProfile" items="${users}">
                         <article class="download-card">
                             <div class="download-card__icon-box"><img
-                                    src="images/avatar/avatar_${userProfile.id}.png"/></div>
+                                    src="images/avatar.png"/></div>
                             <div class="download-card__content-box">
                                 <div class="content">
                                     <h3 class="download-card__content-box__title">

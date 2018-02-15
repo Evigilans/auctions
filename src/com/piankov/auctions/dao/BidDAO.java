@@ -21,7 +21,9 @@ public class BidDAO extends AbstractDAO<Bid> {
     private static final String DELETE_BID_BY_ID = "DELETE FROM BID WHERE ID = ?";
     private static final String UPDATE_BID = "UPDATE BID SET CLIENT_ID = ?, AUCTION_ID = ?, VALUE = ? WHERE ID = ?";
     private static final String CREATE_BID = "INSERT INTO BID (CLIENT_ID, AUCTION_ID, VALUE) VALUES (?, ?, ?)";
-    private static final String FIND_MAXIMAL_BID_FOR_AUCTION = "SELECT ID, CLIENT_ID, AUCTION_ID, MAX(VALUE) AS VALUE FROM BID WHERE AUCTION_ID = ? GROUP BY AUCTION_ID";
+    private static final String FIND_MAXIMAL_BID_FOR_AUCTION = "SELECT ID, CLIENT_ID, AUCTION_ID, MAX(VALUE) AS VALUE " +
+            "FROM BID WHERE (AUCTION_ID = ?, VALUE) IN " +
+            "(SELECT ID, MAX(VALUE) AS VALUE FROM BID GROUP BY AUCTION_ID)";
     private static final String HAS_AUCTION_ANY_BID = "SELECT * FROM BID WHERE AUCTION_ID = ?";
 
     public BidDAO() {
@@ -71,9 +73,12 @@ public class BidDAO extends AbstractDAO<Bid> {
             statement.setString(1, bidId);
 
             return statement.execute();
-        } catch (SQLException e) {
-            throw new DAOException("And exception occurred during deleting bid.", e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //throw new DAOException("And exception occurred during deleting bid.", e);
         }
+
+        return true;
     }
 
     @Override

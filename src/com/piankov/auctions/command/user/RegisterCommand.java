@@ -23,6 +23,8 @@ public class RegisterCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Login' command.");
+
         try {
             UserValidator userValidator = new UserValidator();
             Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());

@@ -2,6 +2,7 @@ package com.piankov.auctions.controller;
 
 import com.piankov.auctions.command.*;
 import com.piankov.auctions.command.auction.*;
+import com.piankov.auctions.command.bid.CancelBidCommand;
 import com.piankov.auctions.command.list.*;
 import com.piankov.auctions.command.bid.MakeBidCommand;
 import com.piankov.auctions.command.user.*;
@@ -17,6 +18,7 @@ public enum CommandType {
     EDIT_AUCTION(new EditAuctionCommand()),
     CREATE_AUCTION(new CreateAuctionCommand()),
     MAKE_BID(new MakeBidCommand()),
+    CANCEL_BID(new CancelBidCommand()),
     SHOW_ACTIVE_AUCTION(new ShowActiveAuctionCommand()),
     SHOW_VERIFYING_AUCTION(new ShowVerifyingAuctionCommand()),
     SHOW_ENDED_AUCTION(new ShowEndedAuctionCommand()),
@@ -34,7 +36,8 @@ public enum CommandType {
     REGISTER(new RegisterCommand()),
     PROMOTE_USER(new PromoteUserCommand()),
     USER_LIST(new UserListCommand()),
-    USER_AUCTIONS_LIST(new UserAuctionsList());
+    USER_AUCTIONS_LIST(new UserAuctionsList()),
+    WITHDRAW_AUCTION(new WithdrawAuctionCommand());
 
     private final Command command;
 

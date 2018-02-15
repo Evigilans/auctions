@@ -33,7 +33,7 @@ public class EditAuctionCommand implements Command {
             User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
 
             Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
-            String auctionId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
+            String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
 
             Auction auction = auctionAction.findAuctionById(auctionId);
 

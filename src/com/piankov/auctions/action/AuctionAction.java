@@ -196,7 +196,7 @@ public class AuctionAction {
         try (BidDAO bidDAO = new BidDAO()) {
             LOGGER.info("Deleting bid from database.");
 
-            bidDAO.delete(String.valueOf(auction.getId()));
+            bidDAO.delete(String.valueOf(auction.getCurrentMaximalBid().getId()));
         } catch (DAOException e) {
             throw new ActionPerformingException("An exception occurred during performing 'Delete Bid' action.", e);
         }

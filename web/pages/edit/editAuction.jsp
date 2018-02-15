@@ -26,7 +26,7 @@
             </c:when>
             <c:otherwise>
                 <h1>Edit an auction</h1>
-                <form action="${pageContext.request.contextPath}/ApplicationController?command=create-auction"
+                <form action="${pageContext.request.contextPath}/ApplicationController?command=edit-auction&auctionId=${auction.id}"
                       method="post">
                     <div class="field-wrap">
                         <label>

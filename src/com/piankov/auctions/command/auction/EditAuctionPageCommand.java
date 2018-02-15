@@ -29,7 +29,7 @@ public class EditAuctionPageCommand implements Command {
             AuctionAction auctionAction = new AuctionAction();
 
             User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
-            String auctionId = request.getParameter(ParameterConstant.PARAMETER_LOT_ID);
+            String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
 
             Auction auction = auctionAction.findAuctionById(auctionId);
 
