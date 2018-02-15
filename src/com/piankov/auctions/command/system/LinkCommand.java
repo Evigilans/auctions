@@ -16,6 +16,8 @@ public class LinkCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Link Command' command.");
+
         try {
             String url = request.getParameter(ParameterConstant.PARAMETER_URL);
             request.getRequestDispatcher(url).forward(request, response);

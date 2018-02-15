@@ -18,14 +18,15 @@
 <main>
     <c:choose>
         <c:when test="${not empty user && user.admin}">
-            <h1>Available functions: </h1>
+            <h3>Admin functions: </h3>
+            <p>
+                <a href="${pageContext.request.contextPath}/ApplicationController?command=user-list"><strong>Manage
+                    users</strong></a>
+                <br>
+            </p>
             <p>
                 <a href="${pageContext.request.contextPath}/ApplicationController?command=verifying-auctions-list"><strong>Verify
                     auctions</strong></a>
-            </p>
-            <p>
-                <a href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/home.jsp"><strong>Edit
-                    users</strong></a>
             </p>
         </c:when>
         <c:otherwise>

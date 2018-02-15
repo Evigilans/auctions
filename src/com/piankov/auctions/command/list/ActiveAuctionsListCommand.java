@@ -22,15 +22,19 @@ public class ActiveAuctionsListCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Active Auctions List' command.");
+
         try {
             AuctionAction auctionAction = new AuctionAction();
 
+            LOGGER.info("Getting auction list.");
             List<Auction> auctions = auctionAction.findAllAuctionsByState(AuctionState.IN_PROGRESS.getValue());
 
+            LOGGER.info("Forwarding...");
             request.setAttribute(ParameterConstant.PARAMETER_AUCTIONS, auctions);
             request.getRequestDispatcher(PageConstant.PAGE_ACTIVE_AUCTIONS_LIST).forward(request, response);
         } catch (ServletException | IOException | ActionPerformingException e) {
-            throw  new CommandExecutionException("An exception occurred during 'Active Auctions List' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Active Auctions List' command execution.", e);
         }
     }
 }

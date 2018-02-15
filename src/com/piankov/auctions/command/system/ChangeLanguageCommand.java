@@ -15,12 +15,13 @@ public class ChangeLanguageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Change Language' command.");
+
         try {
             request.getSession().setAttribute(ParameterConstant.PARAMETER_LANGUAGE, request.getParameter(ParameterConstant.PARAMETER_LANGUAGE_ID));
             response.sendRedirect(request.getHeader(ParameterConstant.REFERER));
         } catch (IOException e) {
-            throw  new CommandExecutionException("An exception occurred during 'Change Language' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Change Language' command execution.", e);
         }
-        //check if refered empty
     }
 }

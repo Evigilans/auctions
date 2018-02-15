@@ -1,6 +1,8 @@
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.language}" scope="session"/>
+<fmt:setBundle basename="resource.content" var="rb"/>
 <html>
 <head>
     <title>Title</title>
@@ -30,7 +32,9 @@
                                         <a href="${pageContext.request.contextPath}/ApplicationController?command=show-verifying-auction&auctionId=${auction.id}">${auction.lot.name}</a>
                                     </h3>
                                     <p class="download-card__content-box__description">
-                                        High & low-res photos for print and web media.
+                                        Owner: <a
+                                            href="${pageContext.request.contextPath}/ApplicationController?command=profile&userId=${auction.lot.owner.id}">${auction.lot.owner.name}</a><br>
+                                        Type: ${auction.type} <br>
                                     </p>
                                 </div>
                             </div>

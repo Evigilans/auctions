@@ -1,4 +1,4 @@
-package com.piankov.auctions.command.view;
+package com.piankov.auctions.command.list;
 
 import com.piankov.auctions.action.AuctionAction;
 import com.piankov.auctions.command.Command;
@@ -14,26 +14,26 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-public class ShowVerifyingAuctionCommand implements Command {
-    private static Logger LOGGER = LogManager.getLogger(ShowVerifyingAuctionCommand.class);
+public class UserAuctionsList implements Command {
+    private static Logger LOGGER = LogManager.getLogger(UserAuctionsList.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
-        LOGGER.info("Execution 'Show Verifying Auction' command.");
+        LOGGER.info("Execution 'User Auctions List' command.");
 
         try {
-            String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
-
             AuctionAction auctionAction = new AuctionAction();
-            Auction auction = auctionAction.findAuctionById(auctionId);
 
-            request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
+            String userId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
+            List<Auction> auctions = auctionAction.findUserAuctions(userId);
 
             LOGGER.info("Forwarding...");
-            request.getRequestDispatcher(PageConstant.PAGE_VERIFYING_AUCTION).forward(request, response);
-        } catch (ServletException | IOException | ActionPerformingException e) {
-            throw new CommandExecutionException("An exception occurred during 'Show Verifying Auction' command execution.", e);
+            request.setAttribute(ParameterConstant.PARAMETER_AUCTIONS, auctions);
+            request.getRequestDispatcher(PageConstant.PAGE_USER_AUCTIONS).forward(request, response);
+        } catch (ActionPerformingException | ServletException | IOException e) {
+            throw new CommandExecutionException("An exception occurred during 'User Auctions List' command execution.", e);
         }
     }
 }

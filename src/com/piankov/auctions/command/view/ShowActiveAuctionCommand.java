@@ -20,19 +20,19 @@ public class ShowActiveAuctionCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
-        AuctionAction auctionAction = new AuctionAction();
+        LOGGER.info("Execution 'Show Active Auction' command.");
 
-        String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
+        try {
+            String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
 
-        if (true) {
-            try {
-                Auction auction = auctionAction.findAuctionById(auctionId);
+            AuctionAction auctionAction = new AuctionAction();
+            Auction auction = auctionAction.findAuctionById(auctionId);
 
-                request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
-                request.getRequestDispatcher(PageConstant.PAGE_ACTIVE_AUCTION).forward(request, response);
-            } catch (ServletException | IOException | ActionPerformingException e) {
-                throw  new CommandExecutionException("An exception occurred during 'Show Active Auction' command execution.", e);
-            }
+            LOGGER.info("Forwarding...");
+            request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
+            request.getRequestDispatcher(PageConstant.PAGE_ACTIVE_AUCTION).forward(request, response);
+        } catch (ServletException | IOException | ActionPerformingException e) {
+            throw new CommandExecutionException("An exception occurred during 'Show Active Auction' command execution.", e);
         }
     }
 }

@@ -13,6 +13,7 @@ public class UserValidator {
     private static final String EMAIL_PATTERN = "^[\\w-+]+(\\.\\w+)*@[\\w-]+(\\.\\w+)*(\\.[a-z]{2,})$";
     private static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,}$";
     private static final String FULL_NAME_PATTERN = "^[\\p{L} .'-]+$";
+    private static final String POSITIVE_INTEGER_PATTERN = "^[1-9]\\d*$";
 
     public boolean validateRegisterData(Map<String, String[]> parameterMap) {
         LOGGER.info("Validating register data.");
@@ -46,5 +47,12 @@ public class UserValidator {
         LOGGER.info("Validating user name.");
 
         return name != null && Pattern.compile(FULL_NAME_PATTERN).matcher(name).matches();
+    }
+
+    public boolean validateBalance(String balance) {
+        LOGGER.info("Checking if balance is positive Integer.");
+
+        return balance != null && Pattern.compile(POSITIVE_INTEGER_PATTERN).matcher(balance).matches();
+
     }
 }

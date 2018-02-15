@@ -8,7 +8,6 @@ import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.User;
 import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
-import com.piankov.auctions.validator.AuctionValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,33 +29,36 @@ public class EditAuctionCommand implements Command {
             String page;
 
             AuctionAction auctionAction = new AuctionAction();
-            AuctionValidator auctionValidator = new AuctionValidator();
 
-            String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
+            User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
+
             Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
+            String auctionId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
+
             Auction auction = auctionAction.findAuctionById(auctionId);
 
-            if (auction != null) {
-                User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
+            if (user.isAdmin() || auction.getLot().getOwner().equals(user)) {
+                auction = auctionAction.updateAuction(auction, parameterMap);
 
-                if (!auction.isActive() && auctionValidator.validateAuctionData(parameterMap)) {
-                    if (user.equals(auction.getLot().getOwner()) || user.isAdmin()) {
-                        auction = auctionAction.updateAuction(auction, parameterMap);
+                request.getSession().setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
+                if (auction.isVerifying()) {
+                    page = PageConstant.PAGE_VERIFYING_AUCTION;
 
-                        request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
-                        request.getRequestDispatcher(PageConstant.PAGE_ACTIVE_AUCTION).forward(request, response);
-                    } else {
-                        //
-                    }
+                } else if (auction.isActive()) {
+                    page = PageConstant.PAGE_ACTIVE_AUCTION;
+
                 } else {
-                    //
+                    page = PageConstant.PAGE_ENDED_AUCTION;
                 }
             } else {
-                //
+                page = PageConstant.PAGE_EDIT_AUCTION;
+                request.setAttribute(ParameterConstant.PARAMETER_ERROR_MESSAGE, "error.access");
             }
+
+            LOGGER.info("Forwarding...");
+            request.getRequestDispatcher(page).forward(request, response);
         } catch (ServletException | IOException | ActionPerformingException e) {
             throw new CommandExecutionException("An exception occurred during 'Edit Auction' command execution.", e);
         }
-
     }
 }

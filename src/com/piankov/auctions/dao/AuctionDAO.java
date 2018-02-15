@@ -21,6 +21,7 @@ public class AuctionDAO extends AbstractDAO<Auction> {
     private static final String CREATE_AUCTION = "INSERT INTO AUCTION (LOT_ID, AUCTION_STATE_ID, AUCTION_TYPE_ID, START_PRICE, DAYS_DURATION, START_DATE, END_DATE) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String CREATE_VERIFYING_AUCTION = "INSERT INTO AUCTION (LOT_ID, AUCTION_STATE_ID, AUCTION_TYPE_ID, START_PRICE, DAYS_DURATION) VALUES (?, 1, ?, ?, ?)";
     private static final String FIND_AUCTIONS_BY_STATE = "SELECT * FROM AUCTION WHERE AUCTION_STATE_ID = ?";
+    private static final String FIND_AUCTIONS_BY_USER = "SELECT * FROM AUCTION WHERE LOT_ID IN (SELECT ID FROM LOT WHERE OWNER_ID = ?)";
     private static final String FIND_OUTDATED_AUCTIONS = "SELECT * FROM AUCTION WHERE (AUCTION_STATE_ID = 2 and END_DATE < NOW())";
     private static final String END_OUTDATED_AUCTIONS = "UPDATE AUCTION SET AUCTION_STATE_ID = ? WHERE ID = ?";
 
@@ -155,7 +156,7 @@ public class AuctionDAO extends AbstractDAO<Auction> {
 
         try {
             PreparedStatement statement = this.connection.prepareStatement(FIND_AUCTIONS_BY_STATE);
-            statement.setInt(AuctionState.ON_VERIFICATION.getValue(), stateId);
+            statement.setInt(1, stateId);
 
             ResultSet rs = statement.executeQuery();
 
@@ -163,6 +164,22 @@ public class AuctionDAO extends AbstractDAO<Auction> {
             return auctionCreator.createListFromResultSet(rs);
         } catch (SQLException | EntityCreationException e) {
             throw new DAOException("And exception occurred during finding auctions by state.", e);
+        }
+    }
+
+    public List<Auction> findAuctionByUserID(String userId) throws DAOException {
+        LOGGER.info("Searching auction in database by user ID.");
+
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(FIND_AUCTIONS_BY_USER);
+            statement.setString(1, userId);
+
+            ResultSet rs = statement.executeQuery();
+
+            AuctionCreator auctionCreator = new AuctionCreator();
+            return auctionCreator.createListFromResultSet(rs);
+        } catch (SQLException | EntityCreationException e) {
+            throw new DAOException("And exception occurred during finding auctions by user ID.", e);
         }
     }
 

@@ -23,17 +23,27 @@
         <div data-view="list-view" class="download-cards">
             <c:forEach var="auction" items="${auctions}">
                 <article class="download-card">
-                    <div class="download-card__icon-box"><img
-                            src="images/question-512.png"/></div>
+                    <div class="download-card__icon-box"><img src="images/question-512.png"/></div>
                     <div class="download-card__content-box">
                         <div class="content">
                             <h3 class="download-card__content-box__title">
-                                <a href="${pageContext.request.contextPath}/ApplicationController?command=show-ended-auction&auctionId=${auction.id}">${auction.lot.name}</a>
+                                <a href="${pageContext.request.contextPath}/ApplicationController?command=show-active-auction&auctionId=${auction.id}">${auction.lot.name}</a>
                             </h3>
                             <p class="download-card__content-box__description">
-                                Owner: <a
-                                    href="${pageContext.request.contextPath}/ApplicationController?command=profile&userId=${auction.lot.owner.id}">${auction.lot.owner.name}</a><br>
-                                Type: ${auction.type} <br>
+
+                                <c:if test="${auction.verifying}">
+                                    Start price: ${auction.startPrice}
+                                </c:if>
+                                <c:if test="${auction.active}">
+                                    <c:choose>
+                                        <c:when test="${not empty auction.currentMaximalBid}">
+                                            Current maximal bid: ${auction.currentMaximalBid.value}
+                                        </c:when>
+                                        <c:otherwise>
+                                            Not bids has been made yet.
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:if>
                                 <c:if test="${auction.successful}">
                                     Winner bid value: ${auction.currentMaximalBid.value}
                                 </c:if>

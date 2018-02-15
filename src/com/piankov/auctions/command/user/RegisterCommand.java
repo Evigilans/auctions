@@ -47,7 +47,7 @@ public class RegisterCommand implements Command {
                 request.getRequestDispatcher(PageConstant.PAGE_LOGIN).forward(request, response);
             }
         } catch (ServletException | IOException | ActionPerformingException e) {
-            throw  new CommandExecutionException("An exception occurred during 'Register' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Register' command execution.", e);
         }
     }
 }

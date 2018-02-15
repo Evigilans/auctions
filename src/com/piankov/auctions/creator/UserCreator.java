@@ -23,7 +23,7 @@ public class UserCreator extends AbstractCreator<User> {
     private static final String PASSWORD_HASH = "PASSWORD_HASH";
     private static final String NAME = "NAME";
     private static final String BALANCE = "BALANCE";
-    private static final String CATEGORY = "CATEGORY";
+    private static final String CATEGORY = "CATEGORY_ID";
 
     @Override
     public User createEntityFromMap(Map<String, String[]> parameterMap, Object... objects) {

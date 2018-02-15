@@ -4,13 +4,16 @@ import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.creator.UserCreator;
 import com.piankov.auctions.dao.UserDAO;
 import com.piankov.auctions.entity.User;
+import com.piankov.auctions.entity.UserCategory;
 import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.DAOException;
 import com.piankov.auctions.util.PasswordEncryptor;
+import com.piankov.auctions.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 public class UserAction {
@@ -53,27 +56,22 @@ public class UserAction {
 
         try (UserDAO userDAO = new UserDAO()) {
             LOGGER.info("Resetting fields and updating user in database.");
+            UserValidator userValidator = new UserValidator();
             User user = userDAO.findById(userId);
 
-            String email = parameterMap.get(ParameterConstant.PARAMETER_EMAIL)[0];
-            if (email != null) {
-                user.setEmail(email);
-            }
-
-            String password = parameterMap.get(ParameterConstant.PARAMETER_PASSWORD)[0];
-            if (password != null) {
-                PasswordEncryptor passwordEncryptor = new PasswordEncryptor();
-                String passwordHash = passwordEncryptor.encrypt(password);
-                user.setPasswordHash(passwordHash);
-            }
-
             String name = parameterMap.get(ParameterConstant.PARAMETER_NAME)[0];
-            if (name != null) {
+            if (name != null && userValidator.validateName(name)) {
                 user.setName(name);
             }
 
+            String balance = parameterMap.get(ParameterConstant.PARAMETER_BALANCE)[0];
+            if (balance != null && userValidator.validateBalance(balance)) {
+                int newBalance = Integer.parseInt(balance);
+                user.setBalance(newBalance);
+            }
+
             return userDAO.update(user);
-        } catch (NoSuchAlgorithmException | DAOException e) {
+        } catch (DAOException e) {
             throw new ActionPerformingException("An exception occurred during performing 'Update User' action.", e);
         }
     }
@@ -96,10 +94,35 @@ public class UserAction {
         LOGGER.info("Performing 'Can Register' action.");
 
         try (UserDAO userDAO = new UserDAO()) {
-            LOGGER.info("Finding exists unique field in database fields.");
+            LOGGER.info("Finding exists unique field in database.");
             return userDAO.canCreate(email);
         } catch (DAOException e) {
             throw new ActionPerformingException("An exception occurred during performing 'Can register' action.", e);
+        }
+    }
+
+    public void promoteUser(User promotedUser) throws ActionPerformingException {
+        LOGGER.info("Performing 'Promote User' action.");
+
+        try (UserDAO userDAO = new UserDAO()) {
+            LOGGER.info("Setting category field and updating user in database.");
+
+            promotedUser.setCategory(UserCategory.ADVANCED);
+            userDAO.update(promotedUser);
+        } catch (DAOException e) {
+            throw new ActionPerformingException("An exception occurred during performing 'Promote User' action.", e);
+        }
+    }
+
+    public List<User> findAllUsers() throws ActionPerformingException {
+        LOGGER.info("Performing 'Find All Users' action.");
+
+        try (UserDAO userDAO = new UserDAO()) {
+            LOGGER.info("Finding all users in database.");
+
+            return userDAO.findAll();
+        } catch (DAOException e) {
+            throw new ActionPerformingException("An exception occurred during performing 'Find All Users' action.", e);
         }
     }
 }

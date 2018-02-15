@@ -29,4 +29,5 @@ public class ParameterConstant {
     public static final String PARAMETER_USER = "user";
     public static final String PARAMETER_USER_ID = "userId";
     public static final String PARAMETER_USER_PROFILE = "userProfile";
+    public static final String PARAMETER_USERS = "users";
 }

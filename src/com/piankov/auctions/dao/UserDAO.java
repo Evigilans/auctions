@@ -19,8 +19,8 @@ public class UserDAO extends AbstractDAO<User> {
     private static final String FIND_ALL_USERS = "SELECT * FROM USER";
     private static final String FIND_USER_BY_ID = "SELECT * FROM USER WHERE ID = ?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM USER WHERE ID = ?";
-    private static final String UPDATE_USER = "UPDATE USER SET EMAIL = ?, PASSWORD_HASH = ?, NAME = ?, BALANCE = ?, CATEGORY = ? WHERE ID = ?";
-    private static final String CREATE_USER = "INSERT INTO USER (EMAIL, PASSWORD_HASH, NAME, BALANCE, CATEGORY) VALUES (?, ?, ?, ?, ?)";
+    private static final String UPDATE_USER = "UPDATE USER SET EMAIL = ?, PASSWORD_HASH = ?, NAME = ?, BALANCE = ?, CATEGORY_ID = ? WHERE ID = ?";
+    private static final String CREATE_USER = "INSERT INTO USER (EMAIL, PASSWORD_HASH, NAME, BALANCE, CATEGORY_ID) VALUES (?, ?, ?, ?, ?)";
     private static final String FIND_AUTHORIZATION_DATA = "SELECT * FROM USER WHERE EMAIL = ? AND PASSWORD_HASH = ?";
     private static final String CHECK_EMAIL_EXISTANCE = "SELECT * FROM USER WHERE EMAIL = ?";
 

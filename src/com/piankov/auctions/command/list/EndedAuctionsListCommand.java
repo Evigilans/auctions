@@ -23,19 +23,22 @@ public class EndedAuctionsListCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Ended Auctions List' command.");
+
         try {
             AuctionAction auctionAction = new AuctionAction();
 
-
+            LOGGER.info("Getting auction list.");
             List<Auction> auctions = new ArrayList<>();
             auctions.addAll(auctionAction.findAllAuctionsByState(AuctionState.SUCCESSFUL.getValue()));
             auctions.addAll(auctionAction.findAllAuctionsByState(AuctionState.UNSUCCESSFUL.getValue()));
             auctions.addAll(auctionAction.findAllAuctionsByState(AuctionState.WITHDRAW_FROM_SALES.getValue()));
 
+            LOGGER.info("Forwarding...");
             request.setAttribute(ParameterConstant.PARAMETER_AUCTIONS, auctions);
             request.getRequestDispatcher(PageConstant.PAGE_ENDED_AUCTIONS_LIST).forward(request, response);
         } catch (ServletException | IOException | ActionPerformingException e) {
-            throw  new CommandExecutionException("An exception occurred during 'Ended Auctions List' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Ended Auctions List' command execution.", e);
         }
     }
 }

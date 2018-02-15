@@ -90,8 +90,24 @@ public class Auction extends Entity {
         this.currentMaximalBid = currentMaximalBid;
     }
 
+    public boolean isVerifying() {
+        return this.state == AuctionState.ON_VERIFICATION;
+    }
+
     public boolean isActive() {
         return this.state == AuctionState.IN_PROGRESS;
+    }
+
+    public boolean isSuccessful() {
+        return this.state == AuctionState.SUCCESSFUL;
+    }
+
+    public boolean isUnsuccessful() {
+        return this.state == AuctionState.UNSUCCESSFUL;
+    }
+
+    public boolean isWithdraw() {
+        return this.state == AuctionState.WITHDRAW_FROM_SALES;
     }
 
     @Override

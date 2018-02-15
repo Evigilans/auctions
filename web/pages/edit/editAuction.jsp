@@ -3,55 +3,65 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.language}" scope="session"/>
 <fmt:setBundle basename="resource.content" var="rb"/>
-
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>SOLD.BY - прродавай и покупай!</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/controls.css" type="text/css" media="screen">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
-
 <body>
-<jsp:include page="${pageContext.request.contextPath}/pages/service/header.jsp"></jsp:include>
+
+<jsp:include page="../service/header.jsp"></jsp:include>
+
 <main>
-    <c:choose>
-        <c:when test="${not empty user && (user == userProfile || user.admin)}">
-            <div class="form">
-                <h1>Edit a profile!</h1>
-                <form action="${pageContext.request.contextPath}/ApplicationController?command=edit-user&userId=${userProfile.id}"
+    <div class="form">
+        <c:choose>
+            <c:when test="${empty user}">
+                <p>
+                    Чтобы изменять аукционы Вам необходимо <a
+                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp"><strong>зарегистрироваться
+                    или войти.</strong></a>
+                </p>
+            </c:when>
+            <c:otherwise>
+                <h1>Edit an auction</h1>
+                <form action="${pageContext.request.contextPath}/ApplicationController?command=create-auction"
                       method="post">
                     <div class="field-wrap">
                         <label>
-                            Current login: ${userProfile.name}
+                            Name<span class="req">*</span>
                         </label>
-                        <input type="text" disabled="disabled" required autocomplete="off"/>
+                        <input type="text" name="lotName" required autocomplete="off"/>
                     </div>
                     <div class="field-wrap">
                         <label>
-                            Current name: ${userProfile.name}
+                            Description<span class="req">*</span>
                         </label>
-                        <input type="text" name="name" required autocomplete="off"/>
+                        <input type="text" name="lotDescription" required autocomplete="off"/>
                     </div>
                     <div class="field-wrap">
                         <label>
-                            Current email: ${userProfile.email}
+                            Start Price<span class="req">*</span>
                         </label>
-                        <input type="text" name="email" required autocomplete="off"/>
+                        <input type="text" name="startPrice" required autocomplete="off"/>
+                    </div>
+                    <div class="field-wrap">
+                        <label>
+                            Length in days<span class="req">*</span>
+                        </label>
+                        <input type="text" name="days" required autocomplete="off"/>
                     </div>
                     <button type="submit" class="button button-block"/>
-                    Apply Changes!</button>
+                    Apply changes!</button>
                 </form>
-            </div>
-            <script src="${pageContext.request.contextPath}/js/login.js"></script>
-        </c:when>
-        <c:otherwise>
-            <h1>We are sorry, but you do not have permission to view this page.</h1>
-        </c:otherwise>
-    </c:choose>
+            </c:otherwise>
+        </c:choose>
+    </div>
+    <script src="${pageContext.request.contextPath}/js/login.js"></script>
 </main>
-<jsp:include page="${pageContext.request.contextPath}/pages/service/footer.jsp"></jsp:include>
-</body>
 
+<jsp:include page="../service/footer.jsp"></jsp:include>
+
+</body>
 </html>

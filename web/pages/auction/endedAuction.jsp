@@ -13,35 +13,24 @@
 <jsp:include page="../service/header.jsp"></jsp:include>
 
 <main>
-    <h3>Информация об аукционе #${auction.id} ${auction.lot.name}</h3>
-    <p>Описание лота: ${auction.lot.description}</p>
-
-    <c:choose>
-        <c:when test="">
-
-        </c:when>
-        <c:otherwise>
-
-        </c:otherwise>
-    </c:choose>
-
     <div class="form">
         <c:choose>
             <c:when test="${empty user}">
-                <h1>Welcome, Guest</h1>
                 <p>
-                    Чтобы просматривать свой профиль, вам необходимо <a
-                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp"><strong>войти
-                    или зарегистрироваться.</strong></a>
+                    Чтобы просматривать аукционы, вам необходимо <a
+                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp"><strong>зарегистрироваться
+                    или войти.</strong></a>
                 </p>
             </c:when>
             <c:otherwise>
+                <h3>Информация об аукционе #${auction.id} ${auction.lot.name}</h3>
+                <p>Описание лота: ${auction.lot.description}</p>
                 <c:choose>
                     <c:when test="${empty auction.currentMaximalBid}">
                         <h1>Auction ended unsuccessfully</h1>
                     </c:when>
                     <c:otherwise>
-                        <h1>Wiiner bid is ${auction.currentMaximalBid.value}$</h1>
+                        <h1>Winner bid is ${auction.currentMaximalBid.value}$</h1>
                     </c:otherwise>
                 </c:choose>
             </c:otherwise>

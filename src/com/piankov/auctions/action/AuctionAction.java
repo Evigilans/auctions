@@ -5,9 +5,12 @@ import com.piankov.auctions.creator.AuctionCreator;
 import com.piankov.auctions.creator.BidCreator;
 import com.piankov.auctions.dao.AuctionDAO;
 import com.piankov.auctions.dao.BidDAO;
+import com.piankov.auctions.dao.LotDAO;
 import com.piankov.auctions.entity.*;
 import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.DAOException;
+import com.piankov.auctions.validator.AuctionValidator;
+import com.piankov.auctions.validator.LotValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,8 +19,16 @@ import java.util.List;
 import java.util.Map;
 
 public class AuctionAction {
+    /**
+     *
+     */
     private static Logger LOGGER = LogManager.getLogger(AuctionAction.class);
 
+    /**
+     * @param parameterMap
+     * @param user
+     * @throws ActionPerformingException
+     */
     public void makeBid(Map<String, String[]> parameterMap, User user) throws ActionPerformingException {
         LOGGER.info("Performing 'Make Bid' action.");
 
@@ -89,6 +100,16 @@ public class AuctionAction {
         }
     }
 
+    public List<Auction> findUserAuctions(String userId) throws ActionPerformingException {
+        LOGGER.info("Performing 'Find User Auctions' action.");
+
+        try (AuctionDAO auctionDAO = new AuctionDAO()) {
+            return auctionDAO.findAuctionByUserID(userId);
+        } catch (DAOException e) {
+            throw new ActionPerformingException("An exception occurred during performing 'Find Auction By ID' action.", e);
+        }
+    }
+
     public Auction verifyAuction(Auction auction) throws ActionPerformingException {
         LOGGER.info("Performing 'Verify Auction' action.");
 
@@ -119,34 +140,65 @@ public class AuctionAction {
     public Auction updateAuction(Auction auction, Map<String, String[]> parameterMap) throws ActionPerformingException {
         LOGGER.info("Performing 'Update Auction' action.");
 
-        try (AuctionDAO auctionDAO = new AuctionDAO()) {
+        try (AuctionDAO auctionDAO = new AuctionDAO();
+             LotDAO lotDAO = new LotDAO()) {
             LOGGER.info("Resetting fields and updating in database.");
+            Lot lot = auction.getLot();
+            LotValidator lotValidator = new LotValidator();
+            AuctionValidator auctionValidator = new AuctionValidator();
+
+            String lotName = parameterMap.get(ParameterConstant.PARAMETER_LOT_NAME)[0];
+            if (lotName != null && lotValidator.validateName(lotName)) {
+                lot.setName(lotName);
+            }
+
+            String lotDescription = parameterMap.get(ParameterConstant.PARAMETER_LOT_DESCRIPTION)[0];
+            if (lotDescription != null && lotValidator.validateDescription(lotDescription)) {
+                lot.setDescription(lotDescription);
+            }
 
             String startPrice = parameterMap.get(ParameterConstant.PARAMETER_START_PRICE)[0];
-            if (startPrice != null) {
-                //auction.setName(startPrice);
+            if (startPrice != null && auctionValidator.isPositiveInteger(startPrice)) {
+                int newStartPrice = Integer.parseInt(startPrice);
+                auction.setStartPrice(newStartPrice);
             }
 
             String days = parameterMap.get(ParameterConstant.PARAMETER_DAYS)[0];
-            if (days != null) {
-                auction.setDaysDurations(Integer.parseInt(days));
+            if (days != null && auctionValidator.isPositiveInteger(days)) {
+                int newDays = Integer.parseInt(days);
+                auction.setDaysDurations(newDays);
             }
 
+            lotDAO.update(lot);
             return auctionDAO.update(auction);
         } catch (DAOException e) {
             throw new ActionPerformingException("An exception occurred during performing 'Update Auction' action.", e);
         }
     }
 
-    public Auction updateLot(String auctionId, Map<String, String[]> parameterMap) {
-        return null;
+    public Auction withdrawAuction(Auction auction) throws ActionPerformingException {
+        LOGGER.info("Performing 'Withdraw Auction' action.");
+
+        try (AuctionDAO auctionDAO = new AuctionDAO()) {
+            LOGGER.info("Resetting state and updating in database.");
+
+            auction.setState(AuctionState.WITHDRAW_FROM_SALES);
+
+            return auctionDAO.update(auction);
+        } catch (DAOException e) {
+            throw new ActionPerformingException("An exception occurred during performing 'Withdraw Auction' action.", e);
+        }
     }
 
-    public Auction withdrawAuction(Auction auction) {
-        return null;
-    }
+    public void deleteBid(Auction auction) throws ActionPerformingException {
+        LOGGER.info("Performing 'Delete Bid' action.");
 
-    public Auction findBidById(String bidID) {
-        return null;
+        try (BidDAO bidDAO = new BidDAO()) {
+            LOGGER.info("Deleting bid from database.");
+
+            bidDAO.delete(String.valueOf(auction.getId()));
+        } catch (DAOException e) {
+            throw new ActionPerformingException("An exception occurred during performing 'Delete Bid' action.", e);
+        }
     }
 }

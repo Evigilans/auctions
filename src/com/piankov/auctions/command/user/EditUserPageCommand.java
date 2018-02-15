@@ -20,20 +20,30 @@ public class EditUserPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Edit User Page' command.");
+
         try {
+            String page;
+
             UserAction userAction = new UserAction();
 
-            String auctionId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
+            User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
+            String userId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
 
-            if (true) {
+            if (user.isAdmin() || (userId.equals(String.valueOf(user.getId())))) {
+                User editedUser = userAction.findUser(userId);
 
-                User user = userAction.findUser(auctionId);
-
-                request.setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, user);
-                request.getRequestDispatcher(PageConstant.PAGE_EDIT_PROFILE).forward(request, response);
+                request.setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, editedUser);
+                page = PageConstant.PAGE_EDIT_PROFILE;
+            } else {
+                page = PageConstant.PAGE_EDIT_PROFILE;
+                request.setAttribute(ParameterConstant.PARAMETER_ERROR_MESSAGE, "error.access");
             }
+
+            LOGGER.info("Forwarding...");
+            request.getRequestDispatcher(page).forward(request, response);
         } catch (ServletException | IOException | ActionPerformingException e) {
-            throw  new CommandExecutionException("An exception occurred during 'Edit User Page' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Edit User Page' command execution.", e);
         }
     }
 }

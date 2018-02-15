@@ -6,7 +6,6 @@ import com.piankov.auctions.constant.PageConstant;
 import com.piankov.auctions.constant.ParameterConstant;
 import com.piankov.auctions.entity.Auction;
 import com.piankov.auctions.entity.AuctionState;
-import com.piankov.auctions.entity.User;
 import com.piankov.auctions.exception.ActionPerformingException;
 import com.piankov.auctions.exception.CommandExecutionException;
 import org.apache.logging.log4j.LogManager;
@@ -23,20 +22,19 @@ public class VerifyingAuctionsListCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Verifying Auction List' command.");
+
         try {
-            User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
+            AuctionAction auctionAction = new AuctionAction();
 
-            if (user.isAdmin()) {
-                AuctionAction auctionAction = new AuctionAction();
-                List<Auction> auctions = auctionAction.findAllAuctionsByState(AuctionState.ON_VERIFICATION.getValue());
+            LOGGER.info("Getting auction list.");
+            List<Auction> auctions = auctionAction.findAllAuctionsByState(AuctionState.ON_VERIFICATION.getValue());
 
-                request.setAttribute(ParameterConstant.PARAMETER_AUCTIONS, auctions);
-                request.getRequestDispatcher(PageConstant.PAGE_VERIFYING_AUCTIONS_LIST).forward(request, response);
-            } else {
-                //
-            }
+            LOGGER.info("Forwarding...");
+            request.setAttribute(ParameterConstant.PARAMETER_AUCTIONS, auctions);
+            request.getRequestDispatcher(PageConstant.PAGE_VERIFYING_AUCTIONS_LIST).forward(request, response);
         } catch (ServletException | IOException | ActionPerformingException e) {
-            throw  new CommandExecutionException("An exception occurred during 'Verifying Auction List' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Verifying Auction List' command execution.", e);
         }
     }
 }

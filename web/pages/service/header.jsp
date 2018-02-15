@@ -10,7 +10,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Sample</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/temp.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css" media="screen">
 </head>
 
 <body>

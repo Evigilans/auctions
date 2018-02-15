@@ -12,7 +12,7 @@ public enum UserCategory {
     }
 
     public static UserCategory getCategoryFromValue(int value) {
-        return UserCategory.values()[value];
+        return UserCategory.values()[value - 1];
     }
 
     public int getValue() {

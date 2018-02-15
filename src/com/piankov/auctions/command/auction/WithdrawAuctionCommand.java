@@ -21,27 +21,28 @@ public class WithdrawAuctionCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Withdraw Auction' command.");
+
         try {
+            String page = null;
+
             AuctionAction auctionAction = new AuctionAction();
 
             String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
             Auction auction = auctionAction.findAuctionById(auctionId);
-            if (auction != null) {
-                User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
+            User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
 
-                if (user.equals(auction.getLot().getOwner()) || user.isAdmin()) {
-                    auction = auctionAction.withdrawAuction(auction);
+            if (user.isAdmin() || auction.getLot().getOwner().equals(user)) {
+                auction = auctionAction.withdrawAuction(auction);
 
-                    request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
-                    request.getRequestDispatcher(PageConstant.PAGE_ENDED_AUCTION).forward(request, response);
-                } else {
-                    //
-                }
-            } else {
-                //
+                page = PageConstant.PAGE_ENDED_AUCTION;
+                request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
             }
+
+            LOGGER.info("Forwarding...");
+            request.getRequestDispatcher(page).forward(request, response);
         } catch (ServletException | IOException | ActionPerformingException e) {
-            throw  new CommandExecutionException("An exception occurred during 'Withdraw Auction' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Withdraw Auction' command execution.", e);
         }
     }
 }

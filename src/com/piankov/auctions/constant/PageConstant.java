@@ -5,7 +5,7 @@ public class PageConstant {
     public static final String PAGE_ACTIVE_AUCTIONS_LIST = "pages/list/activeAuctionsList.jsp";
     public static final String PAGE_CREATE_AUCTION = "pages/auction/create.jsp";
     public static final String PAGE_EDIT_AUCTION = "pages/edit/editAuction.jsp";
-    public static final String PAGE_EDIT_LOT = "pages/edit/editLot.jsp";
+    public static final String PAGE_EDIT_LOT = "pages/edit/editAuction.jsp";
     public static final String PAGE_EDIT_PROFILE = "pages/edit/editUser.jsp";
     public static final String PAGE_ENDED_AUCTION = "pages/auction/endedAuction.jsp";
     public static final String PAGE_ENDED_AUCTIONS_LIST = "pages/list/endedAuctionsList.jsp";
@@ -14,4 +14,8 @@ public class PageConstant {
     public static final String PAGE_PROFILE = "pages/user/profile.jsp";
     public static final String PAGE_VERIFYING_AUCTION = "pages/auction/verifyingAuction.jsp";
     public static final String PAGE_VERIFYING_AUCTIONS_LIST = "pages/list/verifyingAuctionsList.jsp";
+    public static final String PAGE_USERS_LIST = "pages/list/usersList.jsp";
+    public static final String PAGE_MANAGE = "pages/admin/manage.jsp";
+    public static final String PAGE_USER_AUCTIONS = "pages/list/userAuctionsList.jsp";
+    public static final String PAGE_ERROR = "pages/service/error.jsp";
 }

@@ -2,24 +2,19 @@ package com.piankov.auctions.controller;
 
 import com.piankov.auctions.command.*;
 import com.piankov.auctions.command.auction.*;
-import com.piankov.auctions.command.list.ActiveAuctionsListCommand;
-import com.piankov.auctions.command.list.EndedAuctionsListCommand;
-import com.piankov.auctions.command.list.VerifyingAuctionsListCommand;
+import com.piankov.auctions.command.list.*;
 import com.piankov.auctions.command.bid.MakeBidCommand;
-import com.piankov.auctions.command.user.EditUserPageCommand;
+import com.piankov.auctions.command.user.*;
 import com.piankov.auctions.command.system.LinkCommand;
 import com.piankov.auctions.command.system.ChangeLanguageCommand;
-import com.piankov.auctions.command.user.LoginCommand;
-import com.piankov.auctions.command.user.LogoutCommand;
 import com.piankov.auctions.command.view.ProfileCommand;
-import com.piankov.auctions.command.user.RegisterCommand;
-import com.piankov.auctions.command.user.EditUserCommand;
 import com.piankov.auctions.command.view.ShowActiveAuctionCommand;
 import com.piankov.auctions.command.view.ShowEndedAuctionCommand;
 import com.piankov.auctions.command.view.ShowVerifyingAuctionCommand;
 
 public enum CommandType {
     EDIT_USER(new EditUserCommand()),
+    EDIT_AUCTION(new EditAuctionCommand()),
     CREATE_AUCTION(new CreateAuctionCommand()),
     MAKE_BID(new MakeBidCommand()),
     SHOW_ACTIVE_AUCTION(new ShowActiveAuctionCommand()),
@@ -30,12 +25,16 @@ public enum CommandType {
     ENDED_AUCTIONS_LIST(new EndedAuctionsListCommand()),
     VERIFYING_AUCTIONS_LIST(new VerifyingAuctionsListCommand()),
     EDIT_USER_PAGE(new EditUserPageCommand()),
+    EDIT_AUCTION_PAGE(new EditAuctionPageCommand()),
     LINK(new LinkCommand()),
     CHANGE_LANGUAGE(new ChangeLanguageCommand()),
     LOGIN(new LoginCommand()),
     LOGOUT(new LogoutCommand()),
     PROFILE(new ProfileCommand()),
-    REGISTER(new RegisterCommand());
+    REGISTER(new RegisterCommand()),
+    PROMOTE_USER(new PromoteUserCommand()),
+    USER_LIST(new UserListCommand()),
+    USER_AUCTIONS_LIST(new UserAuctionsList());
 
     private final Command command;
 

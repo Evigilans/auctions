@@ -20,31 +20,31 @@ public class VerifyAuctionCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Verify Auction' command.");
+
         try {
+            String page = null;
+
             AuctionAction auctionAction = new AuctionAction();
 
             String auctionId = request.getParameter(ParameterConstant.PARAMETER_AUCTION_ID);
             Auction auction = auctionAction.findAuctionById(auctionId);
-            if (auction != null) {
-                if (request.getParameter("acceptAuction") != null) {
-                    auction = auctionAction.verifyAuction(auction);
+            if (request.getParameter("acceptAuction") != null) {
+                auction = auctionAction.verifyAuction(auction);
 
-                    request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
-                    request.getRequestDispatcher(PageConstant.PAGE_ACTIVE_AUCTION).forward(request, response);
-                } else if (request.getParameter("declineAuction") != null) {
-                    auction = auctionAction.withdrawAuction(auction);
+                page = PageConstant.PAGE_ACTIVE_AUCTION;
+                request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
+            } else if (request.getParameter("declineAuction") != null) {
+                auction = auctionAction.withdrawAuction(auction);
 
-                    request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
-                    request.getRequestDispatcher(PageConstant.PAGE_ENDED_AUCTION).forward(request, response);
-                } else {
-                    //
-                }
-            } else {
-                //
+                page = PageConstant.PAGE_ENDED_AUCTION;
+                request.setAttribute(ParameterConstant.PARAMETER_AUCTION, auction);
             }
 
+            LOGGER.info("Forwarding...");
+            request.getRequestDispatcher(page).forward(request, response);
         } catch (ServletException | IOException | ActionPerformingException e) {
-            throw  new CommandExecutionException("An exception occurred during 'Verify Auction' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Verify Auction' command execution.", e);
         }
     }
 }

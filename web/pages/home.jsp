@@ -17,14 +17,11 @@
 <main>
     <h2 class="heading"><fmt:message key="home.label.welcome" bundle="${rb}"/></h2>
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus voluptate obcaecati nesciunt porro laudantium,
-        autem expedita cum fugit cupiditate itaque debitis sint, tenetur accusamus, omnis! WHAT</p>
+    <p><fmt:message key="home.paragraph.first" bundle="${rb}"/></p>
 
-    <p>Est, dolorum, inventore? Soluta illo necessitatibus facilis omnis nam ipsam, laudantium voluptas veniam ipsa. Ea
-        debitis, explicabo! Fugit repudiandae ex unde assumenda, numquam aliquam architecto?</p>
+    <p><fmt:message key="home.paragraph.second" bundle="${rb}"/></p>
 
-    <p>Beatae minima, ipsam nisi rerum commodi. Culpa quod quibusdam, odit ut! Reprehenderit officiis sint suscipit,
-        neque, mollitia minus? Ab earum cum nam at, quos id!</p>
+    <p><fmt:message key="home.paragraph.third" bundle="${rb}"/></p>
 
     <c:choose>
         <c:when test="">

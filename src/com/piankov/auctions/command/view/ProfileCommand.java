@@ -21,28 +21,32 @@ public class ProfileCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Profile User' command.");
+
         try {
+            String page;
+
             User user = (User) request.getSession().getAttribute(ParameterConstant.PARAMETER_USER);
 
-            if (user != null) {
-                UserAction userAction = new UserAction();
 
-                String userId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
-                User userProfile = userAction.findUser(userId);
+            UserAction userAction = new UserAction();
 
-                if (userProfile != null) {
-                    request.setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, userProfile);
-                    request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
-                } else {
-                    System.out.println(ErrorMessenger.getMessage((String) request.getSession().getAttribute(ParameterConstant.PARAMETER_LANGUAGE), "error.find.user"));
-                    request.setAttribute(ParameterConstant.PARAMETER_ERROR_MESSAGE, ErrorMessenger.getMessage((String) request.getSession().getAttribute(ParameterConstant.PARAMETER_LANGUAGE), "error.find.user"));
-                    request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
-                }
+            String userId = request.getParameter(ParameterConstant.PARAMETER_USER_ID);
+            User userProfile = userAction.findUser(userId);
+
+            LOGGER.info("Checking if user profile exists.");
+            if (userProfile != null) {
+                page = PageConstant.PAGE_PROFILE;
+                request.setAttribute(ParameterConstant.PARAMETER_USER_PROFILE, userProfile);
             } else {
-                request.getRequestDispatcher(PageConstant.PAGE_PROFILE).forward(request, response);
+                page = PageConstant.PAGE_PROFILE;
+                request.setAttribute(ParameterConstant.PARAMETER_ERROR_MESSAGE, ErrorMessenger.getMessage((String) request.getSession().getAttribute(ParameterConstant.PARAMETER_LANGUAGE), "error.find.user"));
             }
+
+            LOGGER.info("Forwarding...");
+            request.getRequestDispatcher(page).forward(request, response);
         } catch (IOException | ServletException | ActionPerformingException e) {
-            throw new CommandExecutionException("An exception occurred during 'Profile' command execution.", e);
+            throw new CommandExecutionException("An exception occurred during 'Profile Command' command execution.", e);
         }
     }
 }

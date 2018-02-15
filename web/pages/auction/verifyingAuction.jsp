@@ -14,28 +14,34 @@
 <body>
 <jsp:include page="${pageContext.request.contextPath}/pages/service/header.jsp"></jsp:include>
 <main>
-
     <c:choose>
-        <c:when test="${not empty user && user.admin}">
+        <c:when test="${not empty user && (user.admin || user == auction.lot.owner)}">
             <h3>Информация об аукционе #${auction.id} ${auction.lot.name}</h3>
             <p>Описание лота: ${auction.lot.description}</p>
             <div class="form">
                 <h1>Verify auction?</h1>
-                <form action="${pageContext.request.contextPath}/ApplicationController?command=verify-auction&auctionId=${auction.id}" method="post">
-                    <button type="submit" name="acceptAuction" class="button button-block"/>Accept auction!</button> <br>
-                    <button type="submit" name="declineAuction" class="button button-block"/>Decline auction!</button>
+                <form action="${pageContext.request.contextPath}/ApplicationController?command=verify-auction&auctionId=${auction.id}"
+                      method="post">
+                    <button type="submit" name="acceptAuction" class="button button-block"/>
+                    Accept auction!</button> <br>
+                    <button type="submit" name="declineAuction" class="button button-block"/>
+                    Decline auction!</button>
                 </form>
             </div>
-            <script src="${pageContext.request.contextPath}/js/login.js"></script>
+            <c:if test="${user == auction.lot.owner}">
+                <p>
+                    <a href="${pageContext.request.contextPath}/ApplicationController?command=withdraw-auction&auctionId=${auction.id}"><strong>Click
+                        here to withdraw auction.</strong></a>
+                </p>
+            </c:if>
         </c:when>
         <c:otherwise>
             <h1>We are sorry, but you do not have permission to view this page.</h1>
         </c:otherwise>
     </c:choose>
-
-
 </main>
 <jsp:include page="${pageContext.request.contextPath}/pages/service/footer.jsp"></jsp:include>
 </body>
+<script src="${pageContext.request.contextPath}/js/login.js"></script>
 
 </html>

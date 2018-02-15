@@ -24,7 +24,7 @@
                       method="post">
                     <div class="field-wrap">
                         <label>
-                            Current login: ${userProfile.name}
+                            Current email: ${userProfile.email}
                         </label>
                         <input type="text" disabled="disabled" required autocomplete="off"/>
                     </div>
@@ -36,9 +36,9 @@
                     </div>
                     <div class="field-wrap">
                         <label>
-                            Current email: ${userProfile.email}
+                            Current balance: ${userProfile.balance}
                         </label>
-                        <input type="text" name="email" autocomplete="off"/>
+                        <input type="text" name="balance" autocomplete="off"/>
                     </div>
                     <button type="submit" class="button button-block"/>
                     Apply Changes!</button>

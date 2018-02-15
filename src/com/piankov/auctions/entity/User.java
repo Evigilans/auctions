@@ -39,6 +39,7 @@ public class User extends Entity {
     }
 
     public void setName(String name) {
+        System.out.println(name);
         this.name = name;
     }
 

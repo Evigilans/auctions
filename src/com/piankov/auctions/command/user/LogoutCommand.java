@@ -17,6 +17,8 @@ public class LogoutCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws CommandExecutionException {
+        LOGGER.info("Execution 'Logout' command.");
+
         try {
             request.getSession().removeAttribute(ParameterConstant.PARAMETER_USER);
             request.getRequestDispatcher(PageConstant.PAGE_LOGIN).forward(request, response);

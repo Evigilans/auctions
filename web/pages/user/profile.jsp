@@ -37,13 +37,13 @@
                         <c:choose>
                             <c:when test="${user == userProfile || user.admin}">
                                 <div id="profile-pic">
-                                    <img class="profile" src="images/avatar/avatar_${user.id}.png"/>
+                                    <img class="profile" src="images/avatar.png"/>
                                 </div>
                                 <div id="details">
-                                    <h1>Name: ${user.name}</h1>
-                                    <h1>Email: ${user.email}</h1>
-                                    <h1>Balance: ${user.balance}$</h1>
-                                    <h1>Category: ${user.category}</h1>
+                                    <h1>Name: ${userProfile.name}</h1>
+                                    <h1>Email: ${userProfile.email}</h1>
+                                    <h1>Balance: ${userProfile.balance}$</h1>
+                                    <h1>Category: ${userProfile.category}</h1>
                                 </div>
                                 <ul>
                                     <li>
@@ -51,12 +51,12 @@
                                             here to edit your profile</a>
                                     </li>
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/ApplicationController?command=edit-user-page&userId=${userProfile.id}">Click
+                                        <a href="${pageContext.request.contextPath}/ApplicationController?command=user-auctions-list&userId=${userProfile.id}">Click
                                             here to view lots</a>
                                     </li>
-                                    <c:if test="${user.admin}">
+                                    <c:if test="${user.admin && userProfile.client}">
                                         <li>
-                                            <a href="${pageContext.request.contextPath}/ApplicationController?command=edit-user-page&userId=${userProfile.id}">Click
+                                            <a href="${pageContext.request.contextPath}/ApplicationController?command=promote-user&userId=${userProfile.id}">Click
                                                 here to promote this user to 'Advanced'</a>
                                         </li>
                                     </c:if>
@@ -64,16 +64,16 @@
                             </c:when>
                             <c:otherwise>
                                 <div id="profile-pic">
-                                    <img class="profile" src="images/avatar/avatar_${user.id}.png"/>
+                                    <img class="profile" src="images/avatar/avatar.png"/>
                                 </div>
                                 <div id="details">
-                                    <h1>Name: ${user.name}</h1>
-                                    <h1>Email: ${user.email}</h1>
-                                    <h1>Category: ${user.category}</h1>
+                                    <h1>Name: ${userProfile.name}</h1>
+                                    <h1>Email: ${userProfile.email}</h1>
+                                    <h1>Category: ${userProfile.category}</h1>
                                 </div>
                                 <ul>
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/ApplicationController?command=edit-user-page&userId=${userProfile.id}">Click
+                                        <a href="${pageContext.request.contextPath}/ApplicationController?command=view-user-auctions&userId=${userProfile.id}">Click
                                             here to view lots</a>
                                     </li>
                                 </ul>

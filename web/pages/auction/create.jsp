@@ -18,11 +18,10 @@
     <div class="form">
         <c:choose>
             <c:when test="${empty user}">
-                <h1>Welcome, Guest</h1>
                 <p>
-                    Чтобы просматривать свой профиль, вам необходимо <a
-                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp"><strong>войти или
-                    зарегистрироваться.</strong></a>
+                    Чтобы создавать аукционы Вам необходимо <a
+                        href="${pageContext.request.contextPath}/ApplicationController?command=link&url=pages/user/login.jsp"><strong>зарегистрироваться
+                    или войти.</strong></a>
                 </p>
             </c:when>
             <c:otherwise>
